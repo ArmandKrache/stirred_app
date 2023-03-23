@@ -1,4 +1,4 @@
-# ttfa
+# Flutter App Template
 
 A new Flutter project.
 
