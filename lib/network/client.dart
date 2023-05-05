@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ttfa/utils/app_config.dart';
+import 'package:template_app/utils/app_config.dart';
 
 Dio createApiClient([BaseOptions? options]) {
   Dio client = Dio();

@@ -1,6 +1,6 @@
 {
-    "name": "ttfa",
-    "short_name": "ttfa",
+    "name": "template_app",
+    "short_name": "template_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

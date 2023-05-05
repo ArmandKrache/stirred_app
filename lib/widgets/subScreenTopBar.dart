@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ttfa/router.dart';
-import 'package:ttfa/utils/app_colors.dart';
+import 'package:template_app/router.dart';
+import 'package:template_app/utils/app_colors.dart';
 
 class SubScreenTopBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ttfa/utils/app_colors.dart';
-import 'package:ttfa/views/champions.dart';
-import 'package:ttfa/views/dashboard.dart';
+import 'package:template_app/utils/app_colors.dart';
+import 'package:template_app/views/champions.dart';
+import 'package:template_app/views/dashboard.dart';
 
 class HomeView extends StatefulWidget {
 

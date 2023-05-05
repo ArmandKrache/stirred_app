@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ttfa/utils/app_colors.dart';
-import 'package:ttfa/widgets/subScreenTopBar.dart';
+import 'package:template_app/utils/app_colors.dart';
+import 'package:template_app/widgets/subScreenTopBar.dart';
 
 class ChampionsDetailsView extends StatefulWidget {
   const ChampionsDetailsView({super.key});

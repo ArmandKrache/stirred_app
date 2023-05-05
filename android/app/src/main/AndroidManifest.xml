@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.flutter.test.tech.ttfa">
+    package="app.flutter.test.tech.template_app">
    <application
-        android:label="ttfa"
+        android:label="template_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

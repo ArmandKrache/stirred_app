@@ -14,8 +14,6 @@ class AppColors {
   static const Color grad800 = Color(0xFF426663);
   static const Color grad900 = Color(0xFF29545A);
 
-
-
   static const Color primary = grad100;
   static const Color variant = grad600;
   static const Color secondary = grad900;
@@ -56,61 +54,14 @@ class AppColors {
   static const Color success = Color(0xFF44e868);
   static const Color tip = Color(0xFF0035F5);
 
-  static const Color grad1 = Color(0xFF6372EE);
-  static const Color grad2 = Color(0xFF767DEE);
-  static const Color grad3 = Color(0xFF8988EE);
-
-  static const Color light = Color(0xFFB8B8FF);
-
-  static final List<Color> gradientChartColors = [
-    variant,
-    primary,
-  ];
-
-  /// Main gradient
-
-  static const List<Color> primaryToVariantGradient = [
-    primary,
-    grad1,
-    grad2,
-    grad3,
-    variant
-  ];
-  static const List<Color> variantToPrimaryGradient = [
-    variant,
-    grad3,
-    grad2,
-    grad1,
-    primary
-  ];
-
-  static const LinearGradient customMainGradient = LinearGradient(
+  static const LinearGradient splashGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: AppColors.primaryToVariantGradient,
+    colors: [Color(0xFF2654a8), Color(0xFF539ce0)],
   );
-
 
   static const Color white = Colors.white;
   static const Color black = Color(0xFF0e101b);
-
-
-  /// rarity colors
-
-  static const Color common = gray400;
-  static const Color uncommon = Color(0xFF319236);
-  static const Color rare = Color(0xFF4c51f7);
-  static const Color epic = Color(0xFF9d4dbb);
-  static const Color legendary = Color(0xFFf3af19);
-
-  static const List<Color> rarityList = [
-    common,
-    uncommon,
-    rare,
-    epic,
-    legendary
-  ];
-
   static const Color transparent = Colors.transparent;
 }
 
