@@ -1,16 +1,21 @@
-# Flutter App Template
+# Flutter Mobile App Template Project
 
-A new Flutter project.
+This is a custom Flutter mobile app template project that I created for my personal use. The purpose of this project is to serve as the starting point for any future mobile app project that I undertake. By using this template as a foundation, I can save time and effort in setting up the basic structure and functionality of my apps, and focus on implementing the unique features and design that make each app unique.
+
+## Features
+
+This template includes the following basic features:
+
+- A simple UI with Splash, Login, Home and subScreen Views
+- Navigation using Fluro
+- A basic use of cache with SharedPreferences
+- An http client using Dio and a ready to use config file
+- The basic project architecture
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To use this template for your own app projects, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+1. Clone the repository to your local machine.
+2. 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
