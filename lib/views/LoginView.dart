@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:template_app/router.dart';
 import 'package:template_app/utils/app_assets.dart';
 import 'package:template_app/utils/app_colors.dart';
+import 'package:template_app/utils/app_data.dart';
 
 class LoginView extends StatefulWidget {
 
@@ -41,6 +42,7 @@ class _LoginViewState extends State<LoginView> {
     await prefs.setString("username", loginController.text);
     await prefs.setString("password", passwordController.text);
 
+    AppData.setCurrentUser(loginController.text);
     AppRouter.push(context, NavPosition.inHome, replace: true);
   }
 

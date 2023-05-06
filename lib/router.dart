@@ -1,5 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:template_app/utils/app_data.dart';
 import 'package:template_app/views/LoginView.dart';
 import 'package:template_app/views/championDetails.dart';
 import 'package:template_app/views/home.dart';
@@ -19,6 +21,16 @@ const Map<NavPosition, String> navStrings = {
 class AppRouter {
   static FluroRouter router = FluroRouter();
   static List<NavPosition> navHistory = [];
+
+  static void logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("username");
+    await prefs.remove("password");
+    AppData.setCurrentUser(null);
+    AppRouter.push(context, NavPosition.inLogin,
+        replace: true, transition: TransitionType.inFromLeft);
+  }
 
   static void pop(BuildContext context) {
     router.pop(context);

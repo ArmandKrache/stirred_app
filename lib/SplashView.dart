@@ -29,7 +29,7 @@ class _SplashView extends State<SplashView> {
   void _dispatch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (false || prefs.containsKey("username") && prefs.containsKey("password")) {
+    if (prefs.containsKey("username") && prefs.containsKey("password")) {
       AppRouter.push(context, NavPosition.inHome, replace: true);
     } else {
       AppRouter.push(context, NavPosition.inLogin, replace: true, transition: TransitionType.fadeIn);
