@@ -16,6 +16,23 @@ This template includes the following basic features:
 
 To use this template for your own app projects, follow these steps:
 
-1. Clone the repository to your local machine.
-2. 
+1. Clone this repository to your local machine.
+
+2. Remove the current remote repository : 
+
+`git remote remove origin`
+
+3. Add the new remote repository : 
+
+`git remote add origin [new_remote_repository_url]`
+
+4. Verify that the new remote repository was added successfully :
+
+`git remote -v`
+
+5. Push the code to the new remote repository:
+
+`git push -u origin main`
+
+
 
