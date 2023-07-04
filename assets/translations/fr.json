@@ -1,0 +1,17 @@
+{
+  "locale" : {
+    "language" : "French",
+    "flag_emoji" : "🇫🇷"
+  },
+  "home" : {
+    "welcome" : "Bienvenue",
+    "dashboard" : "Tableau de bord",
+    "champions" : "Champions"
+  },
+  "settings" : {
+    "disconnect" : "Se déconnecter",
+    "disconnect_disclaimer" : "Êtes vous sûr de vouloir vous déconnecter ?",
+    "contact_us" : "Nous contacter",
+    "change_locale" : "Changer de langue"
+  }
+}

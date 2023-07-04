@@ -1,0 +1,17 @@
+{
+  "locale" : {
+    "language" : "English",
+    "flag_emoji" : "🇺🇸"
+  },
+  "home" : {
+    "welcome" : "Welcome",
+    "dashboard" : "Dashboard",
+    "champions" : "Champions"
+  },
+  "settings" : {
+    "disconnect" : "Disconnect",
+    "disconnect_disclaimer" : "Are you sure you want to log out ?",
+    "contact_us" : "Contact us",
+    "change_locale" : "Change language"
+  }
+}

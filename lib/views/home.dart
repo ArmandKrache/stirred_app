@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:template_app/router.dart';
 import 'package:template_app/utils/app_colors.dart';
@@ -5,6 +6,7 @@ import 'package:template_app/utils/app_data.dart';
 import 'package:template_app/views/champions.dart';
 import 'package:template_app/views/dashboard.dart';
 import 'package:template_app/widgets/popInDisclaimer.dart';
+import 'package:template_app/widgets/settings_button_widget.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -57,8 +59,8 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _childControlTopBar(List<Widget> tabViews) {
     final List<String> nameTabs = [
-      'Dashboard',
-      'Champions',
+      tr('home.dashboard'),
+      tr('home.champions'),
     ];
     return Column(
       children: [
@@ -88,26 +90,9 @@ class _HomeViewState extends State<HomeView> {
   PreferredSizeWidget _appBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text("Welcome ${AppData.currentUser}"),
+      title: Text("${tr("home.welcome")} ${AppData.currentUser}"),
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.logout_rounded, color: AppColors.alert,),
-          tooltip: 'Log out',
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (_) {
-                  return PopInDisclaimer(
-                      bodyText: "Are you sure you want to log out ?",
-                      cancelTap: () {
-                        AppRouter.pop(context);
-                      },
-                      confirmTap: () {
-                        AppRouter.logout(context);
-                      });
-                });
-          },
-        ),
+        SettingsButtonWidget(),
       ],
     );
   }

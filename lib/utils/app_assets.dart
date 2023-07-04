@@ -1,5 +1,5 @@
 class AppAssets {
-  static const String appIcon = "assets/icon.png";
-  static const String splashIcon = "assets/splash-icon.png";
-  static const String animatedBackground = "assets/animated-bg.json";
+  static const String appIcon = "assets/images/icon.png";
+  static const String splashIcon = "assets/images/splash-icon.png";
+  static const String animatedBackground = "assets/images/animated-bg.json";
 }
