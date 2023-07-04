@@ -22,7 +22,7 @@ To use this template for your own app projects, follow these steps:
 
 `git remote remove origin`
 
-3. Add the new remote repository : 
+3. Add the new remote repository (You might need to create a new Git repository first) : 
 
 `git remote add origin [new_remote_repository_url]`
 
