@@ -1,4 +1,3 @@
-
 import 'package:template_app/widgets/counter.dart';
 import 'package:test/test.dart';
 

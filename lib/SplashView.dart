@@ -1,10 +1,6 @@
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:template_app/router.dart';
-import 'package:template_app/utils/app_assets.dart';
 import 'dart:async';
-import 'package:template_app/utils/app_colors.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -30,9 +26,9 @@ class _SplashView extends State<SplashView> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (prefs.containsKey("username") && prefs.containsKey("password")) {
-      AppRouter.push(context, NavPosition.inHome, replace: true);
+      // AppRouter.push(context, NavPosition.inHome, replace: true);
     } else {
-      AppRouter.push(context, NavPosition.inLogin, replace: true, transition: TransitionType.fadeIn);
+      // AppRouter.push(context, NavPosition.inLogin, replace: true, transition: TransitionType.fadeIn);
     }
   }
 
@@ -48,12 +44,16 @@ class CustomSplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+      decoration: const BoxDecoration(gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Color(0xFF2654a8), Color(0xFF539ce0)],
+      )),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(AppAssets.splashIcon)
+            Image.asset("assets/images/splash-icon.png")
           ],
         ),
       ),

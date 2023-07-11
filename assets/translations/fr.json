@@ -1,17 +1,12 @@
 {
-  "locale" : {
-    "language" : "French",
-    "flag_emoji" : "🇫🇷"
+  "breaking_news" : {
+    "daily_news" : "Nouvelles du jour"
   },
-  "home" : {
-    "welcome" : "Bienvenue",
-    "dashboard" : "Tableau de bord",
-    "champions" : "Champions"
+  "saved_articles" : {
+    "saved_articles" : "Articles enregistrés",
+    "no_saved_articles_disclaimer" : "Aucun article enregistré"
   },
-  "settings" : {
-    "disconnect" : "Se déconnecter",
-    "disconnect_disclaimer" : "Êtes vous sûr de vouloir vous déconnecter ?",
-    "contact_us" : "Nous contacter",
-    "change_locale" : "Changer de langue"
+  "article_details" : {
+    "article_saved_confirm" : "Article enregistré avec succès"
   }
 }

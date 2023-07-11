@@ -1,17 +1,12 @@
 {
-  "locale" : {
-    "language" : "English",
-    "flag_emoji" : "🇺🇸"
+  "breaking_news" : {
+    "daily_news" : "Daily News"
   },
-  "home" : {
-    "welcome" : "Welcome",
-    "dashboard" : "Dashboard",
-    "champions" : "Champions"
+  "saved_articles" : {
+    "saved_articles" : "Saved Articles",
+    "no_saved_articles_disclaimer" : "No saved articles yet"
   },
-  "settings" : {
-    "disconnect" : "Disconnect",
-    "disconnect_disclaimer" : "Are you sure you want to log out ?",
-    "contact_us" : "Contact us",
-    "change_locale" : "Change language"
+  "article_details" : {
+    "article_saved_confirm" : "Article Saved Successfully"
   }
 }
