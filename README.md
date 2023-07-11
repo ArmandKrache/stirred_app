@@ -6,11 +6,7 @@ This is a custom Flutter mobile app template project that I created for my perso
 
 This template includes the following basic features:
 
-- A simple UI with Splash, Login, Home and subScreen Views
-- Navigation using Fluro
-- A basic use of cache with SharedPreferences
-- An http client using Dio and a ready to use config file
-- The basic project architecture
+[TODO]
 
 ## Getting Started
 
