@@ -1,9 +1,9 @@
 
 
 
-import 'package:template_app/src/data/datasources/local/app_database.dart';
-import 'package:template_app/src/domain/models/article.dart';
-import 'package:template_app/src/domain/repositories/database_repository.dart';
+import 'package:cocktail_app/src/data/datasources/local/app_database.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {
   final AppDatabase _appDatabase;

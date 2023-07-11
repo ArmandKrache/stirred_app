@@ -1,5 +1,5 @@
-import 'package:template_app/src/domain/models/article.dart';
-import 'package:template_app/src/utils/constants/strings.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:floor/floor.dart';
 
 @dao

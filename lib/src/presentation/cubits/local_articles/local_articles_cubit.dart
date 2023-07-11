@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:template_app/src/domain/models/article.dart';
-import 'package:template_app/src/domain/repositories/database_repository.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'local_articles_state.dart';

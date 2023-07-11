@@ -1,4 +1,4 @@
-import 'package:template_app/widgets/counter.dart';
+import 'counter.dart';
 import 'package:test/test.dart';
 
 void main() {

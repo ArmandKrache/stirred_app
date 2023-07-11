@@ -1,9 +1,9 @@
-import 'package:template_app/src/domain/models/article.dart';
-import 'package:template_app/src/domain/models/requests/breaking_news_request.dart';
-import 'package:template_app/src/domain/repositories/api_repository.dart';
-import 'package:template_app/src/presentation/cubits/base/base_cubit.dart';
-import 'package:template_app/src/utils/constants/nums.dart';
-import 'package:template_app/src/utils/resources/data_state.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/requests/breaking_news_request.dart';
+import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
+import 'package:cocktail_app/src/presentation/cubits/base/base_cubit.dart';
+import 'package:cocktail_app/src/utils/constants/nums.dart';
+import 'package:cocktail_app/src/utils/resources/data_state.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 

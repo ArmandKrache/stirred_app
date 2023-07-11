@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:template_app/src/config/router/app_router.dart';
-import 'package:template_app/src/domain/models/article.dart';
-import 'package:template_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
-import 'package:template_app/src/presentation/widgets/article_widget.dart';
+import 'package:cocktail_app/src/config/router/app_router.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
+import 'package:cocktail_app/src/presentation/widgets/article_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

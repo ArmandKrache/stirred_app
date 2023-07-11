@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.flutter.test.tech.template_app">
+    package="app.flutter.test.tech.cocktail_app">
    <application
-        android:label="template_app"
+        android:label="cocktail_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

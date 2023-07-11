@@ -1,4 +1,4 @@
-import 'package:template_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/article.dart';
 
 abstract class DatabaseRepository {
   Future<List<Article>> getSavedArticles();

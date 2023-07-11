@@ -1,4 +1,4 @@
-import 'package:template_app/src/domain/models/source.dart';
+import 'package:cocktail_app/src/domain/models/source.dart';
 import 'package:floor/floor.dart';
 
 class SourceTypeConverter extends TypeConverter<Source?, String> {

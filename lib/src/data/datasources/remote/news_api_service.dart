@@ -1,5 +1,5 @@
-import 'package:template_app/src/domain/models/responses/breaking_news_response.dart';
-import 'package:template_app/src/utils/constants/strings.dart';
+import 'package:cocktail_app/src/domain/models/responses/breaking_news_response.dart';
+import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
