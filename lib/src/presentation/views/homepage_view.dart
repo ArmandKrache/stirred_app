@@ -1,8 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
 import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/drink.dart';
+import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_articles/remote_articles_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
 import 'package:cocktail_app/src/presentation/widgets/article_widget.dart';
+import 'package:cocktail_app/src/presentation/widgets/drink_widget.dart';
 import 'package:cocktail_app/src/utils/extensions/scroll_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,18 +16,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:ionicons/ionicons.dart';
 
 @RoutePage()
-class BreakingNewsView extends HookWidget {
-  const BreakingNewsView({Key? key}) : super (key: key);
+class HomepageView extends HookWidget {
+  const HomepageView({Key? key}) : super (key: key);
 
   @override
   Widget build(BuildContext context) {
-    final remoteArticlesCubit = BlocProvider.of<RemoteArticlesCubit>(context);
+    final remoteDrinksCubit = BlocProvider.of<RemoteDrinksCubit>(context);
     final scrollController = useScrollController();
-
 
     useEffect(() {
       scrollController.onScrollEndsListener(() {
-        remoteArticlesCubit.getBreakingNewsArticles();
+        remoteDrinksCubit.getFilteredCocktails(filters: {"ingredients" : "Vodka"});
       });
 
       return scrollController.dispose;
@@ -32,7 +35,7 @@ class BreakingNewsView extends HookWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tr("breaking_news.daily_news"),
+          tr("homepage.popular_cocktails"),
         style: const TextStyle(color: Colors.black),
         ),
         actions: [
@@ -45,17 +48,17 @@ class BreakingNewsView extends HookWidget {
           ),
         ],
       ),
-      body: BlocBuilder<RemoteArticlesCubit, RemoteArticlesState>(
+      body: BlocBuilder<RemoteDrinksCubit, RemoteDrinksState>(
         builder: (_, state) {
           switch (state.runtimeType) {
-            case RemoteArticlesLoading:
+            case RemoteDrinksLoading:
               return const Center(child: CupertinoActivityIndicator());
-            case RemoteArticlesFailed:
+            case RemoteDrinksFailed:
               return const Center(child: Icon(Ionicons.refresh));
-            case RemoteArticlesSuccess:
+            case RemoteDrinksSuccess:
               return _buildArticles(
                 scrollController,
-                state.articles,
+                state.drinks,
                 state.noMoreData,
               );
             default:
@@ -68,18 +71,19 @@ class BreakingNewsView extends HookWidget {
 
   Widget _buildArticles(
       ScrollController scrollController,
-      List<Article> articles,
+      List<Drink> drinks,
       bool noMoreData) {
     return CustomScrollView(
       controller: scrollController,
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
-              (context, index) => ArticleWidget(
-                article: articles[index],
-                onArticlePressed: (element) => appRouter.push(ArticleDetailsRoute(article: element)),
+              (context, index) => DrinkWidget(
+                drink: drinks[index],
+                onArticlePressed: (element) =>
+                    appRouter.push(DrinkDetailsRoute(drinkId: drinks[index].idDrink)),
               ),
-              childCount: articles.length),
+              childCount: drinks.length),
         ),
 
         if (!noMoreData)

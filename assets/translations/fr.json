@@ -1,6 +1,6 @@
 {
-  "breaking_news" : {
-    "daily_news" : "Nouvelles du jour"
+  "homepage" : {
+    "popular_cocktails" : "Cocktails populaires"
   },
   "saved_articles" : {
     "saved_articles" : "Articles enregistrés",

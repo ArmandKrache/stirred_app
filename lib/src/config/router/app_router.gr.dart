@@ -15,12 +15,6 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    BreakingNewsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const BreakingNewsView(),
-      );
-    },
     ArticleDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<ArticleDetailsRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -37,21 +31,23 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SavedArticlesView(),
       );
     },
+    HomepageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HomepageView(),
+      );
+    },
+    DrinkDetailsRoute.name: (routeData) {
+      final args = routeData.argsAs<DrinkDetailsRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DrinkDetailsView(
+          key: args.key,
+          drinkId: args.drinkId,
+        ),
+      );
+    },
   };
-}
-
-/// generated route for
-/// [BreakingNewsView]
-class BreakingNewsRoute extends PageRouteInfo<void> {
-  const BreakingNewsRoute({List<PageRouteInfo>? children})
-      : super(
-          BreakingNewsRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'BreakingNewsRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -104,4 +100,56 @@ class SavedArticlesRoute extends PageRouteInfo<void> {
   static const String name = 'SavedArticlesRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HomepageView]
+class HomepageRoute extends PageRouteInfo<void> {
+  const HomepageRoute({List<PageRouteInfo>? children})
+      : super(
+          HomepageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomepageRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [DrinkDetailsView]
+class DrinkDetailsRoute extends PageRouteInfo<DrinkDetailsRouteArgs> {
+  DrinkDetailsRoute({
+    Key? key,
+    required String? drinkId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DrinkDetailsRoute.name,
+          args: DrinkDetailsRouteArgs(
+            key: key,
+            drinkId: drinkId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DrinkDetailsRoute';
+
+  static const PageInfo<DrinkDetailsRouteArgs> page =
+      PageInfo<DrinkDetailsRouteArgs>(name);
+}
+
+class DrinkDetailsRouteArgs {
+  const DrinkDetailsRouteArgs({
+    this.key,
+    required this.drinkId,
+  });
+
+  final Key? key;
+
+  final String? drinkId;
+
+  @override
+  String toString() {
+    return 'DrinkDetailsRouteArgs{key: $key, drinkId: $drinkId}';
+  }
 }

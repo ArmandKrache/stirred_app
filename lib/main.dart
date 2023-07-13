@@ -5,6 +5,7 @@ import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 import 'package:cocktail_app/src/locator.dart';
 import 'package:cocktail_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_articles/remote_articles_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
 import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => LocalArticlesCubit(
           locator<DatabaseRepository>())..getAllSavedArticles(),
         ),
-        BlocProvider(create: (context) => RemoteArticlesCubit(
-          locator<ApiRepository>(),)..getBreakingNewsArticles(),
-        )
+        BlocProvider(create: (context) => RemoteDrinksCubit(
+          locator<ApiRepository>(),)..getFilteredCocktails(),
+        ),
       ],
       child: OKToast(child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

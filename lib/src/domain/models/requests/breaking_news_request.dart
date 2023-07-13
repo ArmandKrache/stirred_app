@@ -1,5 +1,4 @@
 import 'package:cocktail_app/src/utils/constants/nums.dart';
-import 'package:cocktail_app/src/utils/constants/strings.dart';
 
 
 class BreakingNewsRequest {

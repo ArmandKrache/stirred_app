@@ -1,0 +1,4 @@
+class PopularCocktailsRequest {
+
+  PopularCocktailsRequest();
+}

@@ -20,19 +20,19 @@ class RemoteArticlesCubit extends BaseCubit<RemoteArticlesState, List<Article>> 
     if (isBusy) return;
 
     await run(() async {
-      final response = await _apiRepository.getBreakingNewsArticles(request: BreakingNewsRequest(page: _page));
-
-      if (response is DataSuccess) {
-        final articles = response.data!.articles;
-        final noMoreData = articles.length < defaultPageSize;
-
-        data.addAll(articles);
-        _page++;
-
-        emit(RemoteArticlesSuccess(articles: data, noMoreData: noMoreData));
-      } else if (response is DataFailed) {
-        emit(RemoteArticlesFailed(exception: response.exception));
-      }
+      //final response = await _apiRepository.getBreakingNewsArticles(request: BreakingNewsRequest(page: _page));
+//
+      //if (response is DataSuccess) {
+      //  final articles = response.data!.articles;
+      //  final noMoreData = articles.length < defaultPageSize;
+//
+      //  data.addAll(articles);
+      //  _page++;
+//
+      //  emit(RemoteArticlesSuccess(articles: data, noMoreData: noMoreData));
+      //} else if (response is DataFailed) {
+      //  emit(RemoteArticlesFailed(exception: response.exception));
+      //}
     });
   }
 }

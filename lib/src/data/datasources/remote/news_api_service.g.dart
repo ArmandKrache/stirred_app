@@ -13,7 +13,7 @@ class _NewsApiService implements NewsApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://newsapi.org/v2';
+    baseUrl ??= 'baseUrl';
   }
 
   final Dio _dio;

@@ -1,0 +1,30 @@
+import 'package:cocktail_app/src/config/config.dart';
+import 'package:cocktail_app/src/domain/models/responses/filtered_cocktails_response.dart';
+import 'package:cocktail_app/src/domain/models/responses/lookup_details_response.dart';
+import 'package:cocktail_app/src/domain/models/responses/popular_cocktails_response.dart';
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'cocktail_api_service.g.dart';
+
+@RestApi(baseUrl: baseCocktailApiUrl, parser: Parser.MapSerializable)
+abstract class CocktailApiService {
+  factory CocktailApiService(Dio dio, {String baseUrl}) = _CocktailApiService;
+
+  @GET('/popular.php')
+  Future<HttpResponse<PopularCocktailsResponse>> getPopularCocktails();
+
+  @GET('/filter.php')
+  Future<HttpResponse<FilteredCocktailsResponse>> getFilteredCocktails({
+    @Query("c") String? categorie,
+    @Query("a") String? alcoholic,
+    @Query("g") String? glass,
+    @Query("i") String? ingredients,
+  });
+
+  @GET('/lookup.php')
+  Future<HttpResponse<LookupDetailsResponse>> lookupDetails({
+    @Query('i') String? drinkId,
+    @Query('iid') String? ingredientId,
+  });
+}

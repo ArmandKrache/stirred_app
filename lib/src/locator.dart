@@ -1,5 +1,5 @@
 import 'package:cocktail_app/src/data/datasources/local/app_database.dart';
-import 'package:cocktail_app/src/data/datasources/remote/news_api_service.dart';
+import 'package:cocktail_app/src/data/datasources/remote/cocktail_api_service.dart';
 import 'package:cocktail_app/src/data/repositories/api_repository_impl.dart';
 import 'package:cocktail_app/src/data/repositories/database_repository_impl.dart';
 import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
@@ -22,10 +22,10 @@ Future<void> initializeDependencies ( ) async {
   final dio = Dio();
   dio.interceptors.add(AwesomeDioInterceptor());
   locator.registerSingleton<Dio>(dio);
-  locator.registerSingleton<NewsApiService>(
-    NewsApiService(locator<Dio>()),
+  locator.registerSingleton<CocktailApiService>(
+    CocktailApiService(locator<Dio>()),
   );
   locator.registerSingleton<ApiRepository>(
-    ApiRepositoryImpl(locator<NewsApiService>()),
+    ApiRepositoryImpl(locator<CocktailApiService>()),
   );
  }
