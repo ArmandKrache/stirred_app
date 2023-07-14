@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
-import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
-import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/remote_details/remote_details_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,15 +18,15 @@ class DrinkDetailsView extends HookWidget {
 
   const DrinkDetailsView({Key? key, required this.drinkId}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final localArticlesCubit = BlocProvider.of<LocalArticlesCubit>(context);
-    final remoteDrinksCubit = BlocProvider.of<RemoteDrinksCubit>(context);
+    final remoteDetailsCubit = BlocProvider.of<RemoteDetailsCubit>(context);
 
     useEffect(() {
-      /// remoteDrinksCubit.getDrinkDetails(filters: {"id" : drinkId});
-    }, const []);
+      remoteDetailsCubit.handleEvent(LookupDetailsEvent(drinkId: drinkId));
+      return;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,14 +36,27 @@ class DrinkDetailsView extends HookWidget {
           child: const Icon(Ionicons.chevron_back, color: Colors.black,),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildArticleTitleAndDate(),
-            _buildArticleImage(),
-            _buildArticleDescription(),
-          ],
-        ),
+      body: BlocBuilder<RemoteDetailsCubit, RemoteDetailsState>(
+      builder: (_, state) {
+        switch (state.runtimeType) {
+          case RemoteDetailsLoading:
+            return const Center(child: CupertinoActivityIndicator());
+          case RemoteDetailsFailed:
+            return const Center(child: Icon(Ionicons.refresh));
+          case RemoteDetailsSuccess:
+            return SingleChildScrollView(
+              child: Column(
+              children: [
+                _buildDrinkTitle(state.drinksDetails.last),
+                _buildArticleImage(state.drinksDetails.last),
+                _buildArticleDescription(state.drinksDetails.last),
+              ],
+            ),
+          );
+          default:
+           return const SizedBox();
+        }
+      }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -53,14 +68,14 @@ class DrinkDetailsView extends HookWidget {
     );
   }
 
-  Widget _buildArticleTitleAndDate() {
+  Widget _buildDrinkTitle(DrinkDetails details) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'title', /// article.title ?? "",
+            details.title ?? "",
             style: const TextStyle(
                 fontFamily: "Butler",
                 fontSize: 20,
@@ -70,10 +85,10 @@ class DrinkDetailsView extends HookWidget {
           const SizedBox(height: 12,),
           Row(
             children: [
-              const Icon(Ionicons.time_outline, size: 16,),
+              const Icon(Ionicons.wine_outline, size: 16,),
               const SizedBox(width: 4,),
               Text(
-                'publishedAt', /// article.publishedAt ?? '',
+                details.glass ?? '',
                 style: const TextStyle(fontSize: 12),
               )
             ],
@@ -83,24 +98,23 @@ class DrinkDetailsView extends HookWidget {
     );
   }
 
-  Widget _buildArticleImage() {
+  Widget _buildArticleImage(DrinkDetails details) {
     return Container(
       width: double.maxFinite,
       height: 256,
       margin: const EdgeInsets.only(top: 12),
       child: Image.network(
-        "", /// article.urlToImage ?? '',
+        details.thumb ?? '',
         fit: BoxFit.cover,
         alignment: Alignment.topCenter,
       ),
     );
   }
 
-  Widget _buildArticleDescription() {
+  Widget _buildArticleDescription(DrinkDetails details) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      child: Text('Description',
-      /// child: Text('${article.description}\n\n${article.content}',
+      child: Text('${details.instructions}\n\n${details.tags ?? ""}',
         style: const TextStyle(fontSize: 16),
       ),
     );

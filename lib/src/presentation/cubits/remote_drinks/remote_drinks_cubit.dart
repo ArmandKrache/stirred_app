@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
 import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/domain/models/requests/filtered_cocktails_request.dart';
+import 'package:cocktail_app/src/domain/models/requests/lookup_details_request.dart';
 import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
 import 'package:cocktail_app/src/presentation/cubits/base/base_cubit.dart';
 import 'package:cocktail_app/src/utils/resources/data_state.dart';
@@ -35,7 +36,7 @@ class RemoteDrinksCubit extends BaseCubit<RemoteDrinksState, List<Drink>> {
 
         emit(RemoteDrinksSuccess(drinks: data, noMoreData: noMoreData));
       } else if (response is DataFailed) {
-        log(response.exception.toString());
+        // log(response.exception.toString());
       }
     });
   }

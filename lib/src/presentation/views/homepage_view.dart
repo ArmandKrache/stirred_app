@@ -78,12 +78,13 @@ class HomepageView extends HookWidget {
       slivers: [
         SliverList(
           delegate: SliverChildBuilderDelegate(
-              (context, index) => DrinkWidget(
-                drink: drinks[index],
-                onArticlePressed: (element) =>
-                    appRouter.push(DrinkDetailsRoute(drinkId: drinks[index].idDrink)),
-              ),
-              childCount: drinks.length),
+            (context, index) => DrinkWidget(
+              drink: drinks[index],
+              onArticlePressed: (element) =>
+                appRouter.push(DrinkDetailsRoute(drinkId: drinks[index].idDrink)),
+            ),
+            childCount: drinks.length,
+          ),
         ),
 
         if (!noMoreData)

@@ -9,28 +9,28 @@ class DrinkDetails extends Equatable {
   @PrimaryKey(autoGenerate: true)
   final int? id;
   final String? idDrink;
-  final String? strDrink;
-  final String? strDrinkThumb;
-  final String? strTags;
-  final String? strCategory;
-  final String? strIBA;
-  final String? strAlcoholic;
-  final String? strGlass;
-  final String? strInstructions;
+  final String? title;
+  final String? thumb;
+  final String? tags;
+  final String? category;
+  final String? IBA;
+  final String? alcoholic;
+  final String? glass;
+  final String? instructions;
   final List<String>? ingredients;
   final List<String>? measures;
 
   const DrinkDetails({
     this.id,
     this.idDrink,
-    this.strDrink,
-    this.strDrinkThumb,
-    this.strTags,
-    this.strCategory,
-    this.strIBA,
-    this.strAlcoholic,
-    this.strGlass,
-    this.strInstructions,
+    this.title,
+    this.thumb,
+    this.tags,
+    this.category,
+    this.IBA,
+    this.alcoholic,
+    this.glass,
+    this.instructions,
     this.ingredients,
     this.measures,
   });
@@ -63,14 +63,14 @@ class DrinkDetails extends Equatable {
     return DrinkDetails(
       id: map['id'] != null ? map['id'] as int : null,
       idDrink: map['idDrink'] != null ? map['idDrink'] as String : null,
-      strDrink: map['strDrink'] != null ? map['strDrink'] as String : null,
-      strDrinkThumb: map['strDrinkThumb'] != null ? map['strDrinkThumb'] as String : null,
-      strTags: map['strTags'] != null ? map['strTags'] as String : null,
-      strCategory: map['strCategory'] != null ? map['strCategory'] as String : null,
-      strIBA: map['strIBA'] != null ? map['strIBA'] as String : null,
-      strAlcoholic: map['strAlcoholic'] != null ? map['strAlcoholic'] as String : null,
-      strGlass: map['strGlass'] != null ? map['strGlass'] as String : null,
-      strInstructions: map['strInstructions'] != null ? map['strInstructions'] as String : null,
+      title: map['strDrink'] != null ? map['strDrink'] as String : null,
+      thumb: map['strDrinkThumb'] != null ? map['strDrinkThumb'] as String : null,
+      tags: map['strTags'] != null ? map['strTags'] as String : null,
+      category: map['strCategory'] != null ? map['strCategory'] as String : null,
+      IBA: map['strIBA'] != null ? map['strIBA'] as String : null,
+      alcoholic: map['strAlcoholic'] != null ? map['strAlcoholic'] as String : null,
+      glass: map['strGlass'] != null ? map['strGlass'] as String : null,
+      instructions: map['strInstructions'] != null ? map['strInstructions'] as String : null,
       ingredients: ingredients,
       measures: measures
     );
@@ -80,6 +80,6 @@ class DrinkDetails extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object?> get props => [id, idDrink, strDrink, ingredients, measures];
+  List<Object?> get props => [id, idDrink, title, ingredients, measures];
 
 }
