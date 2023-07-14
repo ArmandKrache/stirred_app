@@ -47,9 +47,9 @@ class DrinkDetailsView extends HookWidget {
             return SingleChildScrollView(
               child: Column(
               children: [
-                _buildDrinkTitle(state.drinksDetails.last),
-                _buildArticleImage(state.drinksDetails.last),
-                _buildArticleDescription(state.drinksDetails.last),
+                _buildTitle(state.drinksDetails.last),
+                _buildImage(state.drinksDetails.last),
+                _buildIngredientsAndPreparation(state.drinksDetails.last),
               ],
             ),
           );
@@ -68,7 +68,7 @@ class DrinkDetailsView extends HookWidget {
     );
   }
 
-  Widget _buildDrinkTitle(DrinkDetails details) {
+  Widget _buildTitle(DrinkDetails details) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -82,27 +82,16 @@ class DrinkDetailsView extends HookWidget {
                 fontWeight: FontWeight.w900
             ),
           ),
-          const SizedBox(height: 12,),
-          Row(
-            children: [
-              const Icon(Ionicons.wine_outline, size: 16,),
-              const SizedBox(width: 4,),
-              Text(
-                details.glass ?? '',
-                style: const TextStyle(fontSize: 12),
-              )
-            ],
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildArticleImage(DrinkDetails details) {
+  Widget _buildImage(DrinkDetails details) {
     return Container(
       width: double.maxFinite,
       height: 256,
-      margin: const EdgeInsets.only(top: 12),
+      margin: const EdgeInsets.only(top: 12, bottom: 12),
       child: Image.network(
         details.thumb ?? '',
         fit: BoxFit.cover,
@@ -111,11 +100,56 @@ class DrinkDetailsView extends HookWidget {
     );
   }
 
-  Widget _buildArticleDescription(DrinkDetails details) {
+  Widget _buildIngredientsAndPreparation(DrinkDetails details) {
+    if (details.ingredients ==  null || details.measures == null) {
+      return const SizedBox();
+    }
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      child: Text('${details.instructions}\n\n${details.tags ?? ""}',
-        style: const TextStyle(fontSize: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Ingredients",
+            style: TextStyle(
+                fontFamily: "Butler",
+                fontSize: 18,
+                fontWeight: FontWeight.w900
+            ),
+          ),
+          const SizedBox(height: 8,),
+          for (int i = 0; i < details.ingredients!.length && i < details.measures!.length; i++)
+            Text("${details.measures![i] ?? ""} ${details.ingredients![i]}"),
+          const SizedBox(height: 16,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Preparation",
+                style: TextStyle(
+                    fontFamily: "Butler",
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900
+                ),
+              ),
+              Row(
+                children: [
+                  const Icon(Ionicons.wine_outline, size: 16,),
+                  const SizedBox(width: 4,),
+                  Text(
+                    details.glass ?? '',
+                    style: const TextStyle(fontSize: 14),
+                  )
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8,),
+          Text('${details.instructions}',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
       ),
     );
   }
