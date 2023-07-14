@@ -61,7 +61,7 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  ArticleDao? _articleDaoInstance;
+  DrinkDao? _drinkDaoInstance;
 
   Future<sqflite.Database> open(
     String path,
@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `articles_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `source` TEXT, `author` TEXT, `title` TEXT, `description` TEXT, `url` TEXT, `urlToImage` TEXT, `publishedAt` TEXT, `content` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `drinks_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `idDrink` TEXT, `strDrink` TEXT, `strDrinkThumb` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -94,44 +94,34 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  ArticleDao get articleDao {
-    return _articleDaoInstance ??= _$ArticleDao(database, changeListener);
+  DrinkDao get drinkDao {
+    return _drinkDaoInstance ??= _$DrinkDao(database, changeListener);
   }
 }
 
-class _$ArticleDao extends ArticleDao {
-  _$ArticleDao(
+class _$DrinkDao extends DrinkDao {
+  _$DrinkDao(
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _articleInsertionAdapter = InsertionAdapter(
+        _drinkInsertionAdapter = InsertionAdapter(
             database,
-            'articles_table',
-            (Article item) => <String, Object?>{
+            'drinks_table',
+            (Drink item) => <String, Object?>{
                   'id': item.id,
-                  'source': _sourceTypeConverter.encode(item.source),
-                  'author': item.author,
-                  'title': item.title,
-                  'description': item.description,
-                  'url': item.url,
-                  'urlToImage': item.urlToImage,
-                  'publishedAt': item.publishedAt,
-                  'content': item.content
+                  'idDrink': item.idDrink,
+                  'strDrink': item.strDrink,
+                  'strDrinkThumb': item.strDrinkThumb
                 }),
-        _articleDeletionAdapter = DeletionAdapter(
+        _drinkDeletionAdapter = DeletionAdapter(
             database,
-            'articles_table',
+            'drinks_table',
             ['id'],
-            (Article item) => <String, Object?>{
+            (Drink item) => <String, Object?>{
                   'id': item.id,
-                  'source': _sourceTypeConverter.encode(item.source),
-                  'author': item.author,
-                  'title': item.title,
-                  'description': item.description,
-                  'url': item.url,
-                  'urlToImage': item.urlToImage,
-                  'publishedAt': item.publishedAt,
-                  'content': item.content
+                  'idDrink': item.idDrink,
+                  'strDrink': item.strDrink,
+                  'strDrinkThumb': item.strDrinkThumb
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -140,33 +130,28 @@ class _$ArticleDao extends ArticleDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Article> _articleInsertionAdapter;
+  final InsertionAdapter<Drink> _drinkInsertionAdapter;
 
-  final DeletionAdapter<Article> _articleDeletionAdapter;
+  final DeletionAdapter<Drink> _drinkDeletionAdapter;
 
   @override
-  Future<List<Article>> getAllArticles() async {
-    return _queryAdapter.queryList('SELECT * FROM articles_table',
-        mapper: (Map<String, Object?> row) => Article(
+  Future<List<Drink>> getAllDrinks() async {
+    return _queryAdapter.queryList('SELECT * FROM drinks_table',
+        mapper: (Map<String, Object?> row) => Drink(
             id: row['id'] as int?,
-            source: _sourceTypeConverter.decode(row['source'] as String),
-            author: row['author'] as String?,
-            title: row['title'] as String?,
-            description: row['description'] as String?,
-            url: row['url'] as String?,
-            urlToImage: row['urlToImage'] as String?,
-            publishedAt: row['publishedAt'] as String?,
-            content: row['content'] as String?));
+            idDrink: row['idDrink'] as String?,
+            strDrink: row['strDrink'] as String?,
+            strDrinkThumb: row['strDrinkThumb'] as String?));
   }
 
   @override
-  Future<void> insertArticle(Article article) async {
-    await _articleInsertionAdapter.insert(article, OnConflictStrategy.replace);
+  Future<void> insertDrink(Drink drink) async {
+    await _drinkInsertionAdapter.insert(drink, OnConflictStrategy.replace);
   }
 
   @override
-  Future<void> deleteArticle(Article article) async {
-    await _articleDeletionAdapter.delete(article);
+  Future<void> deleteDrink(Drink drink) async {
+    await _drinkDeletionAdapter.delete(drink);
   }
 }
 

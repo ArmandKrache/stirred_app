@@ -1,3 +1,4 @@
+import 'package:cocktail_app/src/config/config.dart';
 import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';

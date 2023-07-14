@@ -15,22 +15,6 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    ArticleDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<ArticleDetailsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ArticleDetailsView(
-          key: args.key,
-          article: args.article,
-        ),
-      );
-    },
-    SavedArticlesRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SavedArticlesView(),
-      );
-    },
     HomepageRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -43,63 +27,17 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: DrinkDetailsView(
           key: args.key,
-          drinkId: args.drinkId,
+          drink: args.drink,
         ),
       );
     },
+    SavedDrinksRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SavedDrinksView(),
+      );
+    },
   };
-}
-
-/// generated route for
-/// [ArticleDetailsView]
-class ArticleDetailsRoute extends PageRouteInfo<ArticleDetailsRouteArgs> {
-  ArticleDetailsRoute({
-    Key? key,
-    required Article article,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ArticleDetailsRoute.name,
-          args: ArticleDetailsRouteArgs(
-            key: key,
-            article: article,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ArticleDetailsRoute';
-
-  static const PageInfo<ArticleDetailsRouteArgs> page =
-      PageInfo<ArticleDetailsRouteArgs>(name);
-}
-
-class ArticleDetailsRouteArgs {
-  const ArticleDetailsRouteArgs({
-    this.key,
-    required this.article,
-  });
-
-  final Key? key;
-
-  final Article article;
-
-  @override
-  String toString() {
-    return 'ArticleDetailsRouteArgs{key: $key, article: $article}';
-  }
-}
-
-/// generated route for
-/// [SavedArticlesView]
-class SavedArticlesRoute extends PageRouteInfo<void> {
-  const SavedArticlesRoute({List<PageRouteInfo>? children})
-      : super(
-          SavedArticlesRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SavedArticlesRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -121,13 +59,13 @@ class HomepageRoute extends PageRouteInfo<void> {
 class DrinkDetailsRoute extends PageRouteInfo<DrinkDetailsRouteArgs> {
   DrinkDetailsRoute({
     Key? key,
-    required String? drinkId,
+    required Drink drink,
     List<PageRouteInfo>? children,
   }) : super(
           DrinkDetailsRoute.name,
           args: DrinkDetailsRouteArgs(
             key: key,
-            drinkId: drinkId,
+            drink: drink,
           ),
           initialChildren: children,
         );
@@ -141,15 +79,29 @@ class DrinkDetailsRoute extends PageRouteInfo<DrinkDetailsRouteArgs> {
 class DrinkDetailsRouteArgs {
   const DrinkDetailsRouteArgs({
     this.key,
-    required this.drinkId,
+    required this.drink,
   });
 
   final Key? key;
 
-  final String? drinkId;
+  final Drink drink;
 
   @override
   String toString() {
-    return 'DrinkDetailsRouteArgs{key: $key, drinkId: $drinkId}';
+    return 'DrinkDetailsRouteArgs{key: $key, drink: $drink}';
   }
+}
+
+/// generated route for
+/// [SavedDrinksView]
+class SavedDrinksRoute extends PageRouteInfo<void> {
+  const SavedDrinksRoute({List<PageRouteInfo>? children})
+      : super(
+          SavedDrinksRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SavedDrinksRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -1,18 +1,24 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
 import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/drink.dart';
+import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/local_details/local_details_cubit.dart';
 import 'package:cocktail_app/src/presentation/widgets/article_widget.dart';
+import 'package:cocktail_app/src/presentation/widgets/drink_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:ionicons/ionicons.dart';
-/*
+
 @RoutePage()
-class SavedArticlesView extends HookWidget {
-  const SavedArticlesView({Key? key}) : super(key: key);
+class SavedDrinksView extends HookWidget {
+  const SavedDrinksView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +34,13 @@ class SavedArticlesView extends HookWidget {
           style: const TextStyle(color: Colors.black),
         ),
       ),
-      body: BlocBuilder<LocalArticlesCubit, LocalArticlesState>(
+      body: BlocBuilder<LocalDrinkCubit, LocalDrinkState>(
         builder: (_, state) {
           switch (state.runtimeType) {
-            case LocalArticlesLoading:
+            case LocalDrinkLoading:
               return const Center(child: CupertinoActivityIndicator());
-            case LocalArticlesSuccess:
-              return _buildArticlesList(state.articles);
+            case LocalDrinkSuccess:
+              return _buildArticlesList(state.drinkList);
             default:
               return const SizedBox();
           }
@@ -43,8 +49,8 @@ class SavedArticlesView extends HookWidget {
     );
   }
 
-  Widget _buildArticlesList(List<Article> articles) {
-    if (articles.isEmpty) {
+  Widget _buildArticlesList(List<Drink> drinks) {
+    if (drinks.isEmpty) {
       return Center(
         child: Text(
           tr("saved_articles.no_saved_articles_disclaimer"),
@@ -53,18 +59,18 @@ class SavedArticlesView extends HookWidget {
     }
 
     return ListView.builder(
-      itemCount: articles.length,
+      itemCount: drinks.length,
       itemBuilder: (context, index) {
-        return ArticleWidget(
-          article: articles[index],
+        return DrinkWidget(
+          drink: drinks[index],
           isRemovable: true,
-          onRemove: (article) => BlocProvider.of<LocalArticlesCubit>(context)
-            .removeArticles(article: article),
-          onArticlePressed: (article) => appRouter.push(
-            ArticleDetailsRoute(article: article)
+          onRemove: (details) => BlocProvider.of<LocalDrinkCubit>(context)
+            .removeDrink(drink: drinks[index]),
+          onArticlePressed: (drink) => appRouter.push(
+            DrinkDetailsRoute(drink: drink)
           ),
         );
     });
   }
 
-}*/
+}

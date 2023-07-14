@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:oktoast/oktoast.dart';
-
+/*
 @RoutePage()
 class ArticleDetailsView extends HookWidget {
   final Article article;
@@ -98,3 +98,4 @@ class ArticleDetailsView extends HookWidget {
     );
   }
 }
+*/

@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
+import 'package:cocktail_app/src/domain/models/drink.dart';
 import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/presentation/cubits/local_articles/local_articles_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/local_details/local_details_cubit.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_details/remote_details_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,17 +16,17 @@ import 'package:oktoast/oktoast.dart';
 
 @RoutePage()
 class DrinkDetailsView extends HookWidget {
-  final String? drinkId;
+  final Drink drink;
 
-  const DrinkDetailsView({Key? key, required this.drinkId}) : super(key: key);
+  const DrinkDetailsView({Key? key, required this.drink}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localArticlesCubit = BlocProvider.of<LocalArticlesCubit>(context);
+    final localDetailsCubit = BlocProvider.of<LocalDrinkCubit>(context);
     final remoteDetailsCubit = BlocProvider.of<RemoteDetailsCubit>(context);
 
     useEffect(() {
-      remoteDetailsCubit.handleEvent(LookupDetailsEvent(drinkId: drinkId));
+      remoteDetailsCubit.handleEvent(LookupDetailsEvent(drinkId: drink.idDrink));
       return;
     }, []);
 
@@ -60,7 +62,7 @@ class DrinkDetailsView extends HookWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          /// localArticlesCubit.saveArticle(article: article);
+          localDetailsCubit.saveDrink(drink: drink);
           showToast(tr("article_details.article_saved_confirm"));
         },
         child: const Icon(Ionicons.bookmark, color: Colors.white,),

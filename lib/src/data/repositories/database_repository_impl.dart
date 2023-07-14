@@ -3,6 +3,8 @@
 
 import 'package:cocktail_app/src/data/datasources/local/app_database.dart';
 import 'package:cocktail_app/src/domain/models/article.dart';
+import 'package:cocktail_app/src/domain/models/drink.dart';
+import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {
@@ -11,17 +13,17 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   DatabaseRepositoryImpl(this._appDatabase);
 
   @override
-  Future<List<Article>> getSavedArticles() async {
-    return _appDatabase.articleDao.getAllArticles();
+  Future<List<Drink>> getSavedDrinks() async {
+    return _appDatabase.drinkDao.getAllDrinks();
   }
 
   @override
-  Future<void> removeArticle(Article article) async {
-    return _appDatabase.articleDao.deleteArticle(article);
+  Future<void> removeDrink(Drink drink) async {
+    return _appDatabase.drinkDao.deleteDrink(drink);
   }
 
   @override
-  Future<void> saveArticle(Article article) async {
-    return _appDatabase.articleDao.insertArticle(article);
+  Future<void> saveDrink(Drink drink) async {
+    return _appDatabase.drinkDao.insertDrink(drink);
   }
 }

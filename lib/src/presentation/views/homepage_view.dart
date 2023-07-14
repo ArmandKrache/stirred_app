@@ -40,7 +40,7 @@ class HomepageView extends HookWidget {
         ),
         actions: [
           GestureDetector(
-            onTap: () => appRouter.push(const SavedArticlesRoute()),
+            onTap: () => appRouter.push(const SavedDrinksRoute()),
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Icon(Ionicons.bookmark, color: Colors.amber,),
@@ -81,7 +81,7 @@ class HomepageView extends HookWidget {
             (context, index) => DrinkWidget(
               drink: drinks[index],
               onArticlePressed: (element) =>
-                appRouter.push(DrinkDetailsRoute(drinkId: drinks[index].idDrink)),
+                appRouter.push(DrinkDetailsRoute(drink: drinks[index])),
             ),
             childCount: drinks.length,
           ),

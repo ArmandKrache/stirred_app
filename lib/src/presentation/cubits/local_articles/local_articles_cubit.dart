@@ -4,7 +4,7 @@ import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'local_articles_state.dart';
-
+/*
 class LocalArticlesCubit extends Cubit<LocalArticlesState> {
   final DatabaseRepository _databaseRepository;
 
@@ -30,3 +30,4 @@ class LocalArticlesCubit extends Cubit<LocalArticlesState> {
     return LocalArticlesSuccess(articles: articles);
   }
 }
+*/
