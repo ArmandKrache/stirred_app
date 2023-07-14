@@ -1,11 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
-import 'package:cocktail_app/src/domain/models/article.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
-import 'package:cocktail_app/src/domain/models/drink_details.dart';
-import 'package:cocktail_app/src/presentation/cubits/remote_articles/remote_articles_cubit.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
-import 'package:cocktail_app/src/presentation/widgets/article_widget.dart';
 import 'package:cocktail_app/src/presentation/widgets/drink_widget.dart';
 import 'package:cocktail_app/src/utils/extensions/scroll_controller.dart';
 import 'package:easy_localization/easy_localization.dart';

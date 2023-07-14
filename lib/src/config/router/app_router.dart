@@ -2,11 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
 import 'package:cocktail_app/src/presentation/views/drink_details_view.dart';
 import 'package:cocktail_app/src/presentation/views/homepage_view.dart';
-import 'package:cocktail_app/src/presentation/views/article_details_view.dart';
-import 'package:cocktail_app/src/presentation/views/saved_articles_view.dart';
 import 'package:cocktail_app/src/presentation/views/saved_drink_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cocktail_app/src/domain/models/article.dart';
 part 'app_router.gr.dart';
 
 

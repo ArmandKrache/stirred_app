@@ -1,4 +1,4 @@
-part of 'local_details_cubit.dart';
+part of 'local_drink_cubit.dart';
 
 abstract class LocalDrinkState extends Equatable {
   final List<Drink> drinkList;

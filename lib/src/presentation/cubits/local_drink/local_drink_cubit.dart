@@ -1,11 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:cocktail_app/src/domain/models/article.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
-import 'package:cocktail_app/src/domain/models/drink_details.dart';
 import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 import 'package:equatable/equatable.dart';
 
-part 'local_details_state.dart';
+part 'local_drink_state.dart';
 
 class LocalDrinkCubit extends Cubit<LocalDrinkState> {
   final DatabaseRepository _databaseRepository;

@@ -20,6 +20,7 @@ abstract class CocktailApiService {
     @Query("a") String? alcoholic,
     @Query("g") String? glass,
     @Query("i") String? ingredients,
+    ///     @Header("Authorization") String? authorization
   });
 
   @GET('/lookup.php')

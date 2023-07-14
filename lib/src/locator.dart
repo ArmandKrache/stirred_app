@@ -5,7 +5,6 @@ import 'package:cocktail_app/src/data/repositories/api_repository_impl.dart';
 import 'package:cocktail_app/src/data/repositories/database_repository_impl.dart';
 import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
 import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
-import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:dio/dio.dart';
 import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:get_it/get_it.dart';
