@@ -6,6 +6,7 @@ import 'package:cocktail_app/src/locator.dart';
 import 'package:cocktail_app/src/presentation/cubits/local_drink/local_drink_cubit.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_details/remote_details_cubit.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
+import 'package:cocktail_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
 import 'package:cocktail_app/src/utils/constants/strings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => RootNavigationCubit()),
         BlocProvider(create: (context) => LocalDrinkCubit(
           locator<DatabaseRepository>())..getAllSavedDrink(),
         ),
