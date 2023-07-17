@@ -122,7 +122,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icon.png"
+  remove_alpha_ios: true
+  image_path: "assets/images/icon.png"

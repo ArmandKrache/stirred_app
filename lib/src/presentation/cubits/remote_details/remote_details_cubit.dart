@@ -21,8 +21,9 @@ class RemoteDetailsCubit extends BaseCubit<RemoteDetailsState, Map<String, dynam
   });
 
   Future<void> handleEvent(dynamic event) async {
+    if (isBusy) return;
+
     if (event is LookupDetailsEvent) {
-      if (isBusy) return;
 
       await run(() async {
         final response =

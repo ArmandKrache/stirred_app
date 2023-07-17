@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
+import 'package:cocktail_app/src/domain/models/requests/filtered_cocktails_request.dart';
+import 'package:cocktail_app/src/domain/models/requests/searched_cocktails_request.dart';
 import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
 import 'package:cocktail_app/src/presentation/widgets/drink_widget.dart';
+import 'package:cocktail_app/src/presentation/widgets/search_bar_widget.dart';
 import 'package:cocktail_app/src/utils/extensions/scroll_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,13 +24,12 @@ class HomepageView extends HookWidget {
   Widget build(BuildContext context) {
     final remoteDrinksCubit = BlocProvider.of<RemoteDrinksCubit>(context);
     final scrollController = useScrollController();
+    final TextEditingController _searchController = TextEditingController();
+
 
     useEffect(() {
-      scrollController.onScrollEndsListener(() {
-        remoteDrinksCubit.getFilteredCocktails(filters: {"ingredients" : "Vodka"});
-      });
+      remoteDrinksCubit.handleEvent(event: FilteredDrinksEvent(request: FilteredCocktailsRequest(ingredients: "Vodka")));
 
-      return scrollController.dispose;
     }, const []);
 
     return Scaffold(
@@ -44,23 +48,40 @@ class HomepageView extends HookWidget {
           ),
         ],
       ),
-      body: BlocBuilder<RemoteDrinksCubit, RemoteDrinksState>(
-        builder: (_, state) {
-          switch (state.runtimeType) {
-            case RemoteDrinksLoading:
-              return const Center(child: CupertinoActivityIndicator());
-            case RemoteDrinksFailed:
-              return const Center(child: Icon(Ionicons.refresh));
-            case RemoteDrinksSuccess:
-              return _buildArticles(
-                scrollController,
-                state.drinks,
-                state.noMoreData,
+      body: Column(
+        children: [
+          CustomSearchBar(
+            controller: _searchController,
+            onSubmitted: (query) {
+              remoteDrinksCubit.handleEvent(
+                  event: SearchDrinksEvent(
+                    request: SearchedCocktailsRequest(name: query),
+                  )
               );
-            default:
-              return const SizedBox();
-          }
-        }
+            },
+          ),
+          SizedBox(height: 4,),
+          BlocBuilder<RemoteDrinksCubit, RemoteDrinksState>(
+            builder: (_, state) {
+              switch (state.runtimeType) {
+                case RemoteDrinksLoading:
+                  return const Center(child: CupertinoActivityIndicator());
+                case RemoteDrinksFailed:
+                  return const Center(child: Icon(Ionicons.refresh));
+                case RemoteDrinksSuccess:
+                  return Expanded(
+                    child: _buildArticles(
+                      scrollController,
+                      state.drinks,
+                      state.noMoreData,
+                    ),
+                  );
+                default:
+                  return const SizedBox();
+              }
+            }
+          ),
+        ],
       )
     );
   }
@@ -82,14 +103,6 @@ class HomepageView extends HookWidget {
             childCount: drinks.length,
           ),
         ),
-
-        if (!noMoreData)
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(top: 12, bottom: 32),
-              child: CupertinoActivityIndicator(),
-            ),
-          ),
       ],
     );
   }

@@ -20,7 +20,6 @@ Future<void> initializeDependencies ( ) async {
   );
 
   final dio = Dio();
-  dio.interceptors.add(AwesomeDioInterceptor());
   locator.registerSingleton<Dio>(dio);
   locator.registerSingleton<CocktailApiService>(
     CocktailApiService(locator<Dio>()),

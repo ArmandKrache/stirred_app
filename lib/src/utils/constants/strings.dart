@@ -1,1 +1,1 @@
-const String appTitle = 'Flutter Clean Architecture';
+const String appTitle = 'Cocktail App';

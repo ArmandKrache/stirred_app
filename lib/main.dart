@@ -1,5 +1,6 @@
 import 'package:cocktail_app/src/config/router/app_router.dart';
 import 'package:cocktail_app/src/config/themes/app_themes.dart';
+import 'package:cocktail_app/src/domain/models/requests/filtered_cocktails_request.dart';
 import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
 import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
 import 'package:cocktail_app/src/locator.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           locator<DatabaseRepository>())..getAllSavedDrink(),
         ),
         BlocProvider(create: (context) => RemoteDrinksCubit(
-          locator<ApiRepository>(),)..getFilteredCocktails(),
+          locator<ApiRepository>(),)
         ),
         BlocProvider(create: (context) => RemoteDetailsCubit(
           locator<ApiRepository>())..handleEvent(null),

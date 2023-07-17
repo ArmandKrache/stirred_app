@@ -2,6 +2,7 @@ import 'package:cocktail_app/src/config/config.dart';
 import 'package:cocktail_app/src/domain/models/responses/filtered_cocktails_response.dart';
 import 'package:cocktail_app/src/domain/models/responses/lookup_details_response.dart';
 import 'package:cocktail_app/src/domain/models/responses/popular_cocktails_response.dart';
+import 'package:cocktail_app/src/domain/models/responses/saerched_cocktails_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -21,6 +22,13 @@ abstract class CocktailApiService {
     @Query("g") String? glass,
     @Query("i") String? ingredients,
     ///     @Header("Authorization") String? authorization
+  });
+
+  @GET('/search.php')
+  Future<HttpResponse<SearchedCocktailsResponse>> getSearchedCocktails({
+    @Query("s") String? name,
+    @Query("f") String? firstLetter,
+    @Query("i") String? ingredient,
   });
 
   @GET('/lookup.php')
