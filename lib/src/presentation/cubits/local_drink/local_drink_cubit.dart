@@ -25,18 +25,18 @@ class LocalDrinkCubit extends Cubit<LocalDrinkState> {
 
   Future<void> saveDrink({required Drink drink}) async {
     await _databaseRepository.saveDrink(drink);
+    isFavorite = true;
     emit(await _getAllSavedDrinks());
   }
 
   Future<void> contains({required Drink drink}) async {
-    if (drink.id == null) {
+    if (drink.idDrink == null) {
       isFavorite = false;
     } else {
-      log("Contains : ${drink.id}");
-      List<Drink> res = await _databaseRepository.findElementsById(drink.id!);
+      List<Drink> res = await _databaseRepository.findElementsById(drink.idDrink!);
       isFavorite = res.isNotEmpty;
     }
-    return emit(await _getAllSavedDrinks()); ///TODO: refacto cleaner
+    return emit(await _getAllSavedDrinks());
   }
 
   Future<LocalDrinkState> _getAllSavedDrinks() async {

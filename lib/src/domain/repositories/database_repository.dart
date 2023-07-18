@@ -7,5 +7,5 @@ abstract class DatabaseRepository {
 
   Future<void> removeDrink(Drink drink);
 
-  Future<List<Drink>> findElementsById(int drinkId);
+  Future<List<Drink>> findElementsById(String drinkId);
 }

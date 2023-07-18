@@ -23,7 +23,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<Drink>> findElementsById(int drinkId) async {
+  Future<List<Drink>> findElementsById(String drinkId) async {
     return _appDatabase.drinkDao.findElementById(drinkId);
   }
 }

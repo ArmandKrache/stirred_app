@@ -26,9 +26,9 @@ class DrinkDetailsView extends HookWidget {
     final remoteDetailsCubit = BlocProvider.of<RemoteDetailsCubit>(context);
 
     useEffect(() {
-      log(drink.toString());
       localDetailsCubit.contains(drink: drink);
-      remoteDetailsCubit.handleEvent(LookupDetailsEvent(drinkId: drink.idDrink));
+      remoteDetailsCubit.handleEvent(
+          LookupDetailsEvent(drinkId: drink.idDrink));
       return;
     }, const []);
 
@@ -43,16 +43,20 @@ class DrinkDetailsView extends HookWidget {
               ),
             ),
             body: _buildBody(state),
-            floatingActionButton: Visibility(
-              visible: !localDetailsCubit.isFavorite,
-              child: FloatingActionButton(
-                onPressed: () {
-                  localDetailsCubit.saveDrink(drink: drink);
-                  showToast(tr("article_details.article_saved_confirm"));
-                },
-                backgroundColor: Colors.amber,
-                child: const Icon(Ionicons.bookmark, color: Colors.white,),
-              ),
+            floatingActionButton: BlocBuilder<LocalDrinkCubit, LocalDrinkState>(
+              builder: (context, state) {
+                return Visibility(
+                  visible: !localDetailsCubit.isFavorite,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      localDetailsCubit.saveDrink(drink: drink);
+                      showToast(tr("article_details.article_saved_confirm"), position: ToastPosition.bottom);
+                    },
+                    backgroundColor: Colors.amber,
+                    child: const Icon(Ionicons.bookmark, color: Colors.white,),
+                  ),
+                );
+              },
             ),
           );
         });
@@ -112,7 +116,7 @@ class DrinkDetailsView extends HookWidget {
   }
 
   Widget _buildIngredientsAndPreparation(DrinkDetails details) {
-    if (details.ingredients ==  null || details.measures == null) {
+    if (details.ingredients == null || details.measures == null) {
       return const SizedBox();
     }
 
@@ -130,7 +134,8 @@ class DrinkDetailsView extends HookWidget {
             ),
           ),
           const SizedBox(height: 8,),
-          for (int i = 0; i < details.ingredients!.length && i < details.measures!.length; i++)
+          for (int i = 0; i < details.ingredients!.length &&
+              i < details.measures!.length; i++)
             Text("${details.measures![i] ?? ""} ${details.ingredients![i]}"),
           const SizedBox(height: 16,),
           Row(

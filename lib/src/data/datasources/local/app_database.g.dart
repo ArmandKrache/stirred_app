@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `drinks_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `idDrink` TEXT, `strDrink` TEXT, `strDrinkThumb` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `drinks_table` (`id` INTEGER, `idDrink` TEXT, `strDrink` TEXT, `strDrinkThumb` TEXT, PRIMARY KEY (`idDrink`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -116,7 +116,7 @@ class _$DrinkDao extends DrinkDao {
         _drinkDeletionAdapter = DeletionAdapter(
             database,
             'drinks_table',
-            ['id'],
+            ['idDrink'],
             (Drink item) => <String, Object?>{
                   'id': item.id,
                   'idDrink': item.idDrink,
@@ -145,8 +145,9 @@ class _$DrinkDao extends DrinkDao {
   }
 
   @override
-  Future<List<Drink>> findElementById(int drinkId) async {
-    return _queryAdapter.queryList('SELECT * FROM drinks_table WHERE id = ?1',
+  Future<List<Drink>> findElementById(String drinkId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM drinks_table WHERE idDrink = ?1',
         mapper: (Map<String, Object?> row) => Drink(
             id: row['id'] as int?,
             idDrink: row['idDrink'] as String?,
