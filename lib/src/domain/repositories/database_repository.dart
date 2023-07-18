@@ -6,4 +6,6 @@ abstract class DatabaseRepository {
   Future<void> saveDrink(Drink drink);
 
   Future<void> removeDrink(Drink drink);
+
+  Future<List<Drink>> findElementsById(int drinkId);
 }

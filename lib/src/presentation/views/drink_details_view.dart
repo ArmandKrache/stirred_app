@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cocktail_app/src/config/router/app_router.dart';
 import 'package:cocktail_app/src/domain/models/drink.dart';
@@ -24,48 +26,57 @@ class DrinkDetailsView extends HookWidget {
     final remoteDetailsCubit = BlocProvider.of<RemoteDetailsCubit>(context);
 
     useEffect(() {
+      log(drink.toString());
+      localDetailsCubit.contains(drink: drink);
       remoteDetailsCubit.handleEvent(LookupDetailsEvent(drinkId: drink.idDrink));
       return;
-    }, []);
+    }, const []);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => appRouter.pop(),
-          child: const Icon(Ionicons.chevron_back, color: Colors.black,),
-        ),
-      ),
-      body: BlocBuilder<RemoteDetailsCubit, RemoteDetailsState>(
-      builder: (_, state) {
-        switch (state.runtimeType) {
-          case RemoteDetailsLoading:
-            return const Center(child: CupertinoActivityIndicator());
-          case RemoteDetailsFailed:
-            return const Center(child: Icon(Ionicons.refresh));
-          case RemoteDetailsSuccess:
-            return SingleChildScrollView(
-              child: Column(
-              children: [
-                _buildTitle(state.drinksDetails.last),
-                _buildImage(state.drinksDetails.last),
-                _buildIngredientsAndPreparation(state.drinksDetails.last),
-              ],
+    return BlocBuilder<RemoteDetailsCubit, RemoteDetailsState>(
+        builder: (_, state) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => appRouter.pop(),
+                child: const Icon(Ionicons.chevron_back, color: Colors.black,),
+              ),
+            ),
+            body: _buildBody(state),
+            floatingActionButton: Visibility(
+              visible: !localDetailsCubit.isFavorite,
+              child: FloatingActionButton(
+                onPressed: () {
+                  localDetailsCubit.saveDrink(drink: drink);
+                  showToast(tr("article_details.article_saved_confirm"));
+                },
+                backgroundColor: Colors.amber,
+                child: const Icon(Ionicons.bookmark, color: Colors.white,),
+              ),
             ),
           );
-          default:
-           return const SizedBox();
-        }
-      }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          localDetailsCubit.saveDrink(drink: drink);
-          showToast(tr("article_details.article_saved_confirm"));
-        },
-        child: const Icon(Ionicons.bookmark, color: Colors.white,),
-      ),
-    );
+        });
+  }
+
+  Widget _buildBody(RemoteDetailsState state) {
+    switch (state.runtimeType) {
+      case RemoteDetailsLoading:
+        return const Center(child: CupertinoActivityIndicator());
+      case RemoteDetailsFailed:
+        return const Center(child: Icon(Ionicons.refresh));
+      case RemoteDetailsSuccess:
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildTitle(state.drinksDetails.last),
+              _buildImage(state.drinksDetails.last),
+              _buildIngredientsAndPreparation(state.drinksDetails.last),
+            ],
+          ),
+        );
+      default:
+        return const SizedBox();
+    }
   }
 
   Widget _buildTitle(DrinkDetails details) {

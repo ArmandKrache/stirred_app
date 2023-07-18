@@ -21,4 +21,9 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<void> saveDrink(Drink drink) async {
     return _appDatabase.drinkDao.insertDrink(drink);
   }
+
+  @override
+  Future<List<Drink>> findElementsById(int drinkId) async {
+    return _appDatabase.drinkDao.findElementById(drinkId);
+  }
 }

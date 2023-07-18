@@ -12,4 +12,7 @@ abstract class DrinkDao {
 
   @delete
   Future<void> deleteDrink(Drink drink);
+
+  @Query("SELECT * FROM $drinkTableName WHERE id = :drinkId")
+  Future<List<Drink>> findElementById(int drinkId);
 }

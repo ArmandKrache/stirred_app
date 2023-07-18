@@ -145,6 +145,17 @@ class _$DrinkDao extends DrinkDao {
   }
 
   @override
+  Future<List<Drink>> findElementById(int drinkId) async {
+    return _queryAdapter.queryList('SELECT * FROM drinks_table WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Drink(
+            id: row['id'] as int?,
+            idDrink: row['idDrink'] as String?,
+            strDrink: row['strDrink'] as String?,
+            strDrinkThumb: row['strDrinkThumb'] as String?),
+        arguments: [drinkId]);
+  }
+
+  @override
   Future<void> insertDrink(Drink drink) async {
     await _drinkInsertionAdapter.insert(drink, OnConflictStrategy.replace);
   }
