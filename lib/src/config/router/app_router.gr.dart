@@ -15,101 +15,21 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    HomepageRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomepageView(),
-      );
-    },
-    DrinkDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<DrinkDetailsRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DrinkDetailsView(
-          key: args.key,
-          drink: args.drink,
-        ),
-      );
-    },
-    SavedDrinksRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SavedDrinksView(),
-      );
-    },
     RootRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RootView(),
       );
     },
+    LoginRoute.name: (routeData) {
+      final args = routeData.argsAs<LoginRouteArgs>(
+          orElse: () => const LoginRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LoginView(key: args.key),
+      );
+    },
   };
-}
-
-/// generated route for
-/// [HomepageView]
-class HomepageRoute extends PageRouteInfo<void> {
-  const HomepageRoute({List<PageRouteInfo>? children})
-      : super(
-          HomepageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'HomepageRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [DrinkDetailsView]
-class DrinkDetailsRoute extends PageRouteInfo<DrinkDetailsRouteArgs> {
-  DrinkDetailsRoute({
-    Key? key,
-    required Drink drink,
-    List<PageRouteInfo>? children,
-  }) : super(
-          DrinkDetailsRoute.name,
-          args: DrinkDetailsRouteArgs(
-            key: key,
-            drink: drink,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'DrinkDetailsRoute';
-
-  static const PageInfo<DrinkDetailsRouteArgs> page =
-      PageInfo<DrinkDetailsRouteArgs>(name);
-}
-
-class DrinkDetailsRouteArgs {
-  const DrinkDetailsRouteArgs({
-    this.key,
-    required this.drink,
-  });
-
-  final Key? key;
-
-  final Drink drink;
-
-  @override
-  String toString() {
-    return 'DrinkDetailsRouteArgs{key: $key, drink: $drink}';
-  }
-}
-
-/// generated route for
-/// [SavedDrinksView]
-class SavedDrinksRoute extends PageRouteInfo<void> {
-  const SavedDrinksRoute({List<PageRouteInfo>? children})
-      : super(
-          SavedDrinksRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SavedDrinksRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -124,4 +44,32 @@ class RootRoute extends PageRouteInfo<void> {
   static const String name = 'RootRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LoginView]
+class LoginRoute extends PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LoginRoute.name,
+          args: LoginRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginRoute';
+
+  static const PageInfo<LoginRouteArgs> page = PageInfo<LoginRouteArgs>(name);
+}
+
+class LoginRouteArgs {
+  const LoginRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'LoginRouteArgs{key: $key}';
+  }
 }

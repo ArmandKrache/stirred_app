@@ -1,24 +1,25 @@
-import 'package:cocktail_app/src/config/router/app_router.dart';
-import 'package:cocktail_app/src/config/themes/app_themes.dart';
-import 'package:cocktail_app/src/domain/models/requests/filtered_cocktails_request.dart';
-import 'package:cocktail_app/src/domain/repositories/api_repository.dart';
-import 'package:cocktail_app/src/domain/repositories/database_repository.dart';
-import 'package:cocktail_app/src/locator.dart';
-import 'package:cocktail_app/src/presentation/cubits/local_drink/local_drink_cubit.dart';
-import 'package:cocktail_app/src/presentation/cubits/remote_details/remote_details_cubit.dart';
-import 'package:cocktail_app/src/presentation/cubits/remote_drinks/remote_drinks_cubit.dart';
-import 'package:cocktail_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
-import 'package:cocktail_app/src/utils/constants/strings.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:stirred_app/src/config/router/app_router.dart';
+import 'package:stirred_app/src/config/themes/app_themes.dart';
+import 'package:stirred_app/src/locator.dart';
+import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
+import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
+import 'package:stirred_app/src/utils/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initializeDependencies();
+
+  HttpOverrides.global = MyHttpOverrides();
 
   await EasyLocalization.ensureInitialized();
   runApp(EasyLocalization(
@@ -36,14 +37,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => RootNavigationCubit()),
-        BlocProvider(create: (context) => LocalDrinkCubit(
-          locator<DatabaseRepository>())..getAllSavedDrink(),
-        ),
-        BlocProvider(create: (context) => RemoteDrinksCubit(
+        BlocProvider(create: (context) => LoginCubit(
           locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => RemoteDetailsCubit(
-          locator<ApiRepository>())..handleEvent(null),
         ),
       ],
       child: OKToast(child: MaterialApp.router(
@@ -56,5 +51,14 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.light,
       )),
     );
+  }
+}
+
+/// TODO : remove after server release
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
