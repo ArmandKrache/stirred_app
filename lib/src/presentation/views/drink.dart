@@ -66,16 +66,22 @@ class _DrinkViewState extends State<DrinkView> {
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 child: BlocBuilder<DrinkCubit, DrinkState>(
-                    builder: (context, state) {
-                      if (state.runtimeType == DrinkFailed) {
-                        /// TODO: exit view and display toast
-                        return const Center(child: Text("Drink couldn't be loaded"),);
-                      } else if (state.runtimeType == DrinkLoading) {
-                        return const Center(child: Text("Drink is loading"),);
-                      } else {
-                        return _buildDrinkDataWidgets(state.drink!, drinkCubit);
-                      }
-                    })
+                  builder: (context, state) {
+                    if (state.runtimeType == DrinkFailed) {
+                      /// TODO: exit view and display toast
+                      return const Center(
+                        heightFactor: 50,
+                        child: Text("Drink couldn't be loaded"),
+                      );
+                    } else if (state.runtimeType == DrinkLoading) {
+                      return const Center(
+                        heightFactor: 50,
+                        child: Text("Drink is loading"),
+                      );
+                    } else {
+                      return _buildDrinkDataWidgets(state.drink!, drinkCubit);
+                    }
+                  })
             ),
             Container(
               width: double.maxFinite,

@@ -25,10 +25,12 @@ class RootView extends HookWidget {
       bottomNavigationBar: BlocBuilder<RootNavigationCubit, RootNavigationState>(
         builder: (context, state) {
           return BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             currentIndex: state.index,
             showUnselectedLabels: true,
             selectedFontSize: 0.0,
             unselectedFontSize: 0.0,
+            iconSize: 24,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(
