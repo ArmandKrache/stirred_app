@@ -2,6 +2,14 @@ import 'package:stirred_app/src/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
+late Profile _currentProfile;
+
+Profile get currentProfile => _currentProfile;
+
+set currentProfile(Profile profile) {
+  _currentProfile = profile;
+}
+
 late Categories _allPossibleCategories;
 
 Categories get allPossibleCategories => _allPossibleCategories;

@@ -21,12 +21,28 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RootView(),
       );
     },
+    HomepageRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HomepageView(),
+      );
+    },
     LoginRoute.name: (routeData) {
       final args = routeData.argsAs<LoginRouteArgs>(
           orElse: () => const LoginRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: LoginView(key: args.key),
+      );
+    },
+    DrinkRoute.name: (routeData) {
+      final args = routeData.argsAs<DrinkRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DrinkView(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
   };
@@ -42,6 +58,20 @@ class RootRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RootRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HomepageView]
+class HomepageRoute extends PageRouteInfo<void> {
+  const HomepageRoute({List<PageRouteInfo>? children})
+      : super(
+          HomepageRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomepageRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -71,5 +101,42 @@ class LoginRouteArgs {
   @override
   String toString() {
     return 'LoginRouteArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [DrinkView]
+class DrinkRoute extends PageRouteInfo<DrinkRouteArgs> {
+  DrinkRoute({
+    Key? key,
+    required String id,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DrinkRoute.name,
+          args: DrinkRouteArgs(
+            key: key,
+            id: id,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DrinkRoute';
+
+  static const PageInfo<DrinkRouteArgs> page = PageInfo<DrinkRouteArgs>(name);
+}
+
+class DrinkRouteArgs {
+  const DrinkRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'DrinkRouteArgs{key: $key, id: $id}';
   }
 }

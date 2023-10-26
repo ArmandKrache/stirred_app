@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/config/themes/app_themes.dart';
 import 'package:stirred_app/src/locator.dart';
+import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
+import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
 import 'package:stirred_app/src/utils/constants/constants.dart';
@@ -38,6 +40,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => RootNavigationCubit()),
         BlocProvider(create: (context) => LoginCubit(
+          locator<ApiRepository>(),)
+        ),
+        BlocProvider(create: (context) => HomepageCubit(
+          locator<ApiRepository>(),)
+        ),
+        BlocProvider(create: (context) => DrinkCubit(
           locator<ApiRepository>(),)
         ),
       ],

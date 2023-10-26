@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/nav_bar_items.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
 import 'package:stirred_app/src/presentation/data/global_data_functions.dart';
+import 'package:stirred_app/src/presentation/views/homepage.dart';
 import 'package:stirred_app/src/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,8 +92,7 @@ class RootView extends HookWidget {
       body: BlocBuilder<RootNavigationCubit, RootNavigationState>(
           builder: (_, state) {
             if (state.navbarItem == NavbarItem.drinks) {
-              return const Center(child: Text("Drinks"));
-              /// return const DrinksView();
+              return const HomepageView();
             } else if (state.navbarItem == NavbarItem.profiles) {
               return const Center(child: Text("Surprise Me"));
               /// return const ProfilesView();
