@@ -26,8 +26,7 @@ class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
     if (refreshResponse is DataSuccess) {
       await storeAccessToken(refreshResponse.data!.access);
 
-      await _getProfile();
-      appRouter.push(const RootRoute());
+      _getProfileAndDispatch();
       emit(const LoginSuccess());
     } else {
       emit(const LoginFailed());
@@ -48,8 +47,7 @@ class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
           await storeAccessToken(access);
           await storeRefreshToken(refresh);
 
-          await _getProfile();
-          appRouter.push(const RootRoute());
+          _getProfileAndDispatch();
         } else if (response is DataFailed) {
           logger.d(response.exception!.error.toString());
           emit(const LoginLoading());
@@ -59,10 +57,9 @@ class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
       });
   }
 
-  Future<void> _getProfile() async {
+  Future<void> _getProfileAndDispatch() async {
     final response = await _apiRepository.getSelfProfile();
     if (response is DataSuccess) {
-      logger.d(response.data);
       currentProfile = response.data!;
       emit(const LoginSuccess());
       appRouter.push(const RootRoute());
