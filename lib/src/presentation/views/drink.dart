@@ -60,44 +60,44 @@ class _DrinkViewState extends State<DrinkView> {
     return Scaffold(
       body : SafeArea(
         top: false,
-        child: BlocBuilder<DrinkCubit, DrinkState>(
-          builder: (context, state) {
-            if (state.runtimeType == DrinkFailed) {
-              /// TODO: exit view and display toast
-              return const Center(child: Text("Drink couldn't be loaded"),);
-            } else if (state.runtimeType == DrinkLoading) {
-              return const Center(child: Text("Drink is loading"),);
-            } else {
-              return Stack(
-                children: [
-                  SingleChildScrollView(
-                    controller: scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    child: _buildDrinkDataWidgets(state.drink!, drinkCubit),
-                  ),
-                  Container(
-                    width: double.maxFinite,
-                    height: MediaQuery.of(context).padding.top + 36,
-                    color: topBarColor,
-                  ),
-                  SafeArea(
-                    child: Align(
-                        alignment: Alignment.topLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            appRouter.pop();
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 16.0, bottom: 16),
-                            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 28,),
-                          ),
-                        )
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(),
+                child: BlocBuilder<DrinkCubit, DrinkState>(
+                    builder: (context, state) {
+                      if (state.runtimeType == DrinkFailed) {
+                        /// TODO: exit view and display toast
+                        return const Center(child: Text("Drink couldn't be loaded"),);
+                      } else if (state.runtimeType == DrinkLoading) {
+                        return const Center(child: Text("Drink is loading"),);
+                      } else {
+                        return _buildDrinkDataWidgets(state.drink!, drinkCubit);
+                      }
+                    })
+            ),
+            Container(
+              width: double.maxFinite,
+              height: MediaQuery.of(context).padding.top + 36,
+              color: topBarColor,
+            ),
+            SafeArea(
+              child: Align(
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      appRouter.pop();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 16.0, bottom: 16),
+                      child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 28,),
                     ),
-                  ),
-                ],
-              );
-            }
-          }),
+                  )
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -120,7 +120,7 @@ class _DrinkViewState extends State<DrinkView> {
                   Text(drink.name,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  const Text("\${recipe.difficulty} - \${recipe.preparationTime} minutes"),
+                  Text("${drink.recipe.difficulty} - ${drink.recipe.preparationTime} minutes"),
                 ],
               ),
               const Expanded(child: SizedBox(width: 24,)),
@@ -155,10 +155,8 @@ class _DrinkViewState extends State<DrinkView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Ingredients", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-              Text(" X unit of ${drink.glass.name}",),
-              Text(" X unit of ${drink.glass.name}",),
-              Text(" X unit of ${drink.glass.name}",),
-              Text(" X unit of ${drink.glass.name}",),
+              for (var ingredient in drink.recipe.ingredients)
+                ...[Text("${ingredient.quantity} ${ingredient.unit} of ${ingredient.ingredientName}")]
             ],
           ),
         ),
