@@ -27,43 +27,83 @@ class RootView extends HookWidget {
           return BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             currentIndex: state.index,
-            showUnselectedLabels: true,
+            showUnselectedLabels: false,
             selectedFontSize: 0.0,
             unselectedFontSize: 0.0,
             iconSize: 24,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(
-                  state.index == 0 ? Icons.home_rounded : Icons.home_outlined,
-                  color: Colors.black,
+                icon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8,),
+                    Icon(
+                      state.index == 0 ? Icons.home_rounded : Icons.home_outlined,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 2,),
+                    Icon(Icons.circle, size: 6, color: state.index == 0 ? Colors.black : Colors.transparent,)
+                  ],
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  state.index == 1 ? Icons.lightbulb : Icons.lightbulb_outlined,
-                  color: Colors.black,
+                icon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8,),
+                    Icon(
+                      state.index == 1 ? Icons.lightbulb : Icons.lightbulb_outlined,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 2,),
+                    Icon(Icons.circle, size: 6, color: state.index == 1 ? Colors.black : Colors.transparent,)
+                  ],
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  state.index == 2 ? Icons.add_box_rounded : Icons.add_box_outlined,
-                  color: Colors.black,
+                icon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8,),
+                    Icon(
+                      state.index == 2 ? Icons.add_box_rounded : Icons.add_box_outlined,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 2,),
+                    Icon(Icons.circle, size: 6, color: state.index == 2 ? Colors.black : Colors.transparent,)
+                  ],
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  state.index == 3 ? Icons.checklist_rounded : Icons.checklist_outlined ,
-                  color: Colors.black,
+                icon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8,),
+                    Icon(
+                      state.index == 3 ? Icons.checklist_rounded : Icons.checklist_outlined ,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 2,),
+                    Icon(Icons.circle, size: 6, color: state.index == 3 ? Colors.black : Colors.transparent,)
+                  ],
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  state.index == 4 ? Icons.person_rounded : Icons.person_outlined ,
-                  color: Colors.black,
+                icon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8,),
+                    Icon(
+                      state.index == 4 ? Icons.person_rounded : Icons.person_outlined ,
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 2,),
+                    Icon(Icons.circle, size: 6, color: state.index == 4 ? Colors.black : Colors.transparent,)
+                  ],
                 ),
                 label: '',
               ),
