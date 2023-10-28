@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/config/themes/app_themes.dart';
-import 'package:stirred_app/src/locator.dart';
 import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
