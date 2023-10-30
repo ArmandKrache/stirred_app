@@ -3,14 +3,12 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
-import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:stirred_app/src/presentation/widgets/custom_generic_data_table_widget.dart';
-import 'package:stirred_app/src/presentation/widgets/search_bar_widget.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 
 @RoutePage()
 class DrinkView extends StatefulHookWidget {
@@ -172,10 +170,9 @@ class _DrinkViewState extends State<DrinkView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Instructions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-              Text("1: ${drink.glass.name}\n",),
-              Text("2: ${drink.glass.name}\n",),
-              Text("3: ${drink.glass.name}\n",),
-              Text("4: ${drink.glass.name}",),
+              const SizedBox(height: 4,),
+              for (var i = 0; i < drink.recipe.instructions.length ; i++)
+                ...[Text("${i + 1}: ${drink.recipe.instructions[i]}")]
             ],
           ),
         ),
@@ -192,19 +189,78 @@ class _DrinkViewState extends State<DrinkView> {
           padding: EdgeInsets.all(8.0),
           child: Divider(),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-              Text("TODO",),
-              Text("TODO",),
-              Text("TODO",),
+              const Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 4,),
+              for (var rating in drink.ratings)
+                ...[commentWidget(rating)]
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget commentWidget(Rating rating) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey, width: 0.5)
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                  child: Image.network(baseMediaUrl +  rating.userPicture, width: 44, height: 44,)
+              ),
+              Column(children: [
+                Text(rating.username, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                RatingBarIndicator(
+                  rating: rating.rating.toDouble(),
+                  itemBuilder: (context, index) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  itemCount: 5,
+                  itemSize: 16.0,
+                  direction: Axis.horizontal,
+                ),
+              ],),
+              const Expanded(child: SizedBox()),
+              Column(
+                children: [
+                  const Icon(Icons.favorite, color: Colors.redAccent,),
+                  Text(rating.upvotes.toString())
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            width: double.maxFinite,
+            child: Text(rating.comment,
+              textAlign: TextAlign.start,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(),
+              Text(rating.creationTime.toString(),
+                textAlign: TextAlign.end,
+                style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
