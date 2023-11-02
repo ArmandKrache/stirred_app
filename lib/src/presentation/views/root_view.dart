@@ -3,10 +3,12 @@ import 'package:stirred_app/src/presentation/cubits/root_navigation/nav_bar_item
 import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
 import 'package:stirred_app/src/presentation/data/global_data_functions.dart';
 import 'package:stirred_app/src/presentation/views/homepage.dart';
+import 'package:stirred_app/src/presentation/views/profile/profile.dart';
 import 'package:stirred_app/src/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:lottie/lottie.dart';
 
 @RoutePage()
 class RootView extends HookWidget {
@@ -136,17 +138,44 @@ class RootView extends HookWidget {
             if (state.navbarItem == NavbarItem.drinks) {
               return const HomepageView();
             } else if (state.navbarItem == NavbarItem.profiles) {
-              return const Center(child: Text("Surprise Me"));
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Lottie.asset(cocktailAnimation)),
+                  const Text("Surprise Me", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8,),
+                  const Text("Work in progress"),
+                ],
+              );
               /// return const ProfilesView();
             } else if (state.navbarItem == NavbarItem.recipes) {
-              return const Center(child: Text("Create a recipe"));
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Lottie.asset(cocktailAnimation)),
+                  const SizedBox(height: 8,),
+                  const Text("Create a recipe", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                  const SizedBox(height: 8,),
+                  const Text("Work in progress"),
+
+                ],
+              );
               /// return const RecipesView();
             } else if (state.navbarItem == NavbarItem.glasses) {
-              return const Center(child: Text("Cellar"));
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: Lottie.asset(cocktailAnimation)),
+                  const SizedBox(height: 8,),
+                  const Text("Cellar", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                  const SizedBox(height: 8,),
+                  const Text("Work in progress"),
+                ],
+              );
               /// return const GlassesView();
             } else if (state.navbarItem == NavbarItem.ingredients) {
-              return const Center(child: Text("Profile"));
-              /// return const IngredientsView();
+              return const ProfileView();
             }
             return const SizedBox();
           }

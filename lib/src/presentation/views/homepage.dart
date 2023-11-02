@@ -85,28 +85,32 @@ class HomepageView extends HookWidget {
           },
           child: Column(
             children: [
-              SizedBox(
-                width: imageSideSize,
-                height: imageSideSize,
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.network(drink.picture, fit: BoxFit.cover, width: imageSideSize, height: imageSideSize,)
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: GestureDetector(
-                        onTap: () {
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: SizedBox(
+                  width: imageSideSize,
+                  height: imageSideSize,
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(drink.picture, fit: BoxFit.cover, width: imageSideSize, height: imageSideSize,)
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () {
 
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.redAccent : Colors.white, size: 28,),
-                        ),
-                      )
-                    ),
-                  ],
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.redAccent : Colors.white, size: 28,),
+                          ),
+                        )
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Text(drink.name, style: const TextStyle(fontSize: 17),)

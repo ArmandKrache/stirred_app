@@ -51,6 +51,8 @@ dependencies:
   expandable: ^5.0.1
   flutter_rating_bar: ^4.0.1
   cupertino_icons: ^1.0.2
+  expandable_text: ^2.3.0
+
 
 
 dev_dependencies:
