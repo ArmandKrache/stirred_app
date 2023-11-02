@@ -12,6 +12,7 @@ import 'package:stirred_app/src/presentation/widgets/search_bar_widget.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
+
 @RoutePage()
 class HomepageView extends HookWidget {
   const HomepageView({Key? key}) : super (key: key);
@@ -22,12 +23,21 @@ class HomepageView extends HookWidget {
     final scrollController = useScrollController();
     final TextEditingController searchController = TextEditingController();
     final currentRoute = ModalRoute.of(context);
+    final rebuildFlag = useState<bool>(false);
 
 
     useEffect(() {
       homepageCubit.fetchDrinksList();
       return ;
     }, const []);
+
+    useEffect(() {
+      if (rebuildFlag.value) {
+        homepageCubit.rebuild();
+        rebuildFlag.value = false;
+      }
+      return ;
+    }, [rebuildFlag.value]);
 
 
     return Scaffold(
@@ -49,7 +59,7 @@ class HomepageView extends HookWidget {
                   if (state.drinks.isEmpty) {
                     return const Center(child: Text("Drinks list is empty"),);
                   } else {
-                    return _buildDataWidgets(state.drinks, homepageCubit);
+                    return _buildDataWidgets(state.drinks, homepageCubit, () {rebuildFlag.value = true;});
                   }
                 }),
             ),
@@ -59,7 +69,7 @@ class HomepageView extends HookWidget {
     );
   }
 
-  Widget _buildDataWidgets(List<Drink> drinks, HomepageCubit drinksCubit ) {
+  Widget _buildDataWidgets(List<Drink> drinks, HomepageCubit drinksCubit, Function() onPop) {
     double imageSideSize = 192;
     List<Widget> items = [];
     
@@ -67,8 +77,11 @@ class HomepageView extends HookWidget {
       bool isFav = (currentProfile.preferences.favorites.any((element) => element.id == drink.id));
       items.add(
         GestureDetector(
-          onTap: () {
-            appRouter.push(DrinkRoute(id: drink.id));
+          onTap: () async {
+            var pop = await appRouter.push(DrinkRoute(id: drink.id));
+            if (pop == true) {
+              onPop.call();
+            }
           },
           child: Column(
             children: [

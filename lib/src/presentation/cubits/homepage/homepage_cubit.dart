@@ -11,6 +11,11 @@ class HomepageCubit extends BaseCubit<HomepageState, List<Drink>> {
 
   HomepageCubit(this._apiRepository) : super(const HomepageLoading(), []);
 
+  Future<void> rebuild() async {
+    emit(DrinksListLoading(drinks: data));
+    emit(DrinksListSuccess(drinks: data));
+  }
+
   Future<void> fetchDrinksList({String query = ""}) async {
     if (isBusy) return;
 

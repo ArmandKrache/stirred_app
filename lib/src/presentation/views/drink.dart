@@ -156,7 +156,7 @@ class _DrinkViewState extends State<DrinkView> {
         children: [
           GestureDetector(
             onTap: () {
-              appRouter.pop();
+              appRouter.pop(true);
             },
             child: const Padding(
               padding: EdgeInsets.only(left: 16.0, bottom: 16),

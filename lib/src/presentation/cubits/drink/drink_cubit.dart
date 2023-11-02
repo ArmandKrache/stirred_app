@@ -70,7 +70,6 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
      await _apiRepository.favoriteAction(drinkId: drinkId);
     if (response is DataSuccess) {
       final res = response.data!;
-      logger.d(res);
       if (isFavorite) {
         currentProfile.preferences.favorites.removeWhere((element) => element.id == drinkId);
       } else {
