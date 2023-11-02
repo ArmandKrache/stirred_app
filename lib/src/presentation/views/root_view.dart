@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:lottie/lottie.dart';
+import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 @RoutePage()
 class RootView extends HookWidget {
@@ -16,10 +17,11 @@ class RootView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context);
+    final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context).getNavBarItem(NavbarItem.drinks);
 
     useEffect(() {
       initialChoicesDataRetrieve();
+
       return;
     }, const []);
 

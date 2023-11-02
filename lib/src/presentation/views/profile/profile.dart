@@ -108,12 +108,12 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
         ),
-        settingsButton(triggerRebuild),
+        settingsButton(profileCubit, triggerRebuild),
       ],
     );
   }
 
-  Widget settingsButton(Function() triggerRebuild) {
+  Widget settingsButton(ProfileCubit profileCubit, Function() triggerRebuild) {
     return Padding(
       padding: const EdgeInsets.only(right: 16.0),
       child: Align(
@@ -156,8 +156,8 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           const Expanded(child: SizedBox()),
                           GestureDetector(
-                            onTap: () {
-                              /// TODO: Log Out logic
+                            onTap: () async {
+                              await profileCubit.logOut();
                             },
                             child: const Text("Disconnect",
                               style: TextStyle(fontSize: 15,

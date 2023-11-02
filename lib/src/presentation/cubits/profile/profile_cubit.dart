@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
@@ -15,6 +17,11 @@ class ProfileCubit extends BaseCubit<ProfileState, Profile> {
   Future<void> rebuild() async {
     emit(const ProfileLoading());
     emit(const ProfileSuccess());
+  }
+
+  Future<void> logOut() async {
+    await deleteTokens();
+    appRouter.popUntil((route) => route.data?.name == "LoginRoute");
   }
 
 }
