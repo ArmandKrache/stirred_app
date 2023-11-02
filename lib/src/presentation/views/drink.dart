@@ -6,6 +6,8 @@ import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
+import 'package:stirred_app/src/utils/constants/functions.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -71,7 +73,7 @@ class _DrinkViewState extends State<DrinkView> {
                         heightFactor: 50,
                         child: Text("Drink couldn't be loaded"),
                       );
-                    } else if (state.runtimeType == DrinkLoading) {
+                    } else if (state.runtimeType == DrinkLoading && state.drink == null) {
                       return const Center(
                         heightFactor: 50,
                         child: Text("Drink is loading"),
@@ -86,22 +88,76 @@ class _DrinkViewState extends State<DrinkView> {
               height: MediaQuery.of(context).padding.top + 36,
               color: topBarColor,
             ),
-            SafeArea(
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      appRouter.pop();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 16.0, bottom: 16),
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 28,),
-                    ),
-                  )
-              ),
-            ),
+            BlocBuilder<DrinkCubit, DrinkState>(
+              builder: (context, state) {
+                return _buildTopBarWidget(drinkCubit);
+              })
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTopBarWidget(DrinkCubit drinkCubit) {
+    List<Widget> extraActionWidgets = [];
+
+    if (drinkCubit.state.drink != null) {
+      extraActionWidgets.add(GestureDetector(
+        onTap: () async {
+          await showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => RatingDialogWidget(
+                drinkId:  drinkCubit.state.drink!.id,
+                createRatingFunction: (request) async {
+                  Rating? rating = await drinkCubit.rateDrink(request: request);
+                  if (rating != null) {
+                    drinkCubit.retrieveDrink(id: widget.id);
+                  }
+                  return rating;
+                },
+                patchRatingFunction: (request) async {
+                  Rating? rating = await drinkCubit.patchDrinkRating(request: request);
+
+                  if (rating != null) {
+                    drinkCubit.retrieveDrink(id: widget.id);
+                  }
+                  return rating;
+                },
+                currentRating: drinkCubit.state.drink!.userRating,
+              )
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+          child: Icon(drinkCubit.state.drink!.userRating == null ? Icons.star_outline : Icons.star, color: Colors.orangeAccent, size: 32,),
+        ),
+      ),);
+      extraActionWidgets.add(GestureDetector(
+        onTap: () {
+          ///TODO : Add / Remove from favorites
+        },
+        child: const Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+          child: Icon(Icons.favorite_outline, color: Colors.redAccent, size: 32,),
+        ),
+      ),);
+    }
+
+    return SafeArea(
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              appRouter.pop();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 16.0, bottom: 16),
+              child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 28,),
+            ),
+          ),
+          const Expanded(child: SizedBox(),),
+          ...extraActionWidgets
+        ],
       ),
     );
   }
@@ -134,9 +190,14 @@ class _DrinkViewState extends State<DrinkView> {
                   children: [
                     Visibility(
                       visible: drink.averageRating != 0.0,
-                      child: Text(drink.averageRating.toStringAsPrecision(2))
+                      child: Text(drink.averageRating.toStringAsPrecision(2), style: const TextStyle(fontSize: 15),)
                     ),
-                    const Icon(Icons.star, color: Colors.orangeAccent),
+                    Column(
+                      children: [
+                        const Icon(Icons.star, color: Colors.orangeAccent, size: 32,),
+                        Text("(${drink.ratings.length.toString()})", style: const TextStyle(color: Colors.grey, fontSize: 12),)
+                      ],
+                    ),
                   ],
                 ),
               )
@@ -221,25 +282,32 @@ class _DrinkViewState extends State<DrinkView> {
                 borderRadius: BorderRadius.circular(32),
                   child: Image.network(baseMediaUrl +  rating.userPicture, width: 44, height: 44,)
               ),
-              Column(children: [
-                Text(rating.username, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-                RatingBarIndicator(
-                  rating: rating.rating.toDouble(),
-                  itemBuilder: (context, index) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  itemCount: 5,
-                  itemSize: 16.0,
-                  direction: Axis.horizontal,
-                ),
-              ],),
-              const Expanded(child: SizedBox()),
+              const SizedBox(width: 4,),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.favorite, color: Colors.redAccent,),
-                  Text(rating.upvotes.toString())
+                  Text(rating.username, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                  RatingBarIndicator(
+                    rating: rating.rating.toDouble(),
+                    itemBuilder: (context, index) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 16.0,
+                    direction: Axis.horizontal,
+                  ),
                 ],
+              ),
+              const Expanded(child: SizedBox()),
+              Visibility(
+                visible: false,
+                child: Column(
+                  children: [
+                    const Icon(Icons.favorite, color: Colors.redAccent,),
+                    Text(rating.upvotes.toString())
+                  ],
+                ),
               )
             ],
           ),
@@ -253,7 +321,7 @@ class _DrinkViewState extends State<DrinkView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(),
-              Text(rating.creationTime.toString(),
+              Text(formatDateTime(rating.creationTime),
                 textAlign: TextAlign.end,
                 style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12),
               ),

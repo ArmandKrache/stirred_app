@@ -15,7 +15,7 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
     if (isBusy) return;
 
     await run(() async {
-      emit(DrinkLoading(drink: data));
+      emit(const DrinkLoading());
       late DataState<Drink> response;
       response = await _apiRepository.retrieveDrink(request: DrinkRetrieveRequest(id: id));
 
@@ -30,6 +30,36 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
         emit(DrinkFailed(exception: response.exception));
       }
     });
+  }
+
+  Future<Rating?> rateDrink({required RatingCreateRequest request, String ratingId = ""}) async {
+    if (isBusy) return null;
+
+    DataState<RatingCreateResponse> response =
+      await _apiRepository.createRating(request: request);
+    if (response is DataSuccess) {
+      final res = response.data!.rating;
+      logger.d(res);
+      return res;
+    } else if (response is DataFailed) {
+      log(response.exception.toString());
+    }
+    return null;
+  }
+
+  Future<Rating?> patchDrinkRating({required RatingPatchRequest request}) async {
+    if (isBusy) return null;
+
+    DataState<RatingPatchResponse> response =
+      await _apiRepository.patchRating(request: request);
+    if (response is DataSuccess) {
+      final res = response.data!.rating;
+
+      return res;
+    } else if (response is DataFailed) {
+      log(response.exception.toString());
+    }
+    return null;
   }
 
 }

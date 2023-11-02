@@ -37,4 +37,12 @@ class HomepageCubit extends BaseCubit<HomepageState, List<Drink>> {
     });
   }
 
+  Future<void> addFavorite({required String id}) async {
+    if (isBusy) return;
+
+    await run(() async {
+      /// TODO : implement add to favorite logic
+    });
+  }
+
 }
