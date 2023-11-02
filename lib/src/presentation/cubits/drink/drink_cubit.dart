@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
+import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 part 'drink_state.dart';
@@ -60,6 +61,27 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
       log(response.exception.toString());
     }
     return null;
+  }
+
+  Future<bool> favoriteAction({required String drinkId, bool isFavorite = false}) async {
+    if (isBusy) return false;
+
+    DataState<dynamic> response =
+     await _apiRepository.favoriteAction(drinkId: drinkId);
+    if (response is DataSuccess) {
+      final res = response.data!;
+      logger.d(res);
+      if (isFavorite) {
+        currentProfile.preferences.favorites.removeWhere((element) => element.id == drinkId);
+      } else {
+        currentProfile.preferences.favorites.add(GenericPreviewDataModel(id: drinkId));
+      }
+
+      return true;
+    } else if (response is DataFailed) {
+      log(response.exception.toString());
+    }
+    return false;
   }
 
 }

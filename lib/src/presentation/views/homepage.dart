@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
@@ -19,12 +21,14 @@ class HomepageView extends HookWidget {
     final homepageCubit = BlocProvider.of<HomepageCubit>(context);
     final scrollController = useScrollController();
     final TextEditingController searchController = TextEditingController();
+    final currentRoute = ModalRoute.of(context);
 
 
     useEffect(() {
       homepageCubit.fetchDrinksList();
       return ;
     }, const []);
+
 
     return Scaffold(
       body : SafeArea(

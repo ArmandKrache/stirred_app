@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
+import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -25,10 +26,12 @@ class DrinkView extends StatefulHookWidget {
 class _DrinkViewState extends State<DrinkView> {
   final scrollController = ScrollController();
   Color topBarColor = Colors.transparent;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
+    isFavorite = currentProfile.preferences.favorites.any((element) => element.id == widget.id);
   }
 
   @override
@@ -133,12 +136,17 @@ class _DrinkViewState extends State<DrinkView> {
         ),
       ),);
       extraActionWidgets.add(GestureDetector(
-        onTap: () {
-          ///TODO : Add / Remove from favorites
+        onTap: () async {
+          bool res = await drinkCubit.favoriteAction(drinkId: widget.id, isFavorite: isFavorite);
+          if (res) {
+            setState(() {
+              isFavorite = !isFavorite;
+            });
+          }
         },
-        child: const Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
-          child: Icon(Icons.favorite_outline, color: Colors.redAccent, size: 32,),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+          child: Icon( isFavorite ? Icons.favorite : Icons.favorite_outline, color: isFavorite ? Colors.redAccent : Colors.white, size: 32,),
         ),
       ),);
     }
@@ -221,7 +229,7 @@ class _DrinkViewState extends State<DrinkView> {
             children: [
               const Text("Ingredients", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               for (var ingredient in drink.recipe.ingredients)
-                ...[Text("${ingredient.quantity} ${ingredient.unit} of ${ingredient.ingredientName}")]
+                ...[Text(formatRecipeIngredient(ingredient))]
             ],
           ),
         ),
