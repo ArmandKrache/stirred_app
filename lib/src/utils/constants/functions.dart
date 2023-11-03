@@ -1,5 +1,13 @@
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
+String preprocessPictureUrl(String pictureUrl, String baseUrl) {
+  if (pictureUrl.startsWith(baseUrl)) {
+    return pictureUrl;
+  } else {
+    return baseUrl + pictureUrl;
+  }
+}
+
 String formatDateTime(DateTime dateTime) {
   final now = DateTime.now();
   final timeDifference = now.difference(dateTime);

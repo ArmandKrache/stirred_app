@@ -16,7 +16,8 @@ class ProfileCubit extends BaseCubit<ProfileState, Profile> {
 
   Future<void> rebuild() async {
     emit(const ProfileLoading());
-    emit(const ProfileSuccess());
+    data = currentProfile;
+    emit(ProfileSuccess(profile: data));
   }
 
   Future<void> logOut() async {

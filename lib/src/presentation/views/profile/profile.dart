@@ -52,13 +52,18 @@ class _ProfileViewState extends State<ProfileView> {
       return ;
     }, [rebuildFlag.value]);
 
+    useEffect(() {
+      profileCubit.rebuild();
+      return ;
+    }, [currentProfile]);
+
     return Scaffold(
       body : SafeArea(
         child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) {
-                  if (state.runtimeType == ProfileFailed) {
+                  if (state.profile == null || state.runtimeType == ProfileFailed) {
                     return const Center(
                       heightFactor: 50,
                       child: Text("Profile couldn't be loaded"),
@@ -79,6 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
 
 
   Widget _buildProfileDataWidgets(ProfileCubit profileCubit, Function() triggerRebuild) {
+    Profile profile = profileCubit.state.profile!;
 
     return Stack(
       children: [
@@ -92,11 +98,11 @@ class _ProfileViewState extends State<ProfileView> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(256),
-                  child: Image.network(currentProfile.picture, width: 192, height: 192, fit: BoxFit.fill,)
+                  child: Image.network(profile.picture, width: 192, height: 192, fit: BoxFit.fill,)
                 ),
                 const SizedBox(height: 8,),
-                Text(currentProfile.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                ExpandableText(currentProfile.description,
+                Text(profile.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                ExpandableText(profile.description,
                   expandText: "read more",
                   collapseText: "reduce",
                   maxLines: 3,
@@ -104,11 +110,66 @@ class _ProfileViewState extends State<ProfileView> {
                   linkStyle: const TextStyle(fontWeight: FontWeight.bold),
                   linkEllipsis: false,
                 ),
+                preferencesDataWidgets(profileCubit, profile)
               ],
             ),
           ),
         ),
         settingsButton(profileCubit, triggerRebuild),
+      ],
+    );
+  }
+
+  Widget preferencesDataWidgets(ProfileCubit profileCubit, Profile profile) {
+    /// Favorites - Likes - Dislikes
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Favorite Drinks", style: TextStyle(fontWeight: FontWeight.bold),),
+              const SizedBox(height: 4,),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (var drink in profile.preferences.favorites)
+                      ...[_favoriteDrinkWidget(drink),]
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _favoriteDrinkWidget(GenericPreviewDataModel drink) {
+    double imageSideSize = 112;
+    if (drink.picture == null || drink.name == null) {
+      return const SizedBox();
+    }
+    return Column(
+      children: [
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: SizedBox(
+            width: imageSideSize,
+            height: imageSideSize,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(preprocessPictureUrl(drink.picture!, baseUrl), fit: BoxFit.cover, width: imageSideSize, height: imageSideSize,)
+            ),
+          ),
+        ),
+        SizedBox(
+          width: imageSideSize,
+          child: Text(drink.name!, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center,)
+        )
       ],
     );
   }
@@ -140,7 +201,7 @@ class _ProfileViewState extends State<ProfileView> {
                           GestureDetector(
                             onTap: () async {
                               await appRouter.push(const ProfileEditRoute());
-                              triggerRebuild.call();
+                              /// triggerRebuild.call();
                             },
                             child: Container(
                               color: Colors.transparent,

@@ -17,7 +17,9 @@ class RootView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context).getNavBarItem(NavbarItem.drinks);
+    /// UnComment to make sure app always opens on Homepage
+    /// final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context).getNavBarItem(NavbarItem.drinks);
+    final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context);
 
     useEffect(() {
       initialChoicesDataRetrieve();

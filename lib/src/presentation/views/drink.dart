@@ -137,7 +137,7 @@ class _DrinkViewState extends State<DrinkView> {
       ),);
       extraActionWidgets.add(GestureDetector(
         onTap: () async {
-          bool res = await drinkCubit.favoriteAction(drinkId: widget.id, isFavorite: isFavorite);
+          bool res = await drinkCubit.favoriteAction(drink: drinkCubit.state.drink!, isFavorite: isFavorite);
           if (res) {
             setState(() {
               isFavorite = !isFavorite;

@@ -63,17 +63,21 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
     return null;
   }
 
-  Future<bool> favoriteAction({required String drinkId, bool isFavorite = false}) async {
+  Future<bool> favoriteAction({required Drink drink, bool isFavorite = false}) async {
     if (isBusy) return false;
 
     DataState<dynamic> response =
-     await _apiRepository.favoriteAction(drinkId: drinkId);
+     await _apiRepository.favoriteAction(drinkId: drink.id);
     if (response is DataSuccess) {
       final res = response.data!;
       if (isFavorite) {
-        currentProfile.preferences.favorites.removeWhere((element) => element.id == drinkId);
+        currentProfile.preferences.favorites.removeWhere((element) => element.id == drink.id);
       } else {
-        currentProfile.preferences.favorites.add(GenericPreviewDataModel(id: drinkId));
+        currentProfile.preferences.favorites.add(GenericPreviewDataModel(
+            id: drink.id,
+            name: drink.name,
+            picture: drink.picture,
+        ));
       }
 
       return true;

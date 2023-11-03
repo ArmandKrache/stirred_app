@@ -100,9 +100,7 @@ class HomepageView extends HookWidget {
                       Align(
                         alignment: Alignment.topRight,
                         child: GestureDetector(
-                          onTap: () {
-
-                          },
+                          onTap: () {},
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.redAccent : Colors.white, size: 28,),
