@@ -110,7 +110,8 @@ class _ProfileViewState extends State<ProfileView> {
                   linkStyle: const TextStyle(fontWeight: FontWeight.bold),
                   linkEllipsis: false,
                 ),
-                preferencesDataWidgets(profileCubit, profile)
+                const SizedBox(height: 24,),
+                preferencesDataWidgets(profileCubit, profile, triggerRebuild)
               ],
             ),
           ),
@@ -120,7 +121,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget preferencesDataWidgets(ProfileCubit profileCubit, Profile profile) {
+  Widget preferencesDataWidgets(ProfileCubit profileCubit, Profile profile, Function() triggerRebuild) {
     /// Favorites - Likes - Dislikes
     return Align(
       alignment: Alignment.topLeft,
@@ -129,14 +130,14 @@ class _ProfileViewState extends State<ProfileView> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Favorite Drinks", style: TextStyle(fontWeight: FontWeight.bold),),
+              const Text("Favorite Drinks", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
               const SizedBox(height: 4,),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     for (var drink in profile.preferences.favorites)
-                      ...[_favoriteDrinkWidget(drink),]
+                      ...[_favoriteDrinkWidget(drink, triggerRebuild),]
                   ],
                 ),
               )
@@ -147,30 +148,36 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _favoriteDrinkWidget(GenericPreviewDataModel drink) {
+  Widget _favoriteDrinkWidget(GenericPreviewDataModel drink, Function() triggerRebuild) {
     double imageSideSize = 112;
     if (drink.picture == null || drink.name == null) {
       return const SizedBox();
     }
-    return Column(
-      children: [
-        Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: SizedBox(
-            width: imageSideSize,
-            height: imageSideSize,
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(preprocessPictureUrl(drink.picture!, baseUrl), fit: BoxFit.cover, width: imageSideSize, height: imageSideSize,)
+    return GestureDetector(
+      onTap: () async {
+        await appRouter.push(DrinkRoute(id: drink.id));
+        triggerRebuild.call();
+      },
+      child: Column(
+        children: [
+          Card(
+            elevation: 1,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: SizedBox(
+              width: imageSideSize,
+              height: imageSideSize,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(preprocessPictureUrl(drink.picture!, baseUrl), fit: BoxFit.cover,)
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: imageSideSize,
-          child: Text(drink.name!, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center,)
-        )
-      ],
+          SizedBox(
+            width: imageSideSize,
+            child: Text(drink.name!, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center,)
+          )
+        ],
+      ),
     );
   }
 
