@@ -329,7 +329,7 @@ class _DrinkViewState extends State<DrinkView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(),
-              Text(formatDateTime(rating.creationTime),
+              Text(formatDateTimeDelta(rating.creationTime),
                 textAlign: TextAlign.end,
                 style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12),
               ),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:dio/dio.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,19 @@ class ProfileEditView extends StatefulHookWidget {
 }
 
 class _ProfileEditViewState extends State<ProfileEditView> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final descriptionController = TextEditingController();
+  MultipartFile? selectedImage;
+  DateTime birthdate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
+    nameController.text = currentProfile.name ?? "";
+    emailController.text = currentProfile.email ?? "";
+    descriptionController.text = currentProfile.description ?? "";
+    birthdate = DateTime.parse(currentProfile.dateOfBirth);
   }
 
   @override
@@ -44,21 +54,39 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     }, const []);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            /// TODO: Display warning before leaving
+            appRouter.pop();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Icon(Icons.arrow_back_ios, size: 28, color: Colors.black.withOpacity(0.7),),
+          ),
+        ),
+        title: const Text("Edit Profile", style: TextStyle(color: Colors.black),),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.check, size: 32, color: Colors.green,),
+          )
+        ],
+      ),
       body : SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                child: BlocBuilder<DrinkCubit, DrinkState>(
+                child: BlocBuilder<ProfileEditCubit, ProfileEditState>(
                     builder: (context, state) {
-                      if (state.runtimeType == DrinkFailed) {
+                      if (state.runtimeType == ProfileEditFailed) {
                         /// TODO: exit view and display toast
                         return const Center(
                           heightFactor: 50,
                           child: Text("Profile Edit couldn't be loaded"),
                         );
-                      } else if (state.runtimeType == DrinkLoading && state.drink == null) {
+                      } else if (state.runtimeType == ProfileEditLoading) {
                         return const Center(
                           heightFactor: 50,
                           child: Text("Profile Edit is loading"),
@@ -76,7 +104,127 @@ class _ProfileEditViewState extends State<ProfileEditView> {
 
   Widget _buildDataWidgets(ProfileEditCubit drinksCubit ) {
 
-    return const SizedBox();
+    final Widget picturePreviewWidget;
+
+    if (selectedImage == null) {
+      picturePreviewWidget = Image.network(preprocessPictureUrl(currentProfile.picture, baseUrl), width: 64, height: 64,);
+    } else {
+      picturePreviewWidget = Text(selectedImage == null ? "No picture selected yet" :
+      selectedImage!.filename ?? "",
+        style: const TextStyle(color: Colors.grey),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Profile Picture"),
+                  picturePreviewWidget,
+                ],
+              ),
+              const SizedBox(height: 16,),
+              const Text("Username", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 2,),
+              TextField(
+                controller: nameController,
+                cursorColor: Colors.deepOrangeAccent,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(style: BorderStyle.solid, width: 1),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Email", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 2,),
+              TextField(
+                controller: emailController,
+                cursorColor: Colors.deepOrangeAccent,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(style: BorderStyle.solid, width: 1),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16,),
+          GestureDetector(
+            onTap: () async {
+              DateTime newDate = await showDialog(context: context, builder: (context) {
+                return DatePickerDialog(initialDate: birthdate, firstDate: DateTime(1900), lastDate: DateTime.now());
+              });
+              setState(() {
+                birthdate = newDate;
+              });
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Birthdate", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                const SizedBox(height: 2,),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black.withOpacity(0.7)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(formatDateTime(birthdate), style: const TextStyle(fontSize: 18),),
+                        const SizedBox(width: 4,),
+                        Icon(Icons.edit, color: Colors.black.withOpacity(0.7),)
+                      ],
+                    )
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Description", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 2,),
+              TextField(
+                controller: descriptionController,
+                cursorColor: Colors.deepOrangeAccent,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.deepOrangeAccent, style: BorderStyle.solid, width: 1.5),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
+                maxLines: 5,
+                keyboardType: TextInputType.multiline,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
 }
