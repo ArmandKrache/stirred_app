@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stirred_app/src/utils/constants/colors.dart';
 
 abstract class AppTheme {
   static ThemeData get light {
@@ -10,6 +11,7 @@ abstract class AppTheme {
       primaryColor: Colors.black,
       splashColor: Colors.transparent,
       fontFamily: 'IBM',
-      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),);
+      colorScheme: ColorScheme.fromSwatch().copyWith(primary: Colors.deepOrangeAccent, secondary: Colors.black),
+    );
   }
 }

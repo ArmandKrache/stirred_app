@@ -208,7 +208,8 @@ class _ProfileViewState extends State<ProfileView> {
                           GestureDetector(
                             onTap: () async {
                               await appRouter.push(const ProfileEditRoute());
-                              /// triggerRebuild.call();
+                              triggerRebuild.call();
+                              appRouter.pop();
                             },
                             child: Container(
                               color: Colors.transparent,

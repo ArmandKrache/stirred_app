@@ -19,6 +19,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Stirred</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Photo Library Access Warning</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
