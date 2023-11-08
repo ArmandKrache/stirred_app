@@ -9,6 +9,7 @@ import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/profile/profile_edit_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
+import 'package:stirred_app/src/presentation/cubits/signup/signup_cubit.dart';
 import 'package:stirred_app/src/utils/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => RootNavigationCubit()),
         BlocProvider(create: (context) => LoginCubit(
+          locator<ApiRepository>(),)
+        ),
+        BlocProvider(create: (context) => SignupCubit(
           locator<ApiRepository>(),)
         ),
         BlocProvider(create: (context) => HomepageCubit(

@@ -1,5 +1,6 @@
 
 import 'package:auto_route/auto_route.dart';
+import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +111,7 @@ class LoginView extends HookWidget {
                 const SizedBox(height: 8,),
                 GestureDetector(
                     onTap: () {
-                      logger.d("Sign up tapped");
+                      appRouter.push(const SignupRoute());
                     },
                     child: const Text("Sign up", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold))
                 ),
