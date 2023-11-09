@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -267,6 +268,7 @@ class _SignupViewState extends State<SignupView> {
   }
 
   Widget bottomRowWidget(SignupCubit signupCubit) {
+    int nbSteps = 2;
     bool canContinue = false;
     Function _continue = () {};
     switch (stepIndex) {
@@ -300,41 +302,65 @@ class _SignupViewState extends State<SignupView> {
     
     return Row(
       children: [
-        Visibility(
-          visible: stepIndex > 0,
-          child: TextButton(
-              onPressed: () {
-                setState(() {
-                  stepIndex -= 1;
-                });
-              },
-              child: const Text("< Back",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrangeAccent
-                ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+                onPressed: () {
+                  if (stepIndex > 0) {
+                    setState(() {
+                      stepIndex -= 1;
+                    });
+                  } else {
+                    appRouter.pop();
+                  }
+                },
+                child: const Text("< Back",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrangeAccent
+                  ),
 
-              )
+                )
+            ),
           ),
         ),
-        const Expanded(child: SizedBox()),
-        TextButton(
-            onPressed: () {
-              if (canContinue) {
-                setState(() {
-                  _continue.call();
-                });
-              }
-            },
-          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-            child: Text(continueText,
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: canContinue ? Colors.deepOrangeAccent : Colors.grey
-              ),
+        Row(
+          children: [
+            for (int i = 0; i < nbSteps; i++)
+              ...[Container(
+                margin: const EdgeInsets.all(2),
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: stepIndex == i ? Colors.orangeAccent : Colors.grey.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(16)
+                ),
+              )]
+          ],
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+                onPressed: () {
+                  if (canContinue) {
+                    setState(() {
+                      _continue.call();
+                    });
+                  }
+                },
+              style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                child: Text(continueText,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: canContinue ? Colors.deepOrangeAccent : Colors.grey
+                  ),
+                ),
             ),
+          ),
         ),
       ],
     );
