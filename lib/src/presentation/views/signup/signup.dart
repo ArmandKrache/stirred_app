@@ -23,17 +23,17 @@ class SignupView extends StatefulWidget {
 }
 
 class _SignupViewState extends State<SignupView> {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool obscurePassword = true;
-  bool usernameIsValid = false;
+  bool emailIsValid = false;
   bool passwordIsValid = false;
   int stepIndex = 0;
 
   File? selectedImage;
   DateTime birthdate = DateTime.now();
-  final displayedNameController = TextEditingController();
+  final usernameController = TextEditingController();
 
 
   @override
@@ -67,15 +67,15 @@ class _SignupViewState extends State<SignupView> {
     Widget body = Column(
       children: [
         const Expanded(child: SizedBox()),
-        bottomRowWidget(),
+        bottomRowWidget(signupCubit),
       ],
     );
     switch (stepIndex) {
       case (0):
-        body = firstStepBodyWidget();
+        body = firstStepBodyWidget(signupCubit);
         break;
       case (1):
-        body = secondStepBodyWidget();
+        body = secondStepBodyWidget(signupCubit);
         break;
     }
 
@@ -87,7 +87,7 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 
-  Widget firstStepBodyWidget() {
+  Widget firstStepBodyWidget(SignupCubit signupCubit) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,16 +96,16 @@ class _SignupViewState extends State<SignupView> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Username", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            const Text("Email", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             const SizedBox(height: 2,),
             TextField(
               onChanged: (value) {
                 setState(() {
-                  ///TODO : Check unicity of username + Debouncer
-                  usernameIsValid = usernameController.text != "";
+                  ///TODO : Check validity and unicity of email + Debouncer
+                  emailIsValid = emailController.text != "";
                 });
               },
-              controller: usernameController,
+              controller: emailController,
               cursorColor: Colors.deepOrangeAccent,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -153,12 +153,12 @@ class _SignupViewState extends State<SignupView> {
           ],
         ),
         const Expanded(child: SizedBox()),
-        bottomRowWidget(),
+        bottomRowWidget(signupCubit),
       ],
     );
   }
 
-  Widget secondStepBodyWidget() {
+  Widget secondStepBodyWidget(SignupCubit signupCubit) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +239,7 @@ class _SignupViewState extends State<SignupView> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Displayed Name", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+            const Text("Username", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             const SizedBox(height: 2,),
             TextField(
               onChanged: (value) {
@@ -247,7 +247,7 @@ class _SignupViewState extends State<SignupView> {
                   /// V2: Check that displayedUsername is Safe
                 });
               },
-              controller: displayedNameController,
+              controller: usernameController,
               cursorColor: Colors.deepOrangeAccent,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -261,35 +261,39 @@ class _SignupViewState extends State<SignupView> {
           ],
         ),
         const Expanded(child: SizedBox()),
-        bottomRowWidget(),
+        bottomRowWidget(signupCubit),
       ],
     );
   }
 
-  Widget bottomRowWidget() {
+  Widget bottomRowWidget(SignupCubit signupCubit) {
     bool canContinue = false;
     Function _continue = () {};
     switch (stepIndex) {
       case (0):
-        canContinue = (usernameIsValid && passwordIsValid);
+        canContinue = (emailIsValid && passwordIsValid);
         _continue = () {
           stepIndex += 1;
-          if (displayedNameController.text == "") {
-            setState(() {
-              displayedNameController.text = usernameController.text;
-              displayedNameController.selection = TextSelection.fromPosition(
-                TextPosition(offset: displayedNameController.text.length),
-              );
-            });
-          }
         };
         break;
       case (1):
-        canContinue = (usernameIsValid && passwordIsValid
-            && selectedImage != null && displayedNameController.text != "");
-        _continue () {
-          /// TODO: Signup Logic
-        }
+        canContinue = (emailIsValid && passwordIsValid
+            && selectedImage != null && usernameController.text != "");
+        _continue = () async {
+          MultipartFile profilePic = await MultipartFile.fromFile(selectedImage!.path);
+          signupCubit.signup(
+            userRequest: SignupRequest(
+              email: emailController.text,
+              password: passwordController.text),
+            profileRequest: ProfileCreateRequest(
+                user: emailController.text,
+                name: usernameController.text,
+                description: "",
+                birthdate: formatDateTime(birthdate),
+                picture: profilePic
+            ),
+          );
+        };
         break;
     }
     String continueText = stepIndex == 1 ? "Signup" : "Continue >";

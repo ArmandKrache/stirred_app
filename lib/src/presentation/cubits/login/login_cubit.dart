@@ -64,6 +64,7 @@ class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
       emit(const LoginSuccess());
       appRouter.push(const RootRoute());
     } else if (response is DataFailed) {
+      /// V2 : Profile creation view for account with User but no Profile
       logger.d(response.exception!.error.toString());
       emit(const LoginLoading());
       emit(LoginFailed(exception: response.exception));
