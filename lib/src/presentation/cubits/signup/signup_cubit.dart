@@ -16,24 +16,30 @@ class SignupCubit extends BaseCubit<SignupState, Profile?> {
 
   SignupCubit(this._apiRepository) : super(const SignupLoading(), null);
 
-  Future<void> checkUsernameValidity({required String username}) async {
+  Future<void> checkUsernameValidity({required String username, required Function(bool) onFinishCallback}) async {
     if (isBusy) return ;
     if (username == "") {
       emit(const SignupLoading());
-      return;
+      return ;
     }
 
-    const SignupUsernameValidityLoading();
-    debouncer.debounce(() async {
-      final response = await _apiRepository.checkUsernameValidity(username: username);
-      if (response is DataSuccess) {
+    emit(const SignupUsernameValidityLoading());
+    await run(() async {
+      await debouncer.debounce(() async {
+        bool res = false;
+        final response = await _apiRepository.checkUsernameValidity(username: username);
+        if (response is DataSuccess) {
+          res = true;
 
-        emit(const SignupUsernameValiditySuccess());
-      } else if (response is DataFailed) {
-        emit(const SignupUsernameValidityFailed());
-      }
+          emit(const SignupUsernameValiditySuccess());
+        } else if (response is DataFailed) {
+          res = false;
+          emit(const SignupUsernameValidityFailed());
+        }
+        onFinishCallback.call(res);
+      });
     });
-    return;
+    return ;
   }
 
   Future<Profile?> signup({required SignupRequest userRequest, required ProfileCreateRequest profileRequest}) async {

@@ -50,6 +50,7 @@ class _SignupViewState extends State<SignupView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Signup', style: TextStyle(color: Colors.black.withOpacity(0.7)),),
+        leading: const SizedBox(),
       ),
       body: BlocBuilder<SignupCubit, SignupState>(
         builder: (context, state) {
@@ -98,14 +99,14 @@ class _SignupViewState extends State<SignupView> {
             const SizedBox(height: 2,),
             TextField(
               onChanged: (value) async {
-                await signupCubit.checkUsernameValidity(username: emailController.text);
-                setState(() {
-                  if (stateType == SignupUsernameValiditySuccess) {
-                    emailIsValid = true;
-                  } else {
-                    emailIsValid = false;
+                await signupCubit.checkUsernameValidity(
+                  username: emailController.text,
+                  onFinishCallback: (value) {
+                    setState(() {
+                      emailIsValid = value;
+                    });
                   }
-                });
+                );
               },
               controller: emailController,
               cursorColor: Colors.deepOrangeAccent,
@@ -115,7 +116,9 @@ class _SignupViewState extends State<SignupView> {
                   borderSide: BorderSide(
                     style: BorderStyle.solid,
                     width: 1,
-                    color: stateType == SignupUsernameValiditySuccess ?  Colors.green : Colors.red,
+                    color: stateType == SignupUsernameValiditySuccess ?
+                      Colors.green : stateType == SignupUsernameValidityFailed ?
+                      Colors.red : Colors.black,
                   ),
                 ),
                 helperText: stateType == SignupUsernameValidityFailed ?
@@ -135,7 +138,6 @@ class _SignupViewState extends State<SignupView> {
             TextField(
               onChanged: (value) {
                 setState(() {
-                  ///TODO : Check password rules
                   passwordIsValid = passwordController.text.length >= 8;
                 });
               },
@@ -288,7 +290,10 @@ class _SignupViewState extends State<SignupView> {
     Function _continue = () {};
     switch (stepIndex) {
       case (0):
-        canContinue = (emailIsValid && passwordIsValid);
+        canContinue = (emailIsValid
+            && passwordIsValid
+            && signupCubit.state.runtimeType == SignupUsernameValiditySuccess
+        );
         _continue = () {
           stepIndex += 1;
         };
