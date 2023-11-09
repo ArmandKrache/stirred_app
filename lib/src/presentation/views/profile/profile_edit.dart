@@ -13,6 +13,7 @@ import 'package:stirred_app/src/presentation/cubits/profile/profile_edit_cubit.d
 import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
+import 'package:stirred_app/src/utils/constants/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 

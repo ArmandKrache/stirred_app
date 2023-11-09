@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stirred_app/src/presentation/cubits/signup/signup_cubit.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
+import 'package:stirred_app/src/utils/constants/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 @RoutePage()
@@ -52,13 +53,7 @@ class _SignupViewState extends State<SignupView> {
       ),
       body: BlocBuilder<SignupCubit, SignupState>(
         builder: (context, state) {
-          if (state.runtimeType == LoginLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.runtimeType == LoginFailed) {
-            return const Center(child: Text("An error as occurred"));
-          } else {
-            return _buildSignupBody(signupCubit);
-          }
+          return _buildSignupBody(signupCubit);
         },
       ),
     );
@@ -89,6 +84,8 @@ class _SignupViewState extends State<SignupView> {
   }
 
   Widget firstStepBodyWidget(SignupCubit signupCubit) {
+    dynamic stateType = signupCubit.state.runtimeType;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,19 +97,29 @@ class _SignupViewState extends State<SignupView> {
             const Text("Email", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
             const SizedBox(height: 2,),
             TextField(
-              onChanged: (value) {
+              onChanged: (value) async {
+                await signupCubit.checkUsernameValidity(username: emailController.text);
                 setState(() {
-                  ///TODO : Check validity and unicity of email + Debouncer
-                  emailIsValid = emailController.text != "";
+                  if (stateType == SignupUsernameValiditySuccess) {
+                    emailIsValid = true;
+                  } else {
+                    emailIsValid = false;
+                  }
                 });
               },
               controller: emailController,
               cursorColor: Colors.deepOrangeAccent,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(style: BorderStyle.solid, width: 1),
+                  borderSide: BorderSide(
+                    style: BorderStyle.solid,
+                    width: 1,
+                    color: stateType == SignupUsernameValiditySuccess ?  Colors.green : Colors.red,
+                  ),
                 ),
+                helperText: stateType == SignupUsernameValidityFailed ?
+                  "Email is not valid or is already taken" : "",
                 fillColor: Colors.white,
                 filled: true,
               ),
@@ -129,16 +136,24 @@ class _SignupViewState extends State<SignupView> {
               onChanged: (value) {
                 setState(() {
                   ///TODO : Check password rules
-                  passwordIsValid = passwordController.text != "";
+                  passwordIsValid = passwordController.text.length >= 8;
                 });
               },
               controller: passwordController,
               cursorColor: Colors.deepOrangeAccent,
               decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(style: BorderStyle.solid, width: 1),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      style: BorderStyle.solid,
+                      width: 1,
+                      color: passwordIsValid ?
+                        Colors.green : passwordController.text.isNotEmpty ?
+                        Colors.red : Colors.grey,
+                    ),
                   ),
+                  helperText: !passwordIsValid && passwordController.text.isNotEmpty ?
+                    "Password must be at least 8 characters long" : "",
                   fillColor: Colors.white,
                   filled: true,
                   suffixIcon: GestureDetector(

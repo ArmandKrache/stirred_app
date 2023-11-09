@@ -22,3 +22,15 @@ class SignupSuccess extends SignupState {
 class SignupFailed extends SignupState {
   const SignupFailed({super.exception});
 }
+
+class SignupUsernameValidityLoading extends SignupState {
+  const SignupUsernameValidityLoading();
+}
+
+class SignupUsernameValiditySuccess extends SignupState {
+  const SignupUsernameValiditySuccess();
+}
+
+class SignupUsernameValidityFailed extends SignupState {
+  const SignupUsernameValidityFailed();
+}

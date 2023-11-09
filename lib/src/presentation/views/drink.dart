@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
+import 'package:stirred_app/src/utils/constants/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -188,7 +190,7 @@ class _DrinkViewState extends State<DrinkView> {
                   Text(drink.name,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  Text("${drink.recipe.difficulty} - ${drink.recipe.preparationTime} minutes"),
+                  Text("${formatDifficulty(drink.recipe.difficulty)} - ${drink.recipe.preparationTime} minutes ⏳"),
                 ],
               ),
               const Expanded(child: SizedBox(width: 24,)),
@@ -218,7 +220,25 @@ class _DrinkViewState extends State<DrinkView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Equipment", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-              Text(" - ${drink.glass.name}",),
+              RichText(
+                text: TextSpan(
+                  text: " - ",
+                  style: const TextStyle(color: Colors.black87),
+                  children: [
+                    TextSpan(
+                      text: drink.glass.name,
+                      style: const TextStyle(decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const Dialog();
+                          });
+                      }
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -329,7 +349,7 @@ class _DrinkViewState extends State<DrinkView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(),
-              Text(formatDateTimeDelta(rating.creationTime),
+              Text(formatDateTimeDeltaFromNow(rating.creationTime),
                 textAlign: TextAlign.end,
                 style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12),
               ),

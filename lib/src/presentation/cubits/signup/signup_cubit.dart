@@ -11,9 +11,30 @@ part 'signup_state.dart';
 
 class SignupCubit extends BaseCubit<SignupState, Profile?> {
   final ApiRepository _apiRepository;
+  final debouncer = Debouncer(milliseconds: 700);
+
 
   SignupCubit(this._apiRepository) : super(const SignupLoading(), null);
 
+  Future<void> checkUsernameValidity({required String username}) async {
+    if (isBusy) return ;
+    if (username == "") {
+      emit(const SignupLoading());
+      return;
+    }
+
+    const SignupUsernameValidityLoading();
+    debouncer.debounce(() async {
+      final response = await _apiRepository.checkUsernameValidity(username: username);
+      if (response is DataSuccess) {
+
+        emit(const SignupUsernameValiditySuccess());
+      } else if (response is DataFailed) {
+        emit(const SignupUsernameValidityFailed());
+      }
+    });
+    return;
+  }
 
   Future<Profile?> signup({required SignupRequest userRequest, required ProfileCreateRequest profileRequest}) async {
     if (isBusy) return null;
@@ -35,7 +56,7 @@ class SignupCubit extends BaseCubit<SignupState, Profile?> {
         logger.d(response.exception!.error.toString());
         emit(SignupFailed(exception: response.exception));
         /// TODO: display error toast
-      };
+      }
       return null;
   }
 
