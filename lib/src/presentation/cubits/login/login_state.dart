@@ -2,7 +2,7 @@ part of 'login_cubit.dart';
 
 abstract class LoginState extends Equatable {
 
-  final DioException? exception;
+  final Exception? exception;
 
   const LoginState({this.exception});
 

@@ -1,26 +1,34 @@
 part of 'profile_cubit.dart';
 
 abstract class ProfileState extends Equatable {
-  final Profile? profile;
-  final DioException? exception;
-
-  const ProfileState({
-    this.profile,
-    this.exception,
-  });
+  const ProfileState();
 
   @override
-  List<Object?> get props => [profile, exception];
+  List<Object?> get props => [];
+}
+
+class ProfileInitial extends ProfileState {
+  const ProfileInitial();
 }
 
 class ProfileLoading extends ProfileState {
   const ProfileLoading();
 }
 
-class ProfileSuccess extends ProfileState {
-  const ProfileSuccess({super.profile});
+class ProfileLoaded extends ProfileState {
+  final Profile profile;
+
+  const ProfileLoaded({required this.profile});
+
+  @override
+  List<Object?> get props => [profile];
 }
 
-class ProfileFailed extends ProfileState {
-  const ProfileFailed({super.exception});
+class ProfileError extends ProfileState {
+  final Exception exception;
+
+  const ProfileError({required this.exception});
+
+  @override
+  List<Object?> get props => [exception];
 }

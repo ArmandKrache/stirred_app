@@ -3,7 +3,7 @@ part of 'signup_cubit.dart';
 abstract class SignupState extends Equatable {
 
   final Profile? profile;
-  final DioException? exception;
+  final Exception? exception;
 
   const SignupState({this.profile, this.exception});
 

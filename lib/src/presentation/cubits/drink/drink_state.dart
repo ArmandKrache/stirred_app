@@ -3,7 +3,7 @@ part of 'drink_cubit.dart';
 
 abstract class DrinkState extends Equatable {
   final Drink? drink;
-  final DioException? exception;
+  final Exception? exception;
 
   const DrinkState({
     this.drink,

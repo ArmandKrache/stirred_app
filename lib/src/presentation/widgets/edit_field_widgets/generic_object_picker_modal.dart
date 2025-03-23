@@ -1,10 +1,11 @@
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
-class GenericObjectPickerModal<T extends GenericDataModel> extends StatefulWidget {
-  final Future<List<T>> Function(String query) searchFunction;
+class GenericObjectPickerModal<T extends GenericDataModel> extends ConsumerStatefulWidget {
+  final Future<List<T>> Function(String query, WidgetRef ref) searchFunction;
   final T? currentItem;
   final String title;
 
@@ -16,11 +17,10 @@ class GenericObjectPickerModal<T extends GenericDataModel> extends StatefulWidge
   });
 
   @override
-  State<GenericObjectPickerModal<T>> createState() => _GenericObjectPickerModal();
+  ConsumerState<GenericObjectPickerModal<T>> createState() => _GenericObjectPickerModal();
 }
 
-class _GenericObjectPickerModal<T extends GenericDataModel> extends State<GenericObjectPickerModal<T>> {
-
+class _GenericObjectPickerModal<T extends GenericDataModel> extends ConsumerState<GenericObjectPickerModal<T>> {
   final TextEditingController _searchController = TextEditingController();
   List<T> searchResults = [];
   T? selectedItem;
@@ -33,37 +33,6 @@ class _GenericObjectPickerModal<T extends GenericDataModel> extends State<Generi
 
   @override
   Widget build(BuildContext context) {
-
-    List<Widget> searchResultsWidgetList = List<Widget>.from(searchResults.map((e) {
-      return GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedItem = e;
-          });
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              color: selectedItem == e ? Colors.deepPurpleAccent.withOpacity(0.2) : Colors.transparent
-            ),
-            child: Row(
-              children: [
-                Text(e.name ?? "",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 4,),
-                Text("(${e.id})",
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }));
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -83,7 +52,7 @@ class _GenericObjectPickerModal<T extends GenericDataModel> extends State<Generi
                 hintText: "Search",
                 controller: _searchController,
                 onChanged: (query) async {
-                  List<T> res = await widget.searchFunction.call(query);
+                  List<T> res = await widget.searchFunction.call(query, ref);
                   setState(() {
                     searchResults = res;
                   });
@@ -136,4 +105,33 @@ class _GenericObjectPickerModal<T extends GenericDataModel> extends State<Generi
     );
   }
 
+  List<Widget> get searchResultsWidgetList {
+    return searchResults.map((item) => GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedItem = item;
+        });
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            color: selectedItem == item ? Colors.deepPurpleAccent.withOpacity(0.2) : Colors.transparent
+          ),
+          child: Row(
+            children: [
+              Text(item.name ?? "",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 4,),
+              Text("(${item.id})",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )).toList();
+  }
 }

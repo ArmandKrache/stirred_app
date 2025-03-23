@@ -2,7 +2,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -32,7 +31,7 @@ class LoginView extends HookWidget {
           if (state.runtimeType == LoginLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.runtimeType == LoginFailed) {
-            return _buildLoginForm(context, remoteLoginCubit, error :state.exception);
+            return _buildLoginForm(context, remoteLoginCubit, error: state.exception);
           } else {
             return _buildLoginForm(context, remoteLoginCubit);
           }
@@ -41,7 +40,7 @@ class LoginView extends HookWidget {
     );
   }
 
-  Widget _buildLoginForm(BuildContext context, LoginCubit remoteLoginCubit, {DioException? error}) {
+  Widget _buildLoginForm(BuildContext context, LoginCubit remoteLoginCubit, {Exception? error}) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

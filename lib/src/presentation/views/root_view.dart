@@ -1,29 +1,27 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/nav_bar_items.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
-import 'package:stirred_app/src/presentation/data/global_data_functions.dart';
 import 'package:stirred_app/src/presentation/views/homepage.dart';
 import 'package:stirred_app/src/presentation/views/profile/profile.dart';
 import 'package:stirred_app/src/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:stirred_common_domain/stirred_common_domain.dart';
+import 'package:stirred_app/src/presentation/data/global_data_functions.dart';
 
 @RoutePage()
-class RootView extends HookWidget {
-  const RootView({Key? key}) : super (key: key);
+class RootView extends HookConsumerWidget {
+  const RootView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// UnComment to make sure app always opens on Homepage
     /// final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context).getNavBarItem(NavbarItem.drinks);
-    final rootNavigationCubit = BlocProvider.of<RootNavigationCubit>(context);
 
     useEffect(() {
-      initialChoicesDataRetrieve();
-
+      ref.read(globalDataInitializationProvider);
       return;
     }, const []);
 

@@ -1,83 +1,53 @@
-import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/config/themes/app_themes.dart';
-import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
-import 'package:stirred_app/src/presentation/cubits/profile/profile_edit_cubit.dart';
-import 'package:stirred_app/src/presentation/cubits/root_navigation/root_navigation_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/signup/signup_cubit.dart';
-import 'package:stirred_app/src/utils/constants/constants.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:stirred_common_domain/stirred_common_domain.dart';
-
+import 'package:stirred_app/src/presentation/data/global_data_functions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await initializeDependencies();
-
-  HttpOverrides.global = MyHttpOverrides();
-
   await EasyLocalization.ensureInitialized();
-  runApp(EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('fr')],
-      path: 'assets/translations/',
-      fallbackLocale: const Locale('en', 'US'),
-      child: const MyApp()
-  ),);
+
+  runApp(
+    ProviderScope(
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US')],
+        path: 'assets/translations/',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const StirredApp(),
+      ),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StirredApp extends ConsumerWidget {
+  const StirredApp({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => RootNavigationCubit()),
-        BlocProvider(create: (context) => LoginCubit(
-          locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => SignupCubit(
-          locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => HomepageCubit(
-          locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => DrinkCubit(
-          locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => ProfileCubit(
-          locator<ApiRepository>(),)
-        ),
-        BlocProvider(create: (context) => ProfileEditCubit(
-          locator<ApiRepository>(),)
-        ),
-      ],
-      child: OKToast(child: MaterialApp.router(
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Initialize global data
+    ref.watch(globalDataInitializationProvider);
+
+    // Watch providers that need to be initialized early
+    ref.watch(loginCubitProvider);
+    ref.watch(signupCubitProvider);
+    ref.watch(profileCubitProvider);
+    ref.watch(homepageCubitProvider);
+
+    return OKToast(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        routerConfig: appRouter.config(),
-        title: appTitle,
+        title: 'Stirred',
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        theme: AppTheme.light,
-      )),
+        routerConfig: appRouter.config(),
+      ),
     );
-  }
-}
-
-/// TODO : remove after server release
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext? context){
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }

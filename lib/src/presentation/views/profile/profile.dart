@@ -3,28 +3,22 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
-import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 
 @RoutePage()
 class ProfileView extends StatefulHookWidget {
-  const ProfileView({Key? key}) : super (key: key);
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
-
   @override
   void initState() {
     super.initState();
@@ -43,48 +37,49 @@ class _ProfileViewState extends State<ProfileView> {
       rebuildFlag.value = true;
     }
 
-
     useEffect(() {
       if (rebuildFlag.value) {
         profileCubit.rebuild();
         rebuildFlag.value = false;
       }
-      return ;
+      return;
     }, [rebuildFlag.value]);
 
     useEffect(() {
-      profileCubit.rebuild();
-      return ;
-    }, [currentProfile]);
+      profileCubit.loadProfile();
+      return;
+    }, const []);
 
     return Scaffold(
-      body : SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: BlocBuilder<ProfileCubit, ProfileState>(
-                builder: (context, state) {
-                  if (state.profile == null || state.runtimeType == ProfileFailed) {
-                    return const Center(
-                      heightFactor: 50,
-                      child: Text("Profile couldn't be loaded"),
-                    );
-                  } else if (state.runtimeType == ProfileLoading) {
-                    return const Center(
-                      heightFactor: 50,
-                      child: Text("Profile is loading"),
-                    );
-                  } else {
-                    return _buildProfileDataWidgets(profileCubit, triggerRebuild);
-                  }
-                })
+          physics: const BouncingScrollPhysics(),
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) {
+              if (state is ProfileError || (state is! ProfileLoaded)) {
+                return const Center(
+                  heightFactor: 50,
+                  child: Text("Profile couldn't be loaded"),
+                );
+              } else if (state is ProfileLoading) {
+                return const Center(
+                  heightFactor: 50,
+                  child: Text("Profile is loading"),
+                );
+              } else {
+                return _buildProfileDataWidgets(profileCubit, triggerRebuild);
+              }
+            },
+          ),
         ),
       ),
     );
   }
 
-
   Widget _buildProfileDataWidgets(ProfileCubit profileCubit, Function() triggerRebuild) {
-    Profile profile = profileCubit.state.profile!;
+    final state = profileCubit.state;
+    if (state is! ProfileLoaded) return const SizedBox();
+    final profile = state.profile;
 
     return Stack(
       children: [

@@ -1,14 +1,10 @@
 part of 'profile_edit_cubit.dart';
 
 abstract class ProfileEditState extends Equatable {
-  final DioException? exception;
-
-  const ProfileEditState({
-    this.exception,
-  });
+  const ProfileEditState();
 
   @override
-  List<Object?> get props => [exception];
+  List<Object?> get props => [];
 }
 
 class ProfileEditLoading extends ProfileEditState {
@@ -20,5 +16,10 @@ class ProfileEditSuccess extends ProfileEditState {
 }
 
 class ProfileEditFailed extends ProfileEditState {
-  const ProfileEditFailed({super.exception});
-}
+  final Exception? exception;
+  
+  const ProfileEditFailed({this.exception});
+  
+  @override
+  List<Object?> get props => [exception];
+} 

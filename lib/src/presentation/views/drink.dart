@@ -7,6 +7,7 @@ import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
 import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
@@ -19,7 +20,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class DrinkView extends StatefulHookWidget {
   final String id;
 
-  const DrinkView({Key? key, required this.id}) : super (key: key);
+  const DrinkView({super.key, required this.id});
 
   @override
   State<DrinkView> createState() => _DrinkViewState();
@@ -33,7 +34,10 @@ class _DrinkViewState extends State<DrinkView> {
   @override
   void initState() {
     super.initState();
-    isFavorite = currentProfile.preferences.favorites.any((element) => element.id == widget.id);
+    final state = context.read<ProfileCubit>().state;
+    if (state is ProfileLoaded) {
+      isFavorite = state.profile.preferences.favorites.any((element) => element.id == widget.id);
+    }
   }
 
   @override

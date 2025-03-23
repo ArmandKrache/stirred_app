@@ -1,27 +1,21 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/presentation/cubits/drink/drink_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/profile/profile_edit_cubit.dart';
-import 'package:stirred_app/src/presentation/widgets/rating_dialog_widget.dart';
 import 'package:stirred_app/src/utils/constants/functions.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_app/src/utils/constants/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:http/http.dart';
 
 @RoutePage()
 class ProfileEditView extends StatefulHookWidget {
-
-  const ProfileEditView({Key? key}) : super (key: key);
+  const ProfileEditView({super.key});
 
   @override
   State<ProfileEditView> createState() => _ProfileEditViewState();
@@ -38,9 +32,13 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   void initState() {
     super.initState();
-    nameController.text = currentProfile.name ?? "";
-    descriptionController.text = currentProfile.description ?? "";
-    birthdate = DateTime.parse(currentProfile.dateOfBirth);
+    final state = context.read<ProfileCubit>().state;
+    if (state is ProfileLoaded) {
+      final profile = state.profile;
+      nameController.text = profile.name;
+      descriptionController.text = profile.description;
+      birthdate = DateTime.parse(profile.dateOfBirth);
+    }
   }
 
   @override
@@ -51,6 +49,9 @@ class _ProfileEditViewState extends State<ProfileEditView> {
   @override
   Widget build(BuildContext context) {
     final profileEditCubit = BlocProvider.of<ProfileEditCubit>(context);
+    final state = context.read<ProfileCubit>().state;
+    if (state is! ProfileLoaded) return const SizedBox();
+    final profile = state.profile;
 
     useEffect(() {
       nameController.addListener(() {
@@ -66,16 +67,15 @@ class _ProfileEditViewState extends State<ProfileEditView> {
       return;
     }, const []);
 
-
     useEffect(() {
       bool tmp = false;
-      if (nameController.text != currentProfile.name) {
+      if (nameController.text != profile.name) {
         tmp = true;
       }
-      else if (descriptionController.text != currentProfile.description) {
+      else if (descriptionController.text != profile.description) {
         tmp = true;
       }
-      else if (formatDateTime(birthdate) != currentProfile.dateOfBirth) {
+      else if (formatDateTime(birthdate) != profile.dateOfBirth) {
         tmp = true;
       }
       else if (selectedImage != null) {
@@ -84,7 +84,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
       setState(() {
         isEdited = tmp;
       });
-      return ;
+      return;
     }, [_shouldCheckValue, birthdate, selectedImage]);
 
     return Scaffold(
@@ -110,10 +110,13 @@ class _ProfileEditViewState extends State<ProfileEditView> {
                 data["description"] = descriptionController.text;
                 data["birthdate"] = formatDateTime(birthdate);
                 if (selectedImage != null) {
-                  MultipartFile multipartImage = await MultipartFile.fromFile(selectedImage!.path);
+                  MultipartFile multipartImage = await MultipartFile.fromPath(
+                    'picture',
+                    selectedImage!.path
+                  );
                   data["picture"] = multipartImage;
                 }
-                var res = await profileEditCubit.patchProfile(currentProfile.id, data);
+                var res = await profileEditCubit.patchProfile(profile.id, data);
                 if (res != null) {
                   appRouter.pop();
                 } else {
@@ -128,7 +131,7 @@ class _ProfileEditViewState extends State<ProfileEditView> {
           )
         ],
       ),
-      body : SafeArea(
+      body: SafeArea(
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -157,12 +160,14 @@ class _ProfileEditViewState extends State<ProfileEditView> {
     );
   }
 
-  Widget _buildDataWidgets(ProfileEditCubit drinksCubit ) {
-
+  Widget _buildDataWidgets(ProfileEditCubit profileEditCubit) {
+    final state = context.read<ProfileCubit>().state;
+    if (state is! ProfileLoaded) return const SizedBox();
+    final profile = state.profile;
     final Widget picturePreviewWidget;
 
     if (selectedImage == null) {
-      picturePreviewWidget = Image.network(preprocessPictureUrl(currentProfile.picture, baseUrl), width: 128, height: 128,);
+      picturePreviewWidget = Image.network(preprocessPictureUrl(profile.picture, baseUrl), width: 128, height: 128,);
     } else {
       picturePreviewWidget = Image.file(selectedImage!, width: 128, height: 128, fit: BoxFit.contain,);
     }
@@ -285,5 +290,4 @@ class _ProfileEditViewState extends State<ProfileEditView> {
       ),
     );
   }
-
 }

@@ -1,7 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
-Future<List<Ingredient>> searchIngredients(String query) async {
-  ApiRepository apiRepository = locator<ApiRepository>();
+Future<List<Ingredient>> searchIngredients(String query, WidgetRef ref) async {
+  final apiRepository = ref.read(apiRepositoryProvider);
   final response = await apiRepository.searchIngredients(
       request: IngredientsSearchRequest(query: query,));
   if (response is DataSuccess) {
@@ -12,9 +13,8 @@ Future<List<Ingredient>> searchIngredients(String query) async {
   return [];
 }
 
-
-Future<List<Glass>> searchGlasses(String query) async {
-  ApiRepository apiRepository = locator<ApiRepository>();
+Future<List<Glass>> searchGlasses(String query, WidgetRef ref) async {
+  final apiRepository = ref.read(apiRepositoryProvider);
   final response = await apiRepository.searchGlasses(
       request: GlassesSearchRequest(query: query,));
   if (response is DataSuccess) {
@@ -25,8 +25,8 @@ Future<List<Glass>> searchGlasses(String query) async {
   return [];
 }
 
-Future<List<Recipe>> searchRecipes(String query) async {
-  ApiRepository apiRepository = locator<ApiRepository>();
+Future<List<Recipe>> searchRecipes(String query, WidgetRef ref) async {
+  final apiRepository = ref.read(apiRepositoryProvider);
   final response = await apiRepository.searchRecipes(
       request: RecipesSearchRequest(query: query,));
   if (response is DataSuccess) {
@@ -37,8 +37,8 @@ Future<List<Recipe>> searchRecipes(String query) async {
   return [];
 }
 
-Future<List<Profile>> searchProfiles(String query) async {
-  ApiRepository apiRepository = locator<ApiRepository>();
+Future<List<Profile>> searchProfiles(String query, WidgetRef ref) async {
+  final apiRepository = ref.read(apiRepositoryProvider);
   final response = await apiRepository.searchProfiles(
       request: ProfilesSearchRequest(query: query,));
   if (response is DataSuccess) {
@@ -49,8 +49,8 @@ Future<List<Profile>> searchProfiles(String query) async {
   return [];
 }
 
-Future<List<Drink>> searchDrinks(String query) async {
-  ApiRepository apiRepository = locator<ApiRepository>();
+Future<List<Drink>> searchDrinks(String query, WidgetRef ref) async {
+  final apiRepository = ref.read(apiRepositoryProvider);
   final response = await apiRepository.searchDrinks(
       request: DrinksSearchRequest(query: query,));
   if (response is DataSuccess) {

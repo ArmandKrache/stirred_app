@@ -1,11 +1,15 @@
 import 'dart:developer';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 part 'drink_state.dart';
+
+final drinkCubitProvider = Provider.autoDispose<DrinkCubit>((ref) {
+  final apiRepository = ref.watch(apiRepositoryProvider);
+  return DrinkCubit(apiRepository);
+});
 
 class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
   final ApiRepository _apiRepository;
@@ -64,27 +68,12 @@ class DrinkCubit extends BaseCubit<DrinkState, Drink?> {
   }
 
   Future<bool> favoriteAction({required Drink drink, bool isFavorite = false}) async {
-    if (isBusy) return false;
-
-    DataState<dynamic> response =
-     await _apiRepository.favoriteAction(drinkId: drink.id);
+    final response = await _apiRepository.favoriteAction(drinkId: drink.id);
     if (response is DataSuccess) {
-      final res = response.data!;
-      if (isFavorite) {
-        currentProfile.preferences.favorites.removeWhere((element) => element.id == drink.id);
-      } else {
-        currentProfile.preferences.favorites.add(GenericPreviewDataModel(
-            id: drink.id,
-            name: drink.name,
-            picture: drink.picture,
-        ));
-      }
-
       return true;
     } else if (response is DataFailed) {
-      log(response.exception.toString());
+      log('Failed to toggle favorite: ${response.exception}');
     }
     return false;
   }
-
 }

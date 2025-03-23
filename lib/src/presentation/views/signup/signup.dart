@@ -1,19 +1,13 @@
-
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/presentation/cubits/login/login_cubit.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stirred_app/src/presentation/cubits/signup/signup_cubit.dart';
-import 'package:stirred_app/src/utils/constants/functions.dart';
 import 'package:stirred_app/src/utils/constants/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
+import 'package:http/http.dart' as http;
 
 @RoutePage()
 class SignupView extends StatefulWidget {
@@ -302,7 +296,12 @@ class _SignupViewState extends State<SignupView> {
         canContinue = (emailIsValid && passwordIsValid
             && selectedImage != null && usernameController.text != "");
         _continue = () async {
-          MultipartFile profilePic = await MultipartFile.fromFile(selectedImage!.path);
+          final bytes = await selectedImage!.readAsBytes();
+          final profilePic = await http.MultipartFile.fromBytes(
+            'picture',
+            bytes,
+            filename: selectedImage!.path.split('/').last
+          );
           signupCubit.signup(
             userRequest: SignupRequest(
               email: emailController.text,

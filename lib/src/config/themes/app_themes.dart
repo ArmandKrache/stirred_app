@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stirred_app/src/utils/constants/colors.dart';
 
 abstract class AppTheme {
   static ThemeData get light {

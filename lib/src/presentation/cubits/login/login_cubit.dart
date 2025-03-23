@@ -1,32 +1,35 @@
 import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
-import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
-import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:equatable/equatable.dart';
+import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
 
 part 'login_state.dart';
 
-class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
-  final ApiRepository _apiRepository;
+final loginCubitProvider = Provider.autoDispose<LoginCubit>((ref) {
+  final apiRepository = ref.watch(apiRepositoryProvider);
+  final tokenManager = ref.watch(tokenManagerProvider.notifier);
+  return LoginCubit(apiRepository, tokenManager, ref);
+});
 
-  LoginCubit(this._apiRepository) : super(const LoginLoading(), {});
+class LoginCubit extends Cubit<LoginState> {
+  final ApiRepository _apiRepository;
+  final TokenManager _tokenManager;
+  final ProviderRef _ref;
+
+  LoginCubit(this._apiRepository, this._tokenManager, this._ref) : super(const LoginLoading());
 
   Future<void> isAlreadyLoggedIn() async {
-    final access = await getAccessToken();
-    final refresh = await getRefreshToken();
-    logger.d("Access : $access | Refresh : $refresh");
-
-    if (access == null || refresh == null) {
+    final header = await _tokenManager.getAuthorizationHeader();
+    if (header == null) {
       emit(const LoginFailed());
-      return ;
+      return;
     }
 
-    final refreshResponse = await _apiRepository.refreshToken(refreshToken: refresh);
-    if (refreshResponse is DataSuccess) {
-      await storeAccessToken(refreshResponse.data!.access);
-
-      _getProfileAndDispatch();
+    final refreshed = await _tokenManager.refreshTokens();
+    if (refreshed) {
+      await _getProfileAndDispatch();
       emit(const LoginSuccess());
     } else {
       emit(const LoginFailed());
@@ -35,41 +38,33 @@ class LoginCubit extends BaseCubit<LoginState, Map<String, dynamic>> {
   }
 
   Future<void> logIn({LoginRequest? request}) async {
-    if (isBusy) return;
     if (request == null) return;
 
-      await run(() async {
-        final response = await _apiRepository.getTokens(request: request);
-        if (response is DataSuccess) {
-          final access = response.data!.access;
-          final refresh = response.data!.refresh;
+    emit(const LoginLoading());
+    final response = await _apiRepository.getTokens(request: request);
+    
+    if (response is DataSuccess) {
+      final access = response.data!.access;
+      final refresh = response.data!.refresh;
 
-          await storeAccessToken(access);
-          await storeRefreshToken(refresh);
-
-          _getProfileAndDispatch();
-        } else if (response is DataFailed) {
-          logger.d(response.exception!.error.toString());
-          emit(const LoginLoading());
-          emit(LoginFailed(exception: response.exception));
-          /// TODO: display error toast
-        }
-      });
+      await _tokenManager.storeTokens(accessToken: access, refreshToken: refresh);
+      await _getProfileAndDispatch();
+    } else if (response is DataFailed) {
+      logger.d(response.exception.toString());
+      emit(LoginFailed(exception: response.exception));
+    }
   }
 
   Future<void> _getProfileAndDispatch() async {
     final response = await _apiRepository.getSelfProfile();
     if (response is DataSuccess) {
-      currentProfile = response.data!;
+      final profileCubit = _ref.read(profileCubitProvider);
+      profileCubit.emit(ProfileLoaded(profile: response.data!));
       emit(const LoginSuccess());
       appRouter.push(const RootRoute());
     } else if (response is DataFailed) {
-      /// V2 : Profile creation view for account with User but no Profile
-      logger.d(response.exception!.error.toString());
-      emit(const LoginLoading());
+      logger.d(response.exception.toString());
       emit(LoginFailed(exception: response.exception));
-      /// TODO: display error toast
     }
-    return;
   }
 }

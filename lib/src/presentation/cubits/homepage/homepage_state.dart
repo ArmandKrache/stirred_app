@@ -1,37 +1,38 @@
 part of 'homepage_cubit.dart';
 
-
 abstract class HomepageState extends Equatable {
   final List<Drink> drinks;
-  final bool noMoreData;
-  final DioException? exception;
+  final Exception? exception;
 
   const HomepageState({
-    this.drinks = const [],
-    this.noMoreData = true,
+    required this.drinks,
     this.exception,
   });
 
   @override
-  List<Object?> get props => [drinks, noMoreData, exception];
+  List<Object?> get props => [drinks, exception];
 }
 
 class HomepageLoading extends HomepageState {
-  const HomepageLoading({super.drinks, super.noMoreData});
+  const HomepageLoading({required super.drinks});
 }
 
 class HomepageSuccess extends HomepageState {
-  const HomepageSuccess({super.drinks, super.noMoreData});
+  const HomepageSuccess({required super.drinks});
+}
+
+class HomepageError extends HomepageState {
+  const HomepageError({required super.drinks, super.exception});
 }
 
 class DrinksListLoading extends HomepageState {
-  const DrinksListLoading({super.drinks, super.noMoreData});
+  const DrinksListLoading({required super.drinks});
 }
 
 class DrinksListSuccess extends HomepageState {
-  const DrinksListSuccess({super.drinks, super.noMoreData});
+  const DrinksListSuccess({required super.drinks});
 }
 
 class DrinksListFailed extends HomepageState {
-  const DrinksListFailed({super.exception});
+  const DrinksListFailed({required super.drinks, required Exception super.exception});
 }

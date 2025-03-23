@@ -1,43 +1,36 @@
-import 'dart:developer';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 part 'profile_edit_state.dart';
 
+final profileEditCubitProvider = Provider.autoDispose<ProfileEditCubit>((ref) {
+  final apiRepository = ref.watch(apiRepositoryProvider);
+  return ProfileEditCubit(apiRepository);
+});
 
-class ProfileEditCubit extends BaseCubit<ProfileEditState, Profile> {
+class ProfileEditCubit extends Cubit<ProfileEditState> {
   final ApiRepository _apiRepository;
 
-  ProfileEditCubit(this._apiRepository) : super(const ProfileEditSuccess(), currentProfile);
+  ProfileEditCubit(this._apiRepository) : super(const ProfileEditLoading());
 
   Future<Profile?> patchProfile(String id, Map<String, dynamic> data) async {
-    if (isBusy) return null;
-
     emit(const ProfileEditLoading());
-    ProfilePatchRequest patchRequest = ProfilePatchRequest(
+    final patchRequest = ProfilePatchRequest(
       id: id,
       name: data["name"],
       description: data["description"],
       picture: data["picture"],
       birthdate: data["birthdate"]
     );
-
-    DataState<ProfilePatchResponse> response =
-      await _apiRepository.patchProfile(request: patchRequest);
+    final response = await _apiRepository.patchProfile(request: patchRequest);
     if (response is DataSuccess) {
-      final res = response.data!.profile;
-      currentProfile = res;
-
       emit(const ProfileEditSuccess());
-      return res;
+      return response.data!.profile;
     } else if (response is DataFailed) {
-      log(response.exception.toString());
-      emit(const ProfileEditFailed());
+      emit(ProfileEditFailed(exception: response.exception));
     }
     return null;
   }
-
 }

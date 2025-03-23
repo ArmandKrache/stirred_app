@@ -1,15 +1,22 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:stirred_app/src/config/router/app_router.dart';
 import 'package:stirred_app/src/presentation/cubits/base/base_cubit.dart';
 import 'package:stirred_app/src/presentation/cubits/root_navigation/nav_bar_items.dart';
 import 'package:equatable/equatable.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'root_navigation_state.dart';
 
+final rootNavigationCubitProvider = Provider.autoDispose<RootNavigationCubit>((ref) {
+  final tokenManager = ref.watch(tokenManagerProvider.notifier);
+  return RootNavigationCubit(tokenManager);
+});
+
 class RootNavigationCubit extends BaseCubit<RootNavigationState, Map<String, dynamic>> {
-  RootNavigationCubit() : super(const RootNavigationSuccess(navbarItem: NavbarItem.drinks, index: 0), {});
+  final TokenManager _tokenManager;
+
+  RootNavigationCubit(this._tokenManager) : super(const RootNavigationSuccess(navbarItem: NavbarItem.drinks, index: 0), {});
 
   void getNavBarItem(NavbarItem navbarItem) {
     switch (navbarItem) {
@@ -35,9 +42,8 @@ class RootNavigationCubit extends BaseCubit<RootNavigationState, Map<String, dyn
     if (isBusy) return;
 
     await run(() async {
-      deleteTokens();
+      await _tokenManager.clearTokens();
       appRouter.popUntil((route) => route.data?.name == "LoginRoute");
     });
   }
-
-  }
+}

@@ -2,9 +2,10 @@ import 'package:stirred_app/src/presentation/widgets/custom_text_tile.dart';
 import 'package:stirred_app/src/utils/constants/global_data.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
-class CategoriesEditFieldWidget extends StatefulWidget {
+class CategoriesEditFieldWidget extends ConsumerStatefulWidget {
   final Categories categories;
   final TextEditingController keywordsController;
 
@@ -14,15 +15,23 @@ class CategoriesEditFieldWidget extends StatefulWidget {
     required this.keywordsController,
   });
 
-
   @override
-  State<CategoriesEditFieldWidget> createState() => _CategoriesEditFieldWidgetState();
+  ConsumerState<CategoriesEditFieldWidget> createState() => _CategoriesEditFieldWidgetState();
 }
 
-class _CategoriesEditFieldWidgetState extends State<CategoriesEditFieldWidget> {
-
+class _CategoriesEditFieldWidgetState extends ConsumerState<CategoriesEditFieldWidget> {
   @override
   Widget build(BuildContext context) {
+    final allPossibleCategories = ref.watch(allPossibleCategoriesProvider) ?? Categories(
+      origins: const [],
+      seasons: const [],
+      colors: const [],
+      strengths: const [],
+      eras: const [],
+      diets: const [],
+      keywords: const [],
+    );
+
     return ExpandablePanel(
       header: const Padding(
         padding: EdgeInsets.all(12.0),

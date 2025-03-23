@@ -1,67 +1,61 @@
-
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:stirred_app/src/config/router/app_router.dart';
-import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:stirred_app/src/presentation/widgets/custom_generic_data_table_widget.dart';
-import 'package:stirred_app/src/presentation/widgets/search_bar_widget.dart';
-import 'package:stirred_app/src/utils/constants/global_data.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stirred_app/src/core/widgets/drink_card.dart';
+import 'package:stirred_app/src/core/widgets/search_bar.dart';
+import 'package:stirred_app/src/presentation/cubits/homepage/homepage_cubit.dart';
+import 'package:stirred_app/src/presentation/cubits/profile/profile_cubit.dart';
+import 'package:stirred_app/src/presentation/views/homepage_loading.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
-
 @RoutePage()
-class HomepageView extends HookWidget {
-  const HomepageView({Key? key}) : super (key: key);
+class HomepageView extends HookConsumerWidget {
+  const HomepageView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final homepageCubit = BlocProvider.of<HomepageCubit>(context);
-    final scrollController = useScrollController();
-    final TextEditingController searchController = TextEditingController();
-    final currentRoute = ModalRoute.of(context);
-    final rebuildFlag = useState<bool>(false);
-
-
-    useEffect(() {
-      homepageCubit.fetchDrinksList();
-      return ;
-    }, const []);
-
-    useEffect(() {
-      if (rebuildFlag.value) {
-        homepageCubit.rebuild();
-        rebuildFlag.value = false;
-      }
-      return ;
-    }, [rebuildFlag.value]);
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homepageCubit = ref.watch(homepageCubitProvider);
+    final profileCubit = ref.watch(profileCubitProvider);
 
     return Scaffold(
-      body : SafeArea(
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomSearchBar(
-              controller: searchController,
-              onChanged: (query) async {
-                homepageCubit.fetchDrinksList(query: query);
-              },
-              margin: const EdgeInsets.all(8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SearchBarWidget(
+                onChanged: (value) {
+                  homepageCubit.fetchDrinksList(query: value);
+                },
+              ),
             ),
-            const SizedBox(height: 4,),
+            const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<HomepageCubit, HomepageState>(
-                builder: (context, state) {
-                  if (state.drinks.isEmpty) {
-                    return const Center(child: Text("Drinks list is empty"),);
-                  } else {
-                    return _buildDataWidgets(state.drinks, homepageCubit, () {rebuildFlag.value = true;});
-                  }
-                }),
+                bloc: homepageCubit,
+                builder: (context, homepageState) {
+                  return BlocBuilder<ProfileCubit, ProfileState>(
+                    bloc: profileCubit,
+                    builder: (context, profileState) {
+                      if (homepageState is HomepageLoading) {
+                        return const HomepageLoadingView();
+                      }
+                      if (homepageState is HomepageError) {
+                        return Center(
+                          child: Text(homepageState.exception.toString()),
+                        );
+                      }
+                      return _buildDataWidgets(
+                        context: context,
+                        drinks: homepageState.drinks,
+                        profileState: profileState,
+                        homepageCubit: homepageCubit,
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -69,69 +63,41 @@ class HomepageView extends HookWidget {
     );
   }
 
-  Widget _buildDataWidgets(List<Drink> drinks, HomepageCubit drinksCubit, Function() onPop) {
-    double imageSideSize = 192;
-    List<Widget> items = [];
-    
-    for (var drink in drinks) {
-      bool isFav = (currentProfile.preferences.favorites.any((element) => element.id == drink.id));
-      items.add(
-        GestureDetector(
-          onTap: () async {
-            var pop = await appRouter.push(DrinkRoute(id: drink.id));
-            if (pop == true) {
-              onPop.call();
-            }
-          },
-          child: Column(
-            children: [
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                child: SizedBox(
-                  width: imageSideSize,
-                  height: imageSideSize,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(drink.picture, fit: BoxFit.cover, width: imageSideSize, height: imageSideSize,)
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.redAccent : Colors.white, size: 28,),
-                          ),
-                        )
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Text(drink.name, style: const TextStyle(fontSize: 17),)
-            ],
-          ),
-        )
-      );
-    }
-
-    return SingleChildScrollView(
-      child: Center(
-        child: Wrap(
-          runAlignment: WrapAlignment.center,
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 16,
-          runSpacing: 16,
-          children: [
-            ...items,
-          ],
-        ),
+  Widget _buildDataWidgets({
+    required BuildContext context,
+    required List<Drink> drinks,
+    required ProfileState profileState,
+    required HomepageCubit homepageCubit,
+  }) {
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 0.8,
       ),
+      itemCount: drinks.length,
+      itemBuilder: (context, index) {
+        final drink = drinks[index];
+        return DrinkCard(
+          drink: drink,
+          isFavorite: profileState is ProfileLoaded
+              ? profileState.profile.preferences.favorites.any((fav) => fav.id == drink.id)
+              : false,
+          onFavoriteTap: () {
+            if (profileState is! ProfileLoaded) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('You need to be logged in to add favorites'),
+                ),
+              );
+              return;
+            }
+            homepageCubit.toggleFavorite(drinkId: drink.id);
+          },
+        );
+      },
     );
   }
-
 }
