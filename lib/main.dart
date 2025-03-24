@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:stirred_app/router/app_router.dart';
-import 'package:stirred_app/presentation/cubits/homepage/homepage_cubit.dart';
-import 'package:stirred_app/presentation/cubits/login/login_cubit.dart';
-import 'package:stirred_app/presentation/cubits/profile/profile_cubit.dart';
-import 'package:stirred_app/presentation/cubits/signup/signup_cubit.dart';
-import 'package:stirred_app/presentation/data/global_data_functions.dart';
+import 'package:stirred_app/presentation_old/cubits/homepage/homepage_cubit.dart';
+import 'package:stirred_app/presentation_old/cubits/login/login_cubit.dart';
+import 'package:stirred_app/presentation_old/cubits/profile/profile_cubit.dart';
+import 'package:stirred_app/presentation_old/cubits/signup/signup_cubit.dart';
+import 'package:stirred_app/presentation_old/data/global_data_functions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
