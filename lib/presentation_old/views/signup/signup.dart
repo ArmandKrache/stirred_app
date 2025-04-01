@@ -5,7 +5,7 @@ import 'package:stirred_app/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stirred_app/presentation_old/cubits/signup/signup_cubit.dart';
-import 'package:stirred_app/core/constants/strings_format.dart';
+import 'package:stirred_app/core/utils/strings_format.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 import 'package:http/http.dart' as http;
 

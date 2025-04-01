@@ -7,6 +7,7 @@ import 'package:stirred_app/presentation_old/cubits/login/login_cubit.dart';
 import 'package:stirred_app/presentation_old/cubits/profile/profile_cubit.dart';
 import 'package:stirred_app/presentation_old/cubits/signup/signup_cubit.dart';
 import 'package:stirred_app/presentation_old/data/global_data_functions.dart';
+import 'package:stirred_app/router/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,18 +27,12 @@ class StirredApp extends ConsumerWidget {
     // Initialize global data
     ref.watch(globalDataInitializationProvider);
 
-    // Watch providers that need to be initialized early
-    ref.watch(loginCubitProvider);
-    ref.watch(signupCubitProvider);
-    ref.watch(profileCubitProvider);
-    ref.watch(homepageCubitProvider);
-
     return OKToast(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Stirred',
         locale: Locale('en'),
-        routerConfig: appRouter.config(),
+        routerConfig: router,
       ),
     );
   }

@@ -45,4 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/common_domain_sources/
+/common_domain_sources/**
+/fast_lib/**
+
+# Generated files
+*.g.dart
+*.freezed.dart

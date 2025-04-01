@@ -1,5 +1,5 @@
 import 'package:stirred_app/presentation_old/widgets/custom_text_tile.dart';
-import 'package:stirred_app/core/constants/global_data.dart';
+import 'package:stirred_app/core/global_data.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

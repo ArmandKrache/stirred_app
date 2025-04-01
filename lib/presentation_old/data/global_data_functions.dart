@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
-import 'package:stirred_app/core/constants/global_data.dart';
+import 'package:stirred_app/core/global_data.dart';
 
 final globalDataInitializationProvider = FutureProvider<void>((ref) async {
   final apiRepository = ref.read(apiRepositoryProvider);

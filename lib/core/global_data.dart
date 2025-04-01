@@ -1,6 +1,6 @@
-import 'package:stirred_app/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stirred_app/core/extensions/widget_ref.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 final currentProfileProvider = StateProvider<Profile?>((ref) => null);
@@ -27,18 +27,19 @@ String getDifficultyTitle(String key, WidgetRef ref) {
 }
 
 Color getDifficultyColor(String key, WidgetRef ref) {
+  final colors = ref.colors;
   final difficulties = ref.read(allPossibleDifficultiesProvider);
   if (difficulties.contains(key)) {
     switch (key) {
-      case "beginner": return commonColor;
-      case "intermediate": return unusualColor;
-      case "advanced": return rareColor;
-      case "expert": return epicColor;
-      case "master": return legendaryColor;
-      default: return commonColor;
+      case "beginner": return colors.common;
+      case "intermediate": return colors.uncommon;
+      case "advanced": return colors.rare;
+      case "expert": return colors.epic;
+      case "master": return colors.legendary;
+      default: return colors.common;
     }
   }
-  return commonColor;
+  return colors.common;
 }
 
 String getUnitTitle(String key, WidgetRef ref) {
