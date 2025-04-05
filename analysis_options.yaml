@@ -8,6 +8,17 @@
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    [
+      build/**,
+      lib/**.freezed.dart,
+      lib/**.g.dart,
+      packages/**,
+      lib/core/l10n/app_localizations*.dart,
+    ]
+  errors:
+    invalid_annotation_target: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -22,8 +33,692 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # DO declare method return types.
+    # When declaring a method or function always specify a return type. Declaring return
+    # types for functions helps improve your codebase by allowing the analyzer to more
+    # adequately check your code for errors that could occur during runtime.
+    always_declare_return_types: true
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # DO avoid relative imports for files in lib/.
+    # When mixing relative and absolute imports it’s possible to create confusion
+    # where the same member gets imported in two different ways. One way to avoid
+    # that is to ensure you consistently use absolute imports for files within the
+    # lib/ directory.
+    always_use_package_imports: true
+
+    # DO annotate overridden methods and fields.
+    # This practice improves code readability and helps protect against
+    # unintentionally overriding superclass members.
+    annotate_overrides: true
+
+    # AVOID empty else statements.
+    avoid_empty_else: true
+
+    # AVOID using forEach with a function literal.
+    # The for loop enables a developer to be clear and explicit as to their intent.
+    # A return in the body of the for loop returns from the body of the function,
+    # where as a return in the body of the forEach closure only returns a value
+    # for that iteration of the forEach. The body of a for loop can contain awaits,
+    # while the closure body of a forEach cannot.
+    avoid_function_literals_in_foreach_calls: true
+
+    # DON’T explicitly initialize variables to null.
+    # If a variable has a non-nullable type or is final, Dart reports a compile
+    # error if you try to use it before it has been definitely initialized. If the
+    # variable is nullable and not const or final, then it is implicitly initialized
+    # to null for you. There’s no concept of “uninitialized memory” in Dart and no
+    # need to explicitly initialize a variable to null to be “safe”. Adding = null
+    # is redundant and unneeded.
+    avoid_init_to_null: true
+
+    # DON’T declare multiple variables on a single line.
+    avoid_multiple_declarations_per_line: true
+
+    # DON’T check for null in custom == operators.
+    # As null is a special value, no instance of any class (other than Null) can be
+    # equivalent to it. Thus, it is redundant to check whether the other instance is null.
+    avoid_null_checks_in_equality_operators: true
+
+    # AVOID positional boolean parameters.
+    # Positional boolean parameters are a bad practice because they are very ambiguous.
+    # Using named boolean parameters is much more readable because it inherently describes
+    # what the boolean value represents.
+    avoid_positional_boolean_parameters: true
+
+    # DO avoid print calls in production code.
+    # For production code, consider using a logging framework. If you are using
+    # Flutter, you can use debugPrint or surround print calls with a check for
+    # kDebugMode.
+    avoid_print: true
+
+    # DON’T pass an argument that matches the corresponding parameter’s default value.
+    avoid_redundant_argument_values: true
+
+    # DO avoid relative imports for files in lib/.
+    # When mixing relative and absolute imports it’s possible to create confusion
+    # where the same member gets imported in two different ways. An easy way to avoid
+    # that is to ensure you have no relative imports that include lib/ in their paths.
+    avoid_relative_lib_imports: true
+
+    # DON’T rename parameters of overridden methods.
+    # Methods that override another method, but do not have their own documentation
+    # comment, will inherit the overridden method’s comment when dart doc produces
+    # documentation. If the inherited method contains the name of the parameter (in
+    # mù^square brackets), then dart doc cannot link it correctly.
+    avoid_renaming_method_parameters: true
+
+    # AVOID return types on setters.
+    # As setters do not return a value, declaring the return type of one is redundant.
+    avoid_return_types_on_setters: true
+
+    # AVOID single cascade in expression statements.
+    avoid_single_cascade_in_expression_statements: true
+
+    # DO avoid calls to .toString() in production code, since it does not contractually
+    # return the user-defined name of the Type (or underlying class). Development-mode
+    # compilers where code size is not a concern use the full name, but release-mode
+    # compilers often choose to minify these symbols.
+    avoid_type_to_string: true
+
+    # AVOID using a parameter name that is the same as an existing type.
+    avoid_types_as_parameter_names: true
+
+    # AVOID annotating types for function expression parameters.
+    # Annotating types for function expression parameters is usually unnecessary because
+    # the parameter types can almost always be inferred from the context, thus making the
+    # practice redundant.
+    avoid_types_on_closure_parameters: true
+
+    # AVOID wrapping widgets in unnecessary containers.
+    # Wrapping a widget in Container with no other parameters set has no effect and
+    # makes code needlessly more complex.
+    avoid_unnecessary_containers: true
+
+    # AVOID defining unused parameters in constructors.
+    avoid_unused_constructor_parameters: true
+
+    # DO mark async functions as returning Future.
+    # When declaring an async method or function which does not return a value,
+    # declare that it returns Future<void> and not just void.
+    avoid_void_async: true
+
+    # AVOID using await on anything which is not a future.
+    # Await is allowed on the types: Future<X>, FutureOr<X>, Future<X>?, FutureOr<X>?
+    # and dynamic.
+    # Further, using await null is specifically allowed as a way to introduce a
+    # microtask delay.
+    await_only_futures: true
+
+    # DO name extensions using UpperCamelCase.
+    # Extensions should capitalize the first letter of each word (including the first word),
+    # and use no separators.
+    camel_case_extensions: true
+
+    # DO name types using UpperCamelCase.
+    # Classes and typedefs should capitalize the first letter of each word (including
+    # the first word), and use no separators.
+    camel_case_types: true
+
+    # DO invoke cancel on instances of dart.async.StreamSubscription.
+    # Cancelling instances of StreamSubscription prevents memory leaks and unexpected
+    # behavior.
+    cancel_subscriptions: true
+
+    # DON’T cast a nullable value to a non nullable type. This hides a null check and most
+    # of the time it is not what is expected.
+    cast_nullable_to_non_nullable: true
+
+    # DON’T invoke certain collection method with an argument with an unrelated type.
+    # Doing this will invoke == on the collection’s elements and most likely will return false.
+    # An argument passed to a collection method should relate to the collection type as follows:
+    # - an argument to Iterable<E>.contains should be related to E
+    # - an argument to List<E>.remove should be related to E
+    # - an argument to Map<K, V>.containsKey should be related to K
+    # - an argument to Map<K, V>.containsValue should be related to V
+    # - an argument to Map<K, V>.remove should be related to K
+    # - an argument to Map<K, V>.[] should be related to K
+    # - an argument to Queue<E>.remove should be related to E
+    # - an argument to Set<E>.lookup should be related to E
+    # - an argument to Set<E>.remove should be related to E
+    collection_methods_unrelated_type: true
+
+    # DO sort combinator names alphabetically.
+    combinators_ordering: true
+
+    # DO reference only in scope identifiers in doc comments.
+    # If you surround things like variable, method, or type names in square brackets,
+    # then dart doc will look up the name and link to its docs. For this all to work,
+    # ensure that all identifiers in docs wrapped in brackets are in scope.
+    comment_references: true
+
+    # PREFER using lowerCamelCase for constant names.
+    constant_identifier_names: true
+
+    # AVOID control flow leaving finally blocks.
+    # Using control flow in finally blocks will inevitably cause unexpected behavior
+    # that is hard to debug.
+    control_flow_in_finally: true
+
+    # DO use curly braces for all flow control structures.
+    # Doing so avoids the dangling else problem.
+    curly_braces_in_flow_control_structures: true
+
+    # DO place dart: imports before other imports.
+    directives_ordering: true
+
+    # DON’T invoke asynchronous functions in non-async blocks.
+    # Making asynchronous calls in non-async functions is usually the sign of a programming
+    # error. In general these functions should be marked async and such futures should
+    # likely be awaited (as enforced by unawaited_futures).
+    discarded_futures: false
+
+    # AVOID empty catch blocks.
+    # In general, empty catch blocks should be avoided. In cases where they are intended,
+    # a comment should be provided to explain why exceptions are being caught and
+    # suppressed. Alternatively, the exception identifier can be named with underscores
+    # (e.g., _) to indicate that we intend to skip it.
+    empty_catches: true
+
+    # DO use ; instead of {} for empty constructor bodies.
+    # In Dart, a constructor with an empty body can be terminated with just a semicolon.
+    # This is required for const constructors. For consistency and brevity, other
+    # constructors should also do this.
+    empty_constructor_bodies: true
+
+    # AVOID empty statements.
+    # Empty statements almost always indicate a bug.
+    empty_statements: true
+
+    # DO define case clauses for all constants in enum-like classes.
+    exhaustive_cases: true
+
+    # DO override hashCode if overriding == and prefer overriding == if overriding hashCode.
+    # Every object in Dart has a hashCode. Both the == operator and the hashCode property
+    # of objects must be consistent in order for a common hash map implementation to
+    # function properly. Thus, when overriding ==, the hashCode should also be overridden
+    # to maintain consistency. Similarly, if hashCode is overridden, == should be also.
+    hash_and_equals: true
+
+    # DON’T import implementation files from another package.
+    # The libraries inside lib are publicly visible: other packages are free to import them.
+    # But much of a package’s code is internal implementation libraries that should only be
+    # imported and used by the package itself. Those go inside a subdirectory of lib called
+    # src. You can create subdirectories in there if it helps you organize things.
+    # You are free to import libraries that live in lib/src from within other Dart code in
+    # the same package (like other libraries in lib, scripts in bin, and tests) but you
+    # should never import from another package’s lib/src directory. Those files are not part
+    # of the package’s public API, and they might change in ways that could break your code.
+    implementation_imports: true
+
+    # DO name libraries using lowercase_with_underscores.
+    # Some file systems are not case-sensitive, so many projects require filenames to be
+    # all lowercase. Using a separating character allows names to still be readable in that
+    # form. Using underscores as the separator ensures that the name is still a valid Dart
+    # identifier, which may be helpful if the language later supports symbolic imports.
+    library_names: true
+
+    # DO use lowercase_with_underscores when specifying a library prefix.
+    library_prefixes: true
+
+    # DO use super parameter names that match their corresponding super constructor’s
+    # parameter names.
+    matching_super_parameters: true
+
+    # DON’T use adjacent strings in a list.
+    # This can indicate a forgotten comma.
+    no_adjacent_strings_in_list: true
+
+    # DON’T use more than one case with same value.
+    # This is usually a typo or changed value of constant.
+    no_duplicate_case_values: true
+
+    # DON’T use a leading underscore for library prefixes. There is no concept of “private”
+    # for library prefixes. When one of those has a name that starts with an underscore, it
+    # sends a confusing signal to the reader. To avoid that, don’t use leading underscores
+    # in those names.
+    no_leading_underscores_for_library_prefixes: true
+
+    # DON’T use a leading underscore for identifiers that aren’t private. Dart uses a
+    # leading underscore in an identifier to mark members and top-level declarations as
+    # private. This trains users to associate a leading underscore with one of those kinds
+    # of declarations. They see _ and think “private”. There is no concept of “private” for
+    # local variables or parameters. When one of those has a name that starts with an
+    # underscore, it sends a confusing signal to the reader. To avoid that, don’t use leading
+    # underscores in those names.
+    # EXCEPTION:: An unused parameter can be named _, __, ___, etc. This is common practice
+    # in callbacks where you are passed a value but you don’t need to use it. Giving it a
+    # name that consists solely of underscores is the idiomatic way to indicate that the
+    # value isn’t used.
+    no_leading_underscores_for_local_identifiers: true
+
+    # DON’T use true or false in equality operations.
+    # This lint applies only if the expression is of a non-nullable bool type.
+    no_literal_bool_comparisons: true
+
+    # Avoid calling toString() on runtimeType.
+    # Calling toString on a runtime type is a non-trivial operation that can negatively
+    # impact performance. It’s better to avoid it.
+    no_runtimeType_toString: true
+
+    # DO name non-constant identifiers using lowerCamelCase.
+    # Class members, top-level definitions, variables, parameters, named parameters and
+    # named constructors should capitalize the first letter of each word except the first
+    # word, and use no separators.
+    non_constant_identifier_names: true
+
+    # DON’T assign a variable to itself. Usually this is a mistake.
+    no_self_assignments: true
+
+    # DON’T use null check on a potentially nullable type parameter.
+    # Given a generic type parameter T which has a nullable bound (e.g. the default bound of
+    # Object?), it is very easy to introduce erroneous null checks when working with a
+    # variable of type T?. Specifically, it is not uncommon to have T? x; and want to assert
+    # that x has been set to a valid value of type T. A common mistake is to do so using x!.
+    # This is almost always incorrect, since if T is a nullable type, x may validly hold null
+    # as a value of type T.
+    null_check_on_nullable_type_parameter: true
+
+    # DON’T pass null as an argument where a closure is expected.
+    # Often a closure that is passed to a method will only be called conditionally, so that
+    # tests and “happy path” production calls do not reveal that null will result in an
+    # exception being thrown.
+    # This rule only catches null literals being passed where closures are expected in some
+    # locations, listed here : https://dart.dev/tools/linter-rules/null_closures
+    null_closures: true
+
+    # DON’T redundantly type annotate initialized local variables.
+    # Local variables, especially in modern code where functions tend to be small, have very
+    # little scope. Omitting the type focuses the reader’s attention on the more important
+    # name of the variable and its initialized value.
+    omit_local_variable_types: false
+
+    # DO throw only instances of classes that extend dart.core.Error or dart.core.Exception.
+    # Throwing instances that do not extend Error or Exception is a bad practice; doing this
+    # is usually a hack for something that should be implemented more thoroughly.
+    only_throw_errors: true
+
+    # DON’T override fields.
+    # Overriding fields is almost always done unintentionally. Regardless, it is a bad
+    # practice to do so.
+    overridden_fields: true
+
+    # DO use lowercase_with_underscores for package names.
+    # Package names should be all lowercase, with underscores to separate words,
+    # just_like_this. Use only basic Latin letters and Arabic digits: [a-z0-9_]. Also, make
+    # sure the name is a valid Dart identifier – that it doesn’t start with digits and isn’t
+    # a reserved word.
+    package_names: true
+
+    # DO prefix library names with the package name and a dot-separated path.
+    # This guideline helps avoid the warnings you get when two libraries have the same name.
+    # Here are the rules we recommend:
+    # - Prefix all library names with the package name.
+    # - Make the entry library have the same name as the package.
+    # - For all other libraries in a package, after the package name add the dot-separated
+    #   path to the library’s Dart file.
+    # - For libraries under lib, omit the top directory name.
+    package_prefixed_library_names: true
+
+    # DON’T assign new values to parameters of methods or functions.
+    # Assigning new values to parameters is generally a bad practice unless an operator such
+    # as ??= is used. Otherwise, arbitrarily reassigning parameters is usually a mistake.
+    parameter_assignments: true
+
+    # DO use adjacent strings to concatenate string literals.
+    prefer_adjacent_string_concatenation: true
+
+    # DO use collection literals when possible.
+    prefer_collection_literals: true
+
+    # PREFER using ??= over testing for null.
+    # As Dart has the ??= operator, it is advisable to use it where applicable to improve
+    # the brevity of your code.
+    prefer_conditional_assignment: true
+
+    # PREFER using const for instantiating constant constructors.
+    # If a constructor can be invoked as const to produce a canonicalized
+    # instance, it’s preferable to do so.
+    prefer_const_constructors: true
+
+    # PREFER declaring const constructors on @immutable classes.
+    # If a class is immutable, it is usually a good idea to make its constructor a const
+    # constructor.
+    prefer_const_constructors_in_immutables: true
+
+    # PREFER using const for const declarations.
+    # Const declarations are more hot-reload friendly and allow to use const constructors if
+    # an instantiation references this declaration.
+    prefer_const_declarations: true
+
+    # PREFER using const for instantiating list, map and set literals used as parameters in
+    # immutable class instantiations.
+    prefer_const_literals_to_create_immutables: true
+
+    # PREFER defining constructors instead of static methods to create instances.
+    # In most cases, it makes more sense to use a named constructor rather than a static method because it makes instantiation clearer.
+    prefer_constructors_over_static_methods: true
+
+    # DON’T use indexOf to see if a collection contains an element.
+    # Calling indexOf to see if a collection contains something is difficult to read and may
+    # have poor performance.
+    # Instead, prefer contains.
+    prefer_contains: true
+
+    # DO prefer declaring private fields as final if they are not reassigned later in the
+    # library.
+    # Declaring fields as final when possible is a good practice because it helps avoid
+    # accidental reassignments and allows the compiler to do optimizations.
+    prefer_final_fields: true
+
+    # DO prefer declaring for-each loop variables as final if they are not reassigned later
+    # in the code.
+    # Declaring for-each loop variables as final when possible is a good practice because it
+    # helps avoid accidental reassignments and allows the compiler to do optimizations.
+    prefer_final_in_for_each: true
+
+    # DO prefer declaring variables as final if they are not reassigned later in the code.
+    # Declaring variables as final when possible is a good practice because it helps avoid
+    # accidental reassignments and allows the compiler to do optimizations.
+    prefer_final_locals: true
+
+    # When building maps from iterables, it is preferable to use ‘for’ elements.
+    # Using ‘for’ elements brings several benefits including:
+    # - Performance
+    # - Flexibility
+    # - Readability
+    # - Improved type inference
+    # - Improved interaction with null safety
+    prefer_for_elements_to_map_fromIterable: true
+
+    # DO use a function declaration to bind a function to a name.
+    # As Dart allows local function declarations, it is a good practice to use them in the
+    # place of function literals.
+    prefer_function_declarations_over_variables: true
+
+    # PREFER generic function type aliases.
+    # With the introduction of generic functions, function type aliases (typedef void F())
+    # couldn’t express all of the possible kinds of parameterization that users might want
+    # to express. Generic function type aliases (typedef F = void Function()) fixed that
+    # issue.
+    # For consistency and readability reasons, it’s better to only use one syntax and thus
+    # prefer generic function type aliases.
+    prefer_generic_function_type_aliases: true
+
+    # When building collections, it is preferable to use if elements rather than conditionals.
+    prefer_if_elements_to_conditional_expressions: true
+
+    # PREFER using if null operators instead of null checks in conditional expressions.
+    prefer_if_null_operators: true
+
+    # DO use initializing formals when possible.
+    # Using initializing formals when possible makes your code more terse.
+    prefer_initializing_formals: true
+
+    # Declare elements in list literals inline, rather than using add and addAll methods
+    # where possible.
+    prefer_inlined_adds: true
+
+    # PREFER using interpolation to compose strings and values.
+    # Using interpolation when composing strings and values is usually easier to write and
+    # read han concatenation.
+    prefer_interpolation_to_compose_strings: true
+
+    # DON’T use length to see if a collection is empty.
+    # The Iterable contract does not require that a collection know its length or be able to
+    # provide it in constant time. Calling length just to see if the collection contains anything
+    # can be painfully slow.
+    # Instead, there are faster and more readable getters: isEmpty and isNotEmpty. Use the one that
+    # doesn’t require you to negate the result.
+    prefer_is_empty: true
+
+    # PREFER x.isNotEmpty to !x.isEmpty for Iterable and Map instances.
+    # When testing whether an iterable or map is empty, prefer isNotEmpty over !isEmpty to improve
+    # code readability.
+    prefer_is_not_empty: true
+
+    # When checking if an object is not of a specified type, it is preferable to use the
+    # ’is!’ operator.
+    prefer_is_not_operator: true
+
+    # PREFER iterable.whereType<T>() over iterable.where((e) => e is T).
+    prefer_iterable_whereType: true
+
+    # Instead of checking nullability of a function/method f before calling it you can use
+    # f?.call().
+    prefer_null_aware_method_calls: true
+
+    # PREFER using null aware operators instead of null checks in conditional expressions.
+    prefer_null_aware_operators: true
+
+    # DO use single quotes where they wouldn’t require additional escapes.
+    # That means strings with an apostrophe may use double quotes so that the
+    # apostrophe isn’t escaped (note: we don’t lint the other way around, ie, a
+    # single quoted string with an escaped apostrophe is not flagged).
+    #It’s also rare, but possible, to have strings within string interpolations.
+    # In this case, its much more readable to use a double quote somewhere. So
+    # double quotes are allowed either within, or containing, an interpolated
+    # string literal. Arguably strings within string interpolations should be its
+    # own type of lint.
+    prefer_single_quotes: true
+
+    #Use spread collections when possible.
+    #Collection literals are excellent when you want to create a new collection out of
+    # individual items. But, when existing items are already stored in another collection,
+    # spread collection syntax leads to simpler code.
+    prefer_spread_collections: true
+
+    # PREFER specifying a type annotation for uninitialized variables and fields.
+    # Forgoing type annotations for uninitialized variables is a bad practice because you may
+    # accidentally assign them to a type that you didn’t originally intend to.
+    prefer_typing_uninitialized_variables: true
+
+    # DO specify a deprecation message (with migration instructions and/or a removal
+    # schedule) in the Deprecation constructor.
+    provide_deprecation_message: true
+
+    # DON’T create recursive getters.
+    # Recursive getters are getters which return themselves as a value. This is usually a
+    # typo.
+    recursive_getters: true
+
+    # DO use trailing commas for all function calls and declarations unless the function
+    # call or definition, from the start of the function name up to the closing parenthesis,
+    # fits in a single line.
+    require_trailing_commas: true
+
+    # Use SizedBox.shrink(...) and SizedBox.expand(...) constructors appropriately.
+    # Either the SizedBox.shrink(...) or SizedBox.expand(...) constructor should be used
+    # instead of the more general SizedBox(...) constructor when one of the named
+    # constructors capture the intent of the code more succinctly.
+    sized_box_shrink_expand: true
+
+    # DO use /// for documentation comments.
+    # Although Dart supports two syntaxes of doc comments (/// and /**), we prefer using ///
+    # for doc comments.
+    slash_for_doc_comments: true
+
+    # Sort child properties last in widget instance creations. This improves readability
+    # and plays nicest with UI as Code visualization in IDEs with UI as Code Guides in
+    # editors (such as IntelliJ) where Properties in the correct order appear clearly
+    # associated with the constructor call and separated from the children.
+    sort_child_properties_last: true
+
+    # DO sort constructor declarations before other members.
+    sort_constructors_first: true
+
+    # DO sort pub dependencies alphabetically (A to Z) in pubspec.yaml.
+    # Sorting list of pub dependencies makes maintenance easier.
+    sort_pub_dependencies: true
+
+    # DO sort unnamed constructor declarations first, before named ones.
+    sort_unnamed_constructors_first: true
+
+    # DO test type arguments in operator ==(Object other).
+    # Not testing types might result in null pointer exceptions which will be unexpected for
+    # consumers of your class.
+    test_types_in_equals: true
+
+    # AVOID throwing exceptions in finally blocks.
+    # Throwing exceptions in finally blocks will inevitably cause unexpected behavior that
+    # is hard to debug.
+    throw_in_finally: true
+
+    # DON’T type annotate initializing formals.
+    # If a constructor parameter is using this.x to initialize a field, then the type of the
+    # parameter is understood to be the same type as the field. If a a constructor parameter
+    # is using super.x to forward to a super constructor, then the type of the parameter is
+    # understood to be the same as the super constructor parameter.
+    # Type annotating an initializing formal with a different type than that of the field is
+    # OK.
+    type_init_formals: true
+
+    # DO await functions that return a Future inside of an async function body.
+    # It’s easy to forget await in async methods as naming conventions usually don’t tell us
+    # if a method is sync or async (except for some in dart:io).
+    # When you really do want to start a fire-and-forget Future, the recommended way is to
+    # use unawaited from dart:async. The // ignore and // ignore_for_file comments also work.
+    unawaited_futures: false
+
+    # Avoid returning an awaited expression when the expression type is assignable to the
+    # function’s return type.
+    unnecessary_await_in_return: true
+
+    # AVOID using braces in interpolation when not needed.
+    # If you’re just interpolating a simple identifier, and it’s not immediately followed by
+    # more alphanumeric text, the {} can and should be omitted.
+    unnecessary_brace_in_string_interps: true
+
+    # AVOID repeating const keyword in a const context.
+    unnecessary_const: true
+
+    # PREFER using the default unnamed Constructor over .new.
+    unnecessary_constructor_name: true
+
+    # AVOID wrapping fields in getters and setters just to be “safe”.
+    # In Java and C#, it’s common to hide all fields behind getters and setters (or
+    # properties in C#), even if the implementation just forwards to the field. That way,
+    # if you ever need to do more work in those members, you can do it without needing to
+    # touch the callsites. This is because calling a getter method is different than
+    # accessing a field in Java, and accessing a property isn’t binary-compatible with
+    # accessing a raw field in C#.
+    # Dart doesn’t have this limitation. Fields and getters/setters are completely
+    # indistinguishable. You can expose a field in a class and later wrap it in a getter
+    # and setter without having to touch any code that uses that field.
+    unnecessary_getters_setters: true
+
+    # DON’T create a lambda when a tear-off will do.
+    unnecessary_lambdas: true
+
+    # DO not specify the late modifier for top-level and static variables when the
+    # declaration contains an initializer.
+    # Top-level and static variables with initializers are already evaluated lazily as if
+    # they are marked late.
+    unnecessary_late: true
+
+    # AVOID new keyword to create instances.
+    unnecessary_new: true
+
+    # AVOID null in null-aware assignment.
+    # Using null on the right-hand side of a null-aware assignment effectively makes the
+    # assignment redundant.
+    unnecessary_null_aware_assignments: true
+
+    # AVOID using null as an operand in if null operators.
+    # Using null in an if null operator is redundant, regardless of which side null is used
+    # on.
+    unnecessary_null_in_if_null_operators: true
+
+    # Use a non-nullable type for a final variable initialized with a non-nullable value.
+    unnecessary_nullable_for_final_variable_declarations: true
+
+    # DON’T override a method to do a super method invocation with same parameters.
+    unnecessary_overrides: true
+
+    # AVOID using parentheses when not needed.
+    unnecessary_parenthesis: true
+
+    # AVOID using unnecessary statements.
+    # Statements which have no clear effect are usually unnecessary, or should be broken up.
+    unnecessary_statements: true
+
+    # Remove unnecessary backslashes in strings.
+    unnecessary_string_escapes: true
+
+    # DON’T use string interpolation if there’s only a string expression in it.
+    unnecessary_string_interpolations: true
+
+    # DON’T use this when not needed to avoid shadowing.
+    unnecessary_this: true
+
+    # Unnecessary toList() in spreads.
+    unnecessary_to_list_in_spreads: true
+
+    # DON’T Compare references of unrelated types for equality.
+    # Comparing references of a type where neither is a subtype of the other most likely will
+    # return false and might not reflect programmer’s intent.
+    # Int64 and Int32 from package:fixnum allow comparing to int provided the int is on the
+    # right hand side. The lint allows this as a special case.
+    unrelated_type_equality_checks: true
+
+    # DON’T use BuildContext across asynchronous gaps.
+    # Storing BuildContext for later usage can easily lead to difficult to diagnose crashes.
+    # Asynchronous gaps are implicitly storing BuildContext and are some of the easiest to
+    # overlook when writing code.
+    # When a BuildContext is used, its mounted property must be checked after an asynchronous
+    # gap.
+    use_build_context_synchronously: true
+
+    # DO use ColoredBox when Container has only a Color.
+    # A Container is a heavier Widget than a ColoredBox, and as bonus, ColoredBox has a
+    # const constructor.
+    use_colored_box: true
+
+    # DO use DecoratedBox when Container has only a Decoration.
+    # A Container is a heavier Widget than a DecoratedBox, and as bonus, DecoratedBox has a
+    # const constructor.
+    use_decorated_box: true
+
+    # PREFER an 8-digit hexadecimal integer(0xFFFFFFFF) to instantiate Color. Colors have
+    # four 8-bit channels, which adds up to 32 bits, so Colors are described using a 32 bit
+    # integer.
+    use_full_hex_values_for_flutter_colors: true
+
+    # Use generic function type syntax for parameters.
+    use_function_type_syntax_for_parameters: true
+
+    # Use if-null operators to convert nulls to bools.
+    use_if_null_to_convert_nulls_to_bools: true
+
+    # PREFER the use of intValue.isOdd/isEven to check for evenness.
+    use_is_even_rather_than_modulo: true
+
+    # DO use key in widget constructors.
+    # It’s a good practice to expose the ability to provide a key when creating public
+    # widgets.
+    use_key_in_widget_constructors: true
+
+    # Where possible, use already defined const values.
+    use_named_constants: true
+
+    # DO use strings in part of directives.
+    use_string_in_part_of_directives: true
+
+    # DO use super-initializer parameters where possible.
+    # “Forwarding constructor”s, that do nothing except forward parameters to their
+    # superclass constructors should take advantage of super-initializer parameters rather
+    # than repeating the names of parameters when passing them to the superclass
+    # constructors. This makes the code more concise and easier to read and maintain.
+    use_super_parameters: true
+
+    # Use the throwsA matcher instead of try-catch with fail().
+    use_test_throws_matchers: true
+
+    # DO use rethrow to rethrow a caught exception.
+    # As Dart provides rethrow as a feature, it should be used to improve terseness and
+    # readability.
+    use_rethrow_when_possible: true
+
+    # DO use valid regular expression syntax when creating regular expression instances.
+    # Regular expressions created with invalid syntax will throw a FormatException at
+    # runtime so should be avoided.
+    valid_regexps: true

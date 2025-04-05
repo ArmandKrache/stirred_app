@@ -1,0 +1,7 @@
+{
+    "@@locale" : "en",
+    "unexpectedErrorTitle" : "Unexpected error",
+    "unexpectedErrorBody" : "An unexpected error occurred. Please try again later.",
+    "unexpectedErrorActionRetry" : "Retry",
+    "checkYourConnectivity" : "Check your connectivity"
+}

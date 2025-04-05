@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_icon_button.dart';
-import 'package:stirred_app/router/router.dart';
 
 /// {@template close_icon_button}
 /// A button with an X mark icon, used to go back to the previous navigation
@@ -37,9 +37,7 @@ class CloseIconButton extends StatelessWidget {
     final button = StirIconButton.standard(
       iconData: Icons.close,
       onPressed: () {
-        final canPop = router.canPop();
-
-        if (canPop) {
+        if (router.canPop()) {
           router.pop(popResult);
         }
       },

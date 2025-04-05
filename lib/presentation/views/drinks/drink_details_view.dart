@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stirred_app/core/extensions/widget_ref.dart';
 import 'package:stirred_app/core/theme/color.dart';
 class DrinkDetailsView extends ConsumerStatefulWidget {
-  const DrinkDetailsView({super.key});
+  const DrinkDetailsView({super.key, required this.drinkId});
+
+  final int drinkId;
 
   @override
   ConsumerState<DrinkDetailsView> createState() => _DrinkDetailsViewState();
@@ -48,13 +50,13 @@ class _DrinkDetailsViewState extends ConsumerState<DrinkDetailsView> with Single
             bottom: 0,
             child: Column(
               children: [
-                Container(
+                ColoredBox(
                   color: colors.transparent,
                   child: TabBar(
                     controller: _tabController,
                     indicator: BoxDecoration(
                       color: colors.primaryVariant,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16),
                       ),
@@ -101,9 +103,9 @@ class _DrinkDetailsViewState extends ConsumerState<DrinkDetailsView> with Single
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: const Icon(Icons.arrow_back, color: Colors.black),
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 16.0),
+                  child: Icon(Icons.arrow_back, color: Colors.black),
                 ),
               ),
             ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stirred_app/core/constants/constants.dart';
 import 'package:stirred_app/core/extensions/widget_ref.dart';
+import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_icon_button.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
-import 'package:stirred_app/router/router.dart';
 
 class FastAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const FastAppBar({
