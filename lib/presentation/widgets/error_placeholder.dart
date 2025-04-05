@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
+import 'package:stirred_app/core/extensions/build_context.dart';
 import 'package:stirred_app/core/extensions/widget_ref.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_button.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_icon.dart';
@@ -76,7 +77,7 @@ class _ErrorPlaceholderState extends ConsumerState<ErrorPlaceholder> {
 
   @override
   Widget build(BuildContext context) {
-    // final localizations = context.localizations;
+    final localizations = context.localizations;
     final colors = ref.colors;
     final errorText = widget.message;
 
@@ -90,11 +91,11 @@ class _ErrorPlaceholderState extends ConsumerState<ErrorPlaceholder> {
             ),
             const Gap(StirSpacings.medium32),
             StirText.headlineMedium(
-              widget.title ?? 'localizations.unexpectedErrorTitle',
+              widget.title ?? localizations.unexpectedErrorTitle,
             ),
             const Gap(StirSpacings.small16),
             StirText.bodyLarge(
-              widget.subtitle ?? 'localizations.unexpectedErrorBody',
+              widget.subtitle ?? localizations.unexpectedErrorBody,
               textAlign: TextAlign.center,
             ),
             const Gap(StirSpacings.small8),
@@ -106,7 +107,7 @@ class _ErrorPlaceholderState extends ConsumerState<ErrorPlaceholder> {
             if (widget.action != null) ...[
               const Gap(StirSpacings.medium32),
               StirButton.primary(
-                label: widget.actionLabel ?? 'localizations.unexpectedErrorActionRetry',
+                label: widget.actionLabel ?? localizations.unexpectedErrorActionRetry,
                 onPressed: widget.action,
               ),
             ],

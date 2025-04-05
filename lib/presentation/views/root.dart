@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stirred_app/presentation/providers/current_data.dart';
+import 'package:stirred_app/presentation/router.dart';
 import 'dart:async';
 
-class RootView extends StatelessWidget {
+import 'package:stirred_app/presentation/views/splash_view.dart';
+import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
+
+class RootView extends ConsumerWidget {
   const RootView({super.key});
 
 
-  void _dispatch() async {
-    // TODO: Implement dispatch
+  Future<void> _dispatch(CurrentDataNotifierState state) async {
+    state.map(
+      authentified: (state) {
+        router.go(HomeRoute.route(HomeTabConstants.defaultTabIndex));
+      },
+      unauthentified: (state) {
+        router.go(LoginRoute.route);
+      },
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    Timer(const Duration(seconds: 1), () {
-      _dispatch();
-    });
-    return const CustomSplashScreen();
-  }
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.watch(currentDataNotifierProvider);
 
-class CustomSplashScreen extends StatelessWidget {
-  const CustomSplashScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Color(0xFF2654a8), Color(0xFF539ce0)],
-      )),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset("assets/images/splash-icon.png")
-          ],
-        ),
+    return notifier.when(
+      loading: () => const SplashView(),
+      error: (error, stacktrace) => ErrorPlaceholder(
+        message: error.toString(),
+        stackTrace: stacktrace,
       ),
+      data: (state) {
+        Timer(const Duration(seconds: 2), () => _dispatch(state));
+        return const SplashView();
+      },
     );
   }
 }
