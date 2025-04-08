@@ -4,8 +4,8 @@ import 'package:stirred_app/core/extensions/widget_ref.dart';
 
 const _defaultSpinnerSize = 45.0;
 
-class FastLoader extends ConsumerWidget {
-  const FastLoader({
+class StirLoader extends ConsumerWidget {
+  const StirLoader({
     super.key,
     this.backgroundColor,
     this.color,

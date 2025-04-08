@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stirred_app/core/events/event_router_observer.dart';
@@ -9,9 +8,10 @@ import 'package:stirred_app/presentation/views/drinks/drink_details_view.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks.dart';
 import 'package:stirred_app/presentation/views/home/home_view.dart';
 import 'package:stirred_app/presentation/views/login/login_view.dart';
+import 'package:stirred_app/presentation/views/signup/signup_view.dart';
+import 'package:stirred_app/presentation/views/root.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
 import 'package:stirred_app/presentation/widgets/tools/page_transitions.dart';
-import 'package:stirred_app/presentation_old/views/root_view.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _drinksNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'drinks');
@@ -47,6 +47,7 @@ final router = GoRouter(
   routes: [
     _RootRoute(),
     LoginRoute(),
+    SignupRoute(),
     HomeRoute(),
   ],
 );
@@ -59,7 +60,7 @@ class _RootRoute extends GoRoute {
   _RootRoute()
       : super(
           path: route,
-          builder: (context, state) => const RootView(),
+          pageBuilder: (context, state) => const NoTransitionPage(child: RootView(),),
         );
 
   static const String route = '/';
@@ -69,10 +70,20 @@ class LoginRoute extends GoRoute {
   LoginRoute()
       : super(
           path: route,
-          builder: (context, state) => const LoginView(),
+          pageBuilder: (context, state) => const NoTransitionPage(child: LoginView(),),
         );
 
   static const String route = '/login';
+}
+
+class SignupRoute extends GoRoute {
+  SignupRoute()
+      : super(
+          path: route,
+          pageBuilder: (context, state) => const NoTransitionPage(child: SignupView(),),
+        );
+
+  static const String route = '/signup';
 }
 
 class HomeTabConstants {

@@ -7,7 +7,7 @@ import 'package:stirred_common_domain/stirred_common_domain.dart';
 /// TODO: Implement EventApi in Stirred Common Domain Package
 abstract class EventApi {
 
-  Future<DataState> sendEvents({List<Event> events});
+  Future<Result<void, StirError>> sendEvents({List<Event> events});
 }
 
 /// Static class that manages the events
@@ -70,11 +70,14 @@ class EventManager {
     final eventsBatch = List<Event>.from(events);
     events.clear();
 
-    final result = await eventApi?.sendEvents(events: eventsBatch);
+    final result = await eventApi!.sendEvents(events: eventsBatch);
 
-    if (result is DataFailed) {
-      events = eventsBatch + events;
-    }
+    result.when(
+      success: (_) {},
+      failure: (error) {
+        events = eventsBatch + events;
+      },
+    );
   }
 
   static void addEnterNavigationEvent({required String newLocation, bool forceEvent = false, String? accessedFrom}) {

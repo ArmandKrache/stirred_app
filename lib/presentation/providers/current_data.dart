@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,7 +24,7 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
     ref.onDispose(_dispose);
 
     // If the device is registered, we check if the user has an authentification code valid.
-    final hasAuthToken = await ref.read(adminRepositoryProvider).readAuthToken();
+    final hasAuthToken = await ref.read(authRepositoryProvider).readAccessToken();
 
     // If the token isn't valid, then the user needs to log in with credentials.
     if (hasAuthToken == null) {
@@ -36,23 +35,14 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
 
     final result = await profileRepository.getSelfProfile();
 
-    // TODO: Implement Result type instead of DataSuccess and DataFailed
-    /*return result.when(
+    return result.when(
       success: (user) async {
         return CurrentDataNotifierState.authentified(
           user: user,
         );
       },
       failure: (_) => CurrentDataNotifierState.unauthentified(),
-    );*/
-
-    if (result is DataSuccess) {
-      return CurrentDataNotifierState.authentified(
-        user: result.data!,
-      );
-    }
-
-    return CurrentDataNotifierState.unauthentified();
+    );
   }
 
   void _dispose() {
@@ -75,32 +65,12 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
     );
   }
 
-  /// Allows to log in with [email] and [password].
-  Future<void> login({
-    required String email,
-    required String password,
+  Future<void> setAuthentifiedUser({
+    required final Profile user,
   }) async {
-    final loginResult = await ref.read(adminRepositoryProvider).login(
-          {
-            'email': email,
-            'password': password,
-          },
-        );
-
-    if (loginResult is DataSuccess) {
-      state = AsyncValue.data(
-        CurrentDataNotifierState.authentified(
-          user: loginResult as Profile,
-        ),
-      );
-    } else {
-      showToast(
-        (loginResult as DataFailed).exception.toString(),
-      );
-      state = AsyncValue.data(
-        CurrentDataNotifierState.unauthentified(),
-      );
-    }
+    state = AsyncValue.data(
+      CurrentDataNotifierState.authentified(user: user),
+    );
   }
 }
 

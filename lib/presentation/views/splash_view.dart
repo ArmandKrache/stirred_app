@@ -18,7 +18,7 @@ class _SplashViewState extends ConsumerState<SplashView> with TickerProviderStat
   late Animation<double> _animation;
   late AnimationController _heightController;
   late Animation<double> _heightAnimation;
-  bool _wavesAtBottom = true;
+  bool _wavesAtBottom = false;
 
   @override
   void initState() {
@@ -36,10 +36,10 @@ class _SplashViewState extends ConsumerState<SplashView> with TickerProviderStat
       vsync: this,
     );
 
-    _heightAnimation = Tween<double>(begin: 0, end: 1).animate(
+    _heightAnimation = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
         parent: _heightController,
-        curve: Curves.linear,
+        curve: Curves.easeInOut,
       ),
     );
 
@@ -70,17 +70,10 @@ class _SplashViewState extends ConsumerState<SplashView> with TickerProviderStat
   Widget build(BuildContext context) {
     final colors = ref.colors;
     final screenHeight = MediaQuery.of(context).size.height;
-    final baseBackWaveHeight = screenHeight * (_wavesAtBottom ? 0.32 : 0.72);
-    final baseFrontWaveHeight = screenHeight * (_wavesAtBottom ? 0.3 : 0.7);
+    final baseBackWaveHeight = screenHeight * (_wavesAtBottom ? 0.1 : 0.9);
+    final baseFrontWaveHeight = screenHeight * (_wavesAtBottom ? 0.08 : 0.88);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _toggleWavePosition,
-        backgroundColor: colors.tertiary,
-        child: Icon(
-          _wavesAtBottom ? Icons.arrow_upward : Icons.arrow_downward,
-        ),
-      ),
       backgroundColor: Colors.white,
       body: Stack(
         children: [

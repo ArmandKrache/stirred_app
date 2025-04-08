@@ -53,4 +53,4 @@ app.*.map.json
 *.g.dart
 *.freezed.dart
 
-/lib/presentation_old/**
+presentation_old/**
