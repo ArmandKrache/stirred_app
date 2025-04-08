@@ -4,6 +4,7 @@ import 'package:stirred_app/core/events/event_router_observer.dart';
 import 'package:stirred_app/presentation/views/account/account_view.dart';
 import 'package:stirred_app/presentation/views/cellar/cellar_view.dart';
 import 'package:stirred_app/presentation/views/creation/creation_view.dart';
+import 'package:stirred_app/presentation/views/discovery/discovery_view.dart';
 import 'package:stirred_app/presentation/views/drinks/drink_details_view.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks.dart';
 import 'package:stirred_app/presentation/views/home/home_view.dart';
@@ -15,6 +16,7 @@ import 'package:stirred_app/presentation/widgets/tools/page_transitions.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _drinksNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'drinks');
+final _discoveryNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'discovery');
 final _creationNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'creation');
 final _cellarNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'cellar');
 final _accountNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'account');
@@ -89,12 +91,14 @@ class SignupRoute extends GoRoute {
 class HomeTabConstants {
   static const int defaultTabIndex = drinksTabIndex;
   static const int drinksTabIndex = 0;
-  static const int creationTabIndex = 1;
-  static const int cellarTabIndex = 2;
-  static const int accountTabIndex = 3;
+  static const int discoveryTabIndex = 1;
+  static const int creationTabIndex = 2;
+  static const int cellarTabIndex = 3;
+  static const int accountTabIndex = 4;
 
   static const Map<int, String> routesName = {
     drinksTabIndex: DrinksRoute.route,
+    discoveryTabIndex: DiscoveryRoute.route,
     creationTabIndex: CreationRoute.route,
     cellarTabIndex: CellarRoute.route,
     accountTabIndex: AccountRoute.route,
@@ -113,6 +117,13 @@ class HomeRoute extends StatefulShellRoute {
               observers: [EventGoRouterObserver()],
               routes: [
                 DrinksRoute(),
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _discoveryNavigatorKey,
+              observers: [EventGoRouterObserver()],
+              routes: [
+                DiscoveryRoute(),
               ],
             ),
             StatefulShellBranch(
@@ -142,9 +153,10 @@ class HomeRoute extends StatefulShellRoute {
   static String route(int index) {
     return switch (index) {
       0 => DrinksRoute.route,
-      1 => CreationRoute.route,
-      2 => CellarRoute.route,
-      3 => AccountRoute.route,
+      1 => DiscoveryRoute.route,
+      2 => CreationRoute.route,
+      3 => CellarRoute.route,
+      4 => AccountRoute.route,
       _ => DrinksRoute.route,
     };
   }
@@ -165,6 +177,20 @@ class DrinksRoute extends GoRoute {
         );
 
   static const String route = '/drinks';
+}
+
+class DiscoveryRoute extends GoRoute {
+  DiscoveryRoute()
+      : super(
+          path: route,
+          pageBuilder: (context, state) {
+            return const NoTransitionPage(
+              child: DiscoveryView(),
+            );
+          },
+        );
+
+  static const String route = '/discovery';
 }
 
 class CreationRoute extends GoRoute {

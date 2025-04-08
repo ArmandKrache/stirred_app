@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 
-class CellarView extends ConsumerWidget {
-  const CellarView({super.key});
+class DiscoveryView extends ConsumerWidget {
+  const DiscoveryView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,18 +19,18 @@ class CellarView extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.wine_bar_outlined,
+                  Icons.explore_outlined,
                   size: 64,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: StirSpacings.medium24),
                 const StirText.headlineMedium(
-                  'Cellar Feature',
+                  'Discovery Feature',
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: StirSpacings.small8),
                 const StirText.bodyLarge(
-                  'Manage what ingredients you have in your cellar, and your shopping list.\nComing soon!',
+                  'Explore new drinks and find inspiration for your next creation.\nComing soon!',
                   textAlign: TextAlign.center,
                 ),
               ],
