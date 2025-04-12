@@ -37,8 +37,9 @@ class DrinksNotifier extends _$DrinksNotifier {
   }
 
   Future<DrinksNotifierState> _load() async {
-
     final result = await ref.read(drinksRepositoryProvider).getDrinksList();
+
+    logger.d('result: $result');
 
     final response = result.when(
       success: (response) => response,
@@ -130,6 +131,24 @@ class DrinksNotifier extends _$DrinksNotifier {
       orElse: () => false,
     );
   }
+
+  // Search and filter methods
+  Future<void> searchDrinks(String query) async {
+    throw UnimplementedError('searchDrinks not implemented');
+  }
+
+  Future<void> applyFilters(Map<String, dynamic> filters) async {
+    throw UnimplementedError('applyFilters not implemented');
+  }
+
+  void clearFilters() {
+    state = state.whenData(
+      (state) => state.copyWith(
+        searchQuery: '',
+        activeFilters: {},
+      ),
+    );
+  }
 }
 
 /// The state enclosed by `Theftnotifier`.
@@ -141,5 +160,7 @@ class DrinksNotifierState with _$DrinksNotifierState {
     @Default(false) bool isLoadingMoreDrinks,
     @Default(false) bool isReloading,
     @Default(false) bool isUpToDate,
+    @Default('') String searchQuery,
+    @Default({}) Map<String, dynamic> activeFilters,
   }) = _DrinksNotifierStateData;
 }

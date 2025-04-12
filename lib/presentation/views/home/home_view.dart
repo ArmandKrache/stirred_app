@@ -1,11 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stirred_app/core/events/event_manager.dart';
-import 'package:stirred_app/core/extensions/build_context.dart';
 import 'package:stirred_app/core/extensions/widget_ref.dart';
 import 'package:stirred_app/core/theme/text.dart';
 import 'package:stirred_app/presentation/router.dart';
