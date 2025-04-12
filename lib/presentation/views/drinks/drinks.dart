@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
 import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks_notifier.dart';
+import 'package:stirred_app/presentation/views/drink_details/drink_details_notifier.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text_field.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
@@ -26,6 +28,7 @@ class DrinksView extends ConsumerWidget {
           data: (data) {
             return Column(
               children: [
+                const Gap(StirSpacings.small16),
                 DrinksHeader(
                   onSearch: (query) => drinksNotifier.searchDrinks(query),
                   onFilterPressed: () => _showFilterBottomSheet(context, drinksNotifier),
@@ -103,6 +106,7 @@ class DrinksHeader extends ConsumerWidget {
             hint: 'Search',
             onChanged: onSearch,
             leadingIconData: Icons.search,
+            showLabel: false,
           ),
         ),
       ],
@@ -164,19 +168,25 @@ class DrinkCardItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: () => router.push(DrinkDetailsRoute.route(drink.id)),
+        onTap: () => router.push(
+          DrinkDetailsRoute.route(drink.id),
+          extra: drink,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: CachedNetworkImage(
-                imageUrl: drink.picture,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+              child: Hero(
+                tag: 'drink_image_${drink.id}',
+                child: CachedNetworkImage(
+                  imageUrl: drink.picture,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             Padding(

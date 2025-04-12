@@ -8,17 +8,20 @@ import 'package:stirred_app/core/theme/color.dart';
 import 'package:stirred_app/presentation/views/drink_details/drink_details_notifier.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
-import 'package:stirred_app/presentation/widgets/loading_placeholder.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 class DrinkDetailsView extends ConsumerWidget {
-  const DrinkDetailsView({super.key, required this.drinkId});
+  const DrinkDetailsView({
+    super.key, 
+    required this.drinkId,
+    required this.initialDrink,
+  });
 
   final String drinkId;
+  final Drink initialDrink;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('drinkId: $drinkId');
     final notifier = ref.watch(drinkDetailsNotifierProvider(drinkId));
     final colors = ref.colors;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -28,63 +31,13 @@ class DrinkDetailsView extends ConsumerWidget {
       backgroundColor: colors.surface,
       body: notifier.when(
         data: (data) {
-          final drink = data.drink;
-          if (drink == null) {
-            return const Center(child: Text('Drink not found'));
-          }
-
+          final drink = data.drink ?? initialDrink;
           return Column(
             children: [
-              Stack(
-                children: [
-                  // Drink Image
-                  Container(
-                    height: imageHeight,
-                    width: double.infinity,
-                    color: colors.secondary.withValues(alpha: 0.5),
-                    child: CachedNetworkImage(
-                      imageUrl: drink.picture,
-                      fit: BoxFit.contain,
-                      errorWidget: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/icon.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-                  ),
-                  // Drink Info Overlay
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: StirSpacings.small16,
-                        vertical: StirSpacings.small8,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withValues(alpha: 0.0),
-                            Colors.black.withValues(alpha: 0.7),
-                          ],
-                        ),
-                      ),
-                      child: _DrinkInfoHeader(drink: drink),
-                    ),
-                  ),
-                  // Back Button
-                  const Positioned(
-                    top: 0,
-                    left: 0,
-                    child: SafeArea(
-                      child: _BackButton(),
-                    ),
-                  ),
-                ],
+              _DrinkHeader(
+                drink: drink,
+                imageHeight: imageHeight,
+                colors: colors,
               ),
               Expanded(
                 child: _DrinkContentTabs(drink: drink, colors: colors),
@@ -96,8 +49,93 @@ class DrinkDetailsView extends ConsumerWidget {
           message: error.toString(),
           stackTrace: stackTrace,
         ),
-        loading: () => const LoadingPlaceholder(),
+        loading: () {
+          return Column(
+            children: [
+              _DrinkHeader(
+                drink: initialDrink,
+                imageHeight: imageHeight,
+                colors: colors,
+              ),
+              const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ],
+          );
+        },
       ),
+    );
+  }
+}
+
+class _DrinkHeader extends StatelessWidget {
+  const _DrinkHeader({
+    required this.drink,
+    required this.imageHeight,
+    required this.colors,
+  });
+
+  final Drink drink;
+  final double imageHeight;
+  final StirColorTheme colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Drink Image
+        Container(
+          height: imageHeight,
+          width: double.infinity,
+          color: colors.secondary.withValues(alpha: 0.5),
+          child: Hero(
+            tag: 'drink_image_${drink.id}',
+            child: CachedNetworkImage(
+              imageUrl: drink.picture,
+              fit: BoxFit.contain,
+              errorWidget: (context, error, stackTrace) {
+                return Image.asset(
+                  'assets/images/icon.png',
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          ),
+        ),
+        // Drink Info Overlay
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: StirSpacings.small16,
+              vertical: StirSpacings.small8,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.0),
+                  Colors.black.withValues(alpha: 0.7),
+                ],
+              ),
+            ),
+            child: _DrinkInfoHeader(drink: drink),
+          ),
+        ),
+        // Back Button
+        const Positioned(
+          top: 0,
+          left: 0,
+          child: SafeArea(
+            child: _BackButton(),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -50,3 +50,25 @@ class SlideTransitionPage<T> extends CustomTransitionPage<T> {
   /// Indicates which direction the transition should take.
   final TransitionDirection direction;
 }
+
+/// A page transition using a [FadeTransition].
+///
+/// `child` is the page to animate.
+class FadeTransitionPage<T> extends CustomTransitionPage<T> {
+  FadeTransitionPage({
+    super.key,
+    required super.child,
+  }) : super(
+          transitionsBuilder: (
+            context,
+            animation,
+            secondaryAnimation,
+            child,
+          ) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+}

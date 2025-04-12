@@ -13,6 +13,7 @@ import 'package:stirred_app/presentation/views/signup/signup_view.dart';
 import 'package:stirred_app/presentation/views/root.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
 import 'package:stirred_app/presentation/widgets/tools/page_transitions.dart';
+import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _drinksNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'drinks');
@@ -240,10 +241,13 @@ class DrinkDetailsRoute extends GoRoute {
       : super(
           path: '$_subRoute/:$_drinkIdKey',
           pageBuilder: (context, state) {
-            return SlideTransitionPage(
-              direction: TransitionDirection.bottomToTop,
+            final drinkId = state.pathParameters[_drinkIdKey] ?? '';
+            final initialDrink = state.extra! as Drink;
+            
+            return FadeTransitionPage(
               child: DrinkDetailsView(
-                drinkId: state.pathParameters[_drinkIdKey] ?? '',
+                drinkId: drinkId,
+                initialDrink: initialDrink,
               ),
             );
           },
