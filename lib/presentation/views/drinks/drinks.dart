@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
+import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks_notifier.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text_field.dart';
@@ -161,48 +163,51 @@ class DrinkCardItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: CachedNetworkImage(
-              imageUrl: drink.picture,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(),
+      child: InkWell(
+        onTap: () => router.push(DrinkDetailsRoute.route(drink.id)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: CachedNetworkImage(
+                imageUrl: drink.picture,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                StirText.bodyLarge(
-                  drink.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      size: 16,
-                      color: Colors.amber,
-                    ),
-                    const SizedBox(width: 4),
-                    StirText.bodySmall(
-                      drink.averageRating.toStringAsFixed(1),
-                    ),
-                  ],
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StirText.bodyLarge(
+                    drink.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        size: 16,
+                        color: Colors.amber,
+                      ),
+                      const SizedBox(width: 4),
+                      StirText.bodySmall(
+                        drink.averageRating.toStringAsFixed(1),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

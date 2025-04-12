@@ -86,19 +86,6 @@ flutter:
     - assets/translations/
     - assets/images/
 
-  fonts:
-   - family: Butler
-     fonts:
-       - asset: assets/fonts/butler/Butler_Regular.otf
-       - asset: assets/fonts/butler/Butler_Bold.otf
-         weight: 700
-   - family: IBM
-     fonts:
-       - asset: assets/fonts/ibm_plex_sans/IBMPlexSans-Regular.ttf
-       - asset: assets/fonts/ibm_plex_sans/IBMPlexSans-Bold.ttf
-         weight: 700
-
-
 flutter_launcher_icons:
   android: true
   ios: true

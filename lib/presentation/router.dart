@@ -5,7 +5,7 @@ import 'package:stirred_app/presentation/views/account/account_view.dart';
 import 'package:stirred_app/presentation/views/cellar/cellar_view.dart';
 import 'package:stirred_app/presentation/views/creation/creation_view.dart';
 import 'package:stirred_app/presentation/views/discovery/discovery_view.dart';
-import 'package:stirred_app/presentation/views/drinks/drink_details_view.dart';
+import 'package:stirred_app/presentation/views/drink_details/drink_details_view.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks.dart';
 import 'package:stirred_app/presentation/views/home/home_view.dart';
 import 'package:stirred_app/presentation/views/login/login_view.dart';
@@ -240,24 +240,19 @@ class DrinkDetailsRoute extends GoRoute {
       : super(
           path: '$_subRoute/:$_drinkIdKey',
           pageBuilder: (context, state) {
-            final parsedDrinkId = int.tryParse(
-              state.pathParameters[_drinkIdKey] ?? '',
-            );
-            final drinkId = parsedDrinkId ?? -1;
-
             return SlideTransitionPage(
               direction: TransitionDirection.bottomToTop,
               child: DrinkDetailsView(
-                drinkId: drinkId
+                drinkId: state.pathParameters[_drinkIdKey] ?? '',
               ),
             );
           },
         );
 
   static const String _drinkIdKey = 'drinkId';
-  static const String _subRoute = 'drink_details';
+  static const String _subRoute = 'details';
 
-  static String route(int drinkId) {
+  static String route(String drinkId) {
     return '${DrinksRoute.route}/$_subRoute/$drinkId';
   }
 }
