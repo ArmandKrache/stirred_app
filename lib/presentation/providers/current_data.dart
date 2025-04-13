@@ -113,6 +113,15 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
       },
     );
   }
+
+  Future<Result<void, StirError>> setUser({
+    required Profile user,
+  }) async {
+    state = AsyncValue.data(
+      CurrentDataNotifierState.authentified(user: user),
+    );
+    return const Result.success(null);
+  }
 }
 
 /// The state of the current data to check if the user is authenticated.

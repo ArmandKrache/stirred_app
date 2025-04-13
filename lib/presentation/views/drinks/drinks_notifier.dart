@@ -39,8 +39,6 @@ class DrinksNotifier extends _$DrinksNotifier {
   Future<DrinksNotifierState> _load() async {
     final result = await ref.read(drinksRepositoryProvider).getDrinksList();
 
-    logger.d('result: $result');
-
     final response = result.when(
       success: (response) => response,
       failure: (_) => null,

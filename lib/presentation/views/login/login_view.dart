@@ -7,7 +7,6 @@ import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_button.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text_field.dart';
-import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});

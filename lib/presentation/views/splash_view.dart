@@ -18,7 +18,6 @@ class _SplashViewState extends ConsumerState<SplashView> with TickerProviderStat
   late Animation<double> _animation;
   late AnimationController _heightController;
   late Animation<double> _heightAnimation;
-  bool _wavesAtBottom = false;
 
   @override
   void initState() {
@@ -60,18 +59,13 @@ class _SplashViewState extends ConsumerState<SplashView> with TickerProviderStat
     super.dispose();
   }
 
-  void _toggleWavePosition() {
-    setState(() {
-      _wavesAtBottom = !_wavesAtBottom;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final colors = ref.colors;
     final screenHeight = MediaQuery.of(context).size.height;
-    final baseBackWaveHeight = screenHeight * (_wavesAtBottom ? 0.1 : 0.9);
-    final baseFrontWaveHeight = screenHeight * (_wavesAtBottom ? 0.08 : 0.88);
+    final baseBackWaveHeight = screenHeight * 0.1;
+    final baseFrontWaveHeight = screenHeight * 0.08;
 
     return Scaffold(
       backgroundColor: Colors.white,

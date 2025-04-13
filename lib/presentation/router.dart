@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stirred_app/core/events/event_router_observer.dart';
 import 'package:stirred_app/presentation/views/account/account_view.dart';
+import 'package:stirred_app/presentation/views/account/profile_edit_view.dart';
 import 'package:stirred_app/presentation/views/cellar/cellar_view.dart';
 import 'package:stirred_app/presentation/views/creation/creation_view.dart';
 import 'package:stirred_app/presentation/views/discovery/discovery_view.dart';
@@ -231,9 +232,28 @@ class AccountRoute extends GoRoute {
               child: AccountView(),
             );
           },
+          routes: [
+            ProfileEditRoute(),
+          ],
         );
 
   static const String route = '/account';
+}
+
+class ProfileEditRoute extends GoRoute {
+  ProfileEditRoute()
+      : super(
+          path: '$_subRoute',
+          builder: (context, state) {
+            return const ProfileEditView();
+          },
+        );
+
+  static const String _subRoute = 'edit';
+
+  static String route() {
+    return '${AccountRoute.route}/$_subRoute';
+  }
 }
 
 class DrinkDetailsRoute extends GoRoute {

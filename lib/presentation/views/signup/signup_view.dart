@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stirred_app/presentation/widgets/tools/page_transitions.dart';
 import 'package:stirred_app/presentation/router.dart';
 
 class SignupView extends StatefulWidget {

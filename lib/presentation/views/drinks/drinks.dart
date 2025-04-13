@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
 import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_app/presentation/views/drinks/drinks_notifier.dart';
-import 'package:stirred_app/presentation/views/drink_details/drink_details_notifier.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text_field.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';

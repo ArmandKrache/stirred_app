@@ -197,9 +197,6 @@ linter:
     # Doing so avoids the dangling else problem.
     curly_braces_in_flow_control_structures: true
 
-    # DO place dart: imports before other imports.
-    directives_ordering: true
-
     # DON’T invoke asynchronous functions in non-async blocks.
     # Making asynchronous calls in non-async functions is usually the sign of a programming
     # error. In general these functions should be marked async and such futures should
