@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stirred_app/presentation/router.dart';
 import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 part 'current_data.freezed.dart';
@@ -31,17 +31,16 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
       return CurrentDataNotifierState.unauthentified();
     }
 
-    final profileRepository = ref.read(profileRepositoryProvider);
-
-    final result = await profileRepository.getSelfProfile();
-
+    final result = await ref.read(profileRepositoryProvider).getSelfProfile();
     return result.when(
       success: (user) async {
         return CurrentDataNotifierState.authentified(
           user: user,
         );
       },
-      failure: (_) => CurrentDataNotifierState.unauthentified(),
+      failure: (_) {
+        return CurrentDataNotifierState.unauthentified();
+      },
     );
   }
 
@@ -59,17 +58,59 @@ class CurrentDataNotifier extends _$CurrentDataNotifier {
   Future<void> logout({
     bool automaticLogout = false,
   }) async {
-
+    final authRepository = ref.read(authRepositoryProvider);
+    await Future.wait([
+      authRepository.removeAccessToken(),
+      authRepository.removeRefreshToken(),
+    ]);
     state = AsyncValue.data(
       CurrentDataNotifierState.unauthentified(),
     );
+    router.go(LoginRoute.route);
   }
 
-  Future<void> setAuthentifiedUser({
-    required final Profile user,
+  Future<Result<void, StirError>> login({
+    required String username,
+    required String password,
   }) async {
-    state = AsyncValue.data(
-      CurrentDataNotifierState.authentified(user: user),
+    final authRepository = ref.read(authRepositoryProvider);
+
+    final result = await authRepository.login(
+      {
+        'username': username,
+        'password': password,
+      },
+    );
+
+    return result.when(
+      success: (response) async {
+        await Future.wait([
+          authRepository.saveAccessToken(response.access),
+          authRepository.saveRefreshToken(response.refresh),
+        ]);
+
+        final profileResult = await ref.read(profileRepositoryProvider).getSelfProfile();
+
+        return profileResult.when(
+          success: (user) {
+            state = AsyncValue.data(
+              CurrentDataNotifierState.authentified(user: user),
+            );
+            router.go(HomeRoute.route(HomeTabConstants.defaultTabIndex));
+            return const Result.success(null);
+          },
+          failure: (error) {
+            Future.wait([
+              authRepository.removeAccessToken(),
+              authRepository.removeRefreshToken(),
+            ]);
+            return Result.failure(error);
+          },
+        );
+      },
+      failure: (error) {
+        return Result.failure(error);
+      },
     );
   }
 }

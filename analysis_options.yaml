@@ -123,12 +123,6 @@ linter:
     # AVOID using a parameter name that is the same as an existing type.
     avoid_types_as_parameter_names: true
 
-    # AVOID annotating types for function expression parameters.
-    # Annotating types for function expression parameters is usually unnecessary because
-    # the parameter types can almost always be inferred from the context, thus making the
-    # practice redundant.
-    avoid_types_on_closure_parameters: true
-
     # AVOID wrapping widgets in unnecessary containers.
     # Wrapping a widget in Container with no other parameters set has no effect and
     # makes code needlessly more complex.

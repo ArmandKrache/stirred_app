@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oktoast/oktoast.dart';
@@ -5,6 +7,8 @@ import 'package:stirred_app/presentation/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  HttpOverrides.global = MyHttpOverrides();
 
   runApp(
     const ProviderScope(
@@ -26,5 +30,14 @@ class StirredApp extends ConsumerWidget {
         routerConfig: router,
       ),
     );
+  }
+}
+
+/// TODO : remove after server release
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }

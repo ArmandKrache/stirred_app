@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:stirred_app/presentation/views/splash_view.dart';
 import 'package:stirred_app/presentation/widgets/error_placeholder.dart';
+import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 class RootView extends ConsumerWidget {
   const RootView({super.key});

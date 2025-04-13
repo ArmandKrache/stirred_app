@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stirred_app/core/constants/spacing.dart';
 import 'package:stirred_app/core/extensions/widget_ref.dart';
+import 'package:stirred_app/presentation/providers/current_data.dart';
 import 'package:stirred_app/presentation/router.dart';
-import 'package:stirred_app/presentation/views/login/login_notifier.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_button.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text.dart';
 import 'package:stirred_app/presentation/widgets/design_system/stir_text_field.dart';
+import 'package:stirred_common_domain/stirred_common_domain.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -30,14 +31,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final result = await ref.read(loginNotifierProvider.notifier).login(
+      final result = await ref.read(currentDataNotifierProvider.notifier).login(
             username: _usernameController.text,
             password: _passwordController.text,
           );
 
       result.when(
         success: (_) {
-          // Navigation is handled by the currentDataNotifier
+          // Navigation redirection is handled by the notifier
         },
         failure: (error) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +55,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     final colors = ref.colors;
-    final loginState = ref.watch(loginNotifierProvider);
 
     return Scaffold(
       body: SafeArea(
